@@ -1,0 +1,52 @@
+{
+  "pack_id": "brazil-senate",
+  "pack_version": "0.1.0",
+  "institution": {
+    "id": "ins_br_senado",
+    "slug": "brazil-senate",
+    "official_name": "Senado Federal",
+    "short_name": "Senado",
+    "institution_type": "upper_chamber",
+    "jurisdiction": "Federal — República Federativa do Brasil",
+    "geographic_scope": "Brasil",
+    "country": "BR",
+    "website": "https://www.senado.leg.br/",
+    "seat_count": 81,
+    "seat_count_status": "verified",
+    "seat_count_source": "Constituição Federal, art. 46 (três senadores por estado e pelo Distrito Federal): https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+    "terminology": {
+      "member": "Senador(a)",
+      "members": "Senadores",
+      "represented_unit": "UF",
+      "chamber": "Plenário",
+      "proposal": "Matéria"
+    }
+  },
+  "sources": [
+    {
+      "id": "src_br_senado_dadosabertos",
+      "name": "Dados Abertos Legislativos do Senado Federal",
+      "base_url": "https://legis.senado.leg.br/dadosabertos",
+      "documentation_url": "https://legis.senado.leg.br/dadosabertos/api-docs/swagger-ui/index.html",
+      "allowed_hosts": ["legis.senado.leg.br"],
+      "connector": "brazil-senate",
+      "max_requests_per_second": 5,
+      "config": {
+        "proposal_types": ["PL", "PLP", "PEC", "PDL", "PRS"],
+        "proposal_window_days": 45,
+        "max_proposal_details": 400
+      }
+    }
+  ],
+  "capabilities": {
+    "members": {"scope": "members"},
+    "mandates": {"scope": "members"},
+    "party_composition": {"scope": "members"},
+    "party_history": {"scope": "members"},
+    "proposals": {"scope": "proposals"},
+    "proposal_authors": {"scope": "proposals"},
+    "proposal_events": {"scope": "proposals"},
+    "committees": {"declared": "not_ingested", "note": "Available at /senador/{codigo}/comissoes and /comissao; planned."},
+    "votes": {"declared": "not_ingested", "note": "Available through /votacao; planned."}
+  }
+}
