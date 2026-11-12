@@ -31,7 +31,8 @@ Detalhes em [docs/architecture.md](docs/architecture.md); inventário das fontes
 Pré-requisitos: Python 3.12+, [uv](https://docs.astral.sh/uv/), Node 22+, Docker.
 
 ```bash
-# 1. Banco (Postgres local; para Supabase troque POLITEIA_DATABASE_URL pela connection string do Session pooler)
+# 1. Banco: Postgres local, ou Supabase definindo POLITEIA_DATABASE_URL com a URI do Session pooler
+#    (postgresql://... é aceito; o driver psycopg é aplicado automaticamente)
 docker compose -f infra/docker-compose.yml up -d
 cp .env.example .env
 
@@ -76,7 +77,8 @@ Os testes de pipeline/API criam o schema em `POLITEIA_TEST_DATABASE_URL`
   capacidades como "indisponível na fonte" em vez de inventar dados.
 - **Número oficial de assentos da ALEPE não verificado** em fonte oficial; a composição mostra apenas membros observados.
 - **Senado:** proposições limitadas a uma janela de 45 dias e 400 detalhes por execução; comissões e votações planejadas.
-- Ainda não implantado no Supabase: o schema é Postgres puro com RLS ativado em todas as tabelas (acesso só pelo engine).
+- RLS ativado em todas as tabelas, sem políticas: no Supabase a Data API não lê nem grava nada; só o engine acessa
+  (o advisor `rls_enabled_no_policy`, nível INFO, é esperado).
 
 ## Adicionando uma terceira instituição
 
