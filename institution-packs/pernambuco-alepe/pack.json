@@ -1,0 +1,59 @@
+{
+  "pack_id": "pernambuco-alepe",
+  "pack_version": "0.1.0",
+  "institution": {
+    "id": "ins_pe_alepe",
+    "slug": "pernambuco-alepe",
+    "official_name": "Assembleia Legislativa do Estado de Pernambuco",
+    "short_name": "ALEPE",
+    "institution_type": "state_legislative_assembly",
+    "jurisdiction": "Estadual — Estado de Pernambuco",
+    "geographic_scope": "Pernambuco",
+    "country": "BR",
+    "website": "https://www.alepe.pe.gov.br/",
+    "seat_count": null,
+    "seat_count_status": "unverified",
+    "seat_count_source": null,
+    "terminology": {
+      "member": "Deputado(a) Estadual",
+      "members": "Deputados Estaduais",
+      "represented_unit": "Estado",
+      "chamber": "Plenário",
+      "proposal": "Proposição"
+    }
+  },
+  "sources": [
+    {
+      "id": "src_pe_alepe_dadosabertos",
+      "name": "Portal de Dados Abertos da ALEPE",
+      "base_url": "https://dadosabertos.alepe.pe.gov.br/api/v1",
+      "documentation_url": "https://dadosabertos.alepe.pe.gov.br/",
+      "allowed_hosts": ["dadosabertos.alepe.pe.gov.br"],
+      "connector": "pernambuco-alepe",
+      "max_requests_per_second": 2,
+      "config": {
+        "proposal_years": [],
+        "proposal_type_codes": {
+          "PROJETO DE LEI ORDINÁRIA": "PLO",
+          "PROJETO DE LEI COMPLEMENTAR": "PLC",
+          "PROJETO DE RESOLUÇÃO": "PR",
+          "PROPOSTA DE EMENDA A CONSTITUIÇÃO": "PEC",
+          "PROJETO DE LEI DE DIRETRIZES ORÇAMENTÁRIAS": "PLDO",
+          "PROJETO DE LEI ORÇAMENTÁRIA ANUAL": "PLOA",
+          "PROJETO DE PLANO PLURIANUAL": "PPA"
+        }
+      }
+    }
+  ],
+  "capabilities": {
+    "members": {"scope": "members"},
+    "mandates": {"scope": "members", "note": "Source lists current members only; mandate dates are not published."},
+    "party_composition": {"scope": "members"},
+    "party_history": {"declared": "unavailable_in_source", "note": "The member endpoint has no party history."},
+    "proposals": {"scope": "proposals"},
+    "proposal_authors": {"scope": "proposals", "note": "Authors are names; linked to members by exact normalized-name match."},
+    "proposal_events": {"declared": "unavailable_in_source", "note": "No procedural history in the projetos endpoint."},
+    "committees": {"declared": "unavailable_in_source", "note": "No committee endpoint found in the open-data API."},
+    "votes": {"declared": "unavailable_in_source", "note": "No roll-call vote endpoint found in the open-data API."}
+  }
+}
