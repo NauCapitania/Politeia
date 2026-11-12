@@ -36,7 +36,7 @@ export function Inspector({ inst }: { inst?: Institution }) {
   const mandate = rels.data?.find((r) => r.kind === 'holds_mandate')
   const currentParty = rels.data?.find((r) => r.kind === 'current_party')
   const history = rels.data?.filter((r) => r.kind === 'party_affiliation') ?? []
-  const authored = rels.data?.filter((r) => r.kind === 'authored') ?? []
+  const authored = e?.kind === 'person' ? rels.data?.filter((r) => r.kind === 'authored') ?? [] : []
 
   return (
     <aside className="inspector" aria-label="Inspetor">

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, HTMLSelect, InputGroup, NonIdealState } from '@blueprintjs/core'
 import type { Institution } from '../api/client'
 import { useProposalTypes, useProposals } from '../api/client'
@@ -9,6 +9,7 @@ export function Proposals({ inst }: { inst: Institution }) {
   const { select, selectedId, search, setSearch } = useStore()
   const [type, setType] = useState('')
   const [offset, setOffset] = useState(0)
+  useEffect(() => setOffset(0), [search, inst.id])
   const types = useProposalTypes(inst.id)
   const page = useProposals(inst.id, { q: search || undefined, type_code: type || undefined, offset })
   const total = page.data?.total ?? 0
