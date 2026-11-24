@@ -291,8 +291,10 @@ describe('Plataforma modular', () => {
 
   it('mostra deputados no inspetor de pessoas sem abrir um perfil do Senado', async () => {
     mockFetch({ '/v1/entities/per_deputado': { id: 'per_deputado', kind: 'person', label: 'Deputada de teste', attributes: {}, identifiers: [], sources: [] } })
-    useStore.setState({ view: 'camara', selectedId: 'per_deputado' })
+    useStore.setState({ view: 'camara' })
     renderApp()
+    await waitFor(() => expect(useStore.getState().institutionId).toBe(inst.id))
+    act(() => useStore.getState().select('per_deputado'))
     expect(await screen.findByText('Deputada de teste')).toBeInTheDocument()
     expect(screen.getByLabelText('Inspetor')).toBeInTheDocument()
     expect(vi.mocked(fetch).mock.calls.some(([url]) => String(url).includes('/senadores/per_deputado'))).toBe(false)
