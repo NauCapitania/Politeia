@@ -26,7 +26,7 @@ export const useStore = create<State>((set) => ({
   institutionId: null,
   view: 'senado',
   senadoTab: 'composicao',
-  sidebarCollapsed: localStorage.getItem('politeia.sidebar') === 'collapsed',
+  sidebarCollapsed: readPref('politeia.sidebar') === 'collapsed',
   selectedId: null,
   hoveredId: null,
   partyFilter: null,
@@ -35,7 +35,7 @@ export const useStore = create<State>((set) => ({
   setView: (view) => set({ view, selectedId: null }),
   setSenadoTab: (senadoTab) => set({ view: 'senado', senadoTab, selectedId: null }),
   toggleSidebar: () => set((s) => {
-    localStorage.setItem('politeia.sidebar', s.sidebarCollapsed ? 'open' : 'collapsed')
+    writePref('politeia.sidebar', s.sidebarCollapsed ? 'open' : 'collapsed')
     return { sidebarCollapsed: !s.sidebarCollapsed }
   }),
   select: (selectedId) => set({ selectedId }),
@@ -43,3 +43,11 @@ export const useStore = create<State>((set) => ({
   setPartyFilter: (partyFilter) => set({ partyFilter }),
   setSearch: (search) => set({ search }),
 }))
+
+function readPref(key: string): string | null {
+  try { return localStorage.getItem(key) } catch { return null }
+}
+
+function writePref(key: string, value: string) {
+  try { localStorage.setItem(key, value) } catch { /* preference is optional */ }
+}
