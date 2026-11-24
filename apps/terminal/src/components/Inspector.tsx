@@ -9,7 +9,7 @@ import { SourceLink } from './SourceLink'
 const KIND_LABEL: Record<string, string> = { person: 'Pessoa', party: 'Partido', mandate: 'Mandato', proposal: 'Proposição', institution: 'Instituição' }
 
 export function Inspector({ inst }: { inst?: Institution }) {
-  const { selectedId, select, setView } = useStore()
+  const { selectedId, select } = useStore()
   const entity = useEntity(selectedId)
   const rels = useRelationships(selectedId)
   const timeline = useTimeline(selectedId)
@@ -80,7 +80,7 @@ export function Inspector({ inst }: { inst?: Institution }) {
               <h3>Partido</h3>
               <dl className="kv"><dt>Nome</dt><dd>{a.name ?? <span className="faint">não informado pela fonte</span>}</dd></dl>
               <p className="faint" style={{ marginTop: 8 }}>{a.scope_note}</p>
-              <Button size="small" icon="graph" onClick={() => setView('graph')}>Ver no grafo</Button>
+
             </div>
           )}
 

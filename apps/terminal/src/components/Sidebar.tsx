@@ -4,10 +4,13 @@ import { useCapabilities } from '../api/client'
 import { useStore, type View } from '../store'
 
 const NAV: { view: View; label: string; icon: IconName; cap?: string }[] = [
-  { view: 'overview', label: 'Visão geral', icon: 'layout-circle', cap: 'members' },
-  { view: 'people', label: 'Pessoas', icon: 'people', cap: 'members' },
+  { view: 'senado', label: 'Senado', icon: 'layout-circle', cap: 'members' },
+  { view: 'votacoes', label: 'Votações', icon: 'th-list', cap: 'votes' },
+  { view: 'presidencia2025', label: 'Presidência 2025', icon: 'crown' },
+  { view: 'presidencia2027', label: 'Presidência 2027', icon: 'flag' },
+  { view: 'stf', label: 'STF e caso Master', icon: 'take-action' },
+  { view: 'noticias', label: 'Notícias', icon: 'feed', cap: 'news' },
   { view: 'proposals', label: 'Proposições', icon: 'document', cap: 'proposals' },
-  { view: 'graph', label: 'Grafo institucional', icon: 'graph' },
   { view: 'sources', label: 'Fontes e cobertura', icon: 'database' },
 ]
 
@@ -48,4 +51,5 @@ export function Sidebar({ inst }: { inst?: Institution }) {
 const CAP: Record<string, string> = {
   members: 'Membros', mandates: 'Mandatos', party_composition: 'Composição', party_history: 'Histórico partidário',
   proposals: 'Proposições', proposal_authors: 'Autoria', proposal_events: 'Tramitação', committees: 'Comissões', votes: 'Votações',
+  composition_history: 'Histórico de cadeiras', mandate_exercises: 'Exercícios', speeches: 'Discursos', news: 'Notícias',
 }

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type View = 'overview' | 'people' | 'proposals' | 'graph' | 'sources'
+export type View = 'senado' | 'votacoes' | 'presidencia2025' | 'presidencia2027' | 'stf' | 'noticias' | 'proposals' | 'sources'
 
 type State = {
   institutionId: string | null
@@ -19,13 +19,13 @@ type State = {
 
 export const useStore = create<State>((set) => ({
   institutionId: null,
-  view: 'overview',
+  view: 'senado',
   selectedId: null,
   hoveredId: null,
   partyFilter: null,
   search: '',
   setInstitution: (id) => set({ institutionId: id, selectedId: null, partyFilter: null, search: '', hoveredId: null }),
-  setView: (view) => set({ view }),
+  setView: (view) => set({ view, selectedId: null }),
   select: (selectedId) => set({ selectedId }),
   hover: (hoveredId) => set({ hoveredId }),
   setPartyFilter: (partyFilter) => set({ partyFilter }),

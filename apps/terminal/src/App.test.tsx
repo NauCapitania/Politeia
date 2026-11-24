@@ -1,70 +1,74 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { render, screen, within, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { useStore } from './store'
 import { hemicycleLayout } from './views/Hemicycle'
 
-const inst = (id: string, short: string, seats: number | null) => ({
-  id, slug: id, official_name: `${short} oficial`, short_name: short, institution_type: 'chamber', jurisdiction: 'J',
-  geographic_scope: short === 'Senado' ? 'Brasil' : 'Pernambuco', country: 'BR', website: 'https://example.leg.br',
-  seat_count: seats, seat_count_status: seats ? 'verified' : 'unverified', seat_count_source: null,
-  terminology: { members: 'Membros', represented_unit: 'UF' }, observed_member_count: 2, pack_id: id, pack_version: '0.1.0',
-  last_ingested_at: '2026-11-12T00:00:00Z', sources: [{ id: 's', name: 'Fonte', base_url: 'https://x', documentation_url: null }],
-})
-const party = { id: 'pty_a', abbreviation: 'PA', name: null }
-const seat = (i: number, name: string) => ({ index: i, person_id: `per_${name}`, mandate_id: `man_${name}`, name, party_abbreviation: 'PA', party_id: 'pty_a', represented_unit: 'PE', participation: null, state: 'occupied' })
+const inst = {
+  id: 'ins_br_senado', slug: 'brazil-senate', official_name: 'Senado Federal', short_name: 'Senado', institution_type: 'chamber',
+  jurisdiction: 'Federal', geographic_scope: 'Brasil', country: 'BR', website: 'https://www.senado.leg.br', seat_count: 81,
+  seat_count_status: 'verified', seat_count_source: null, terminology: {}, observed_member_count: 81, pack_id: 'brazil-senate',
+  pack_version: '0.2.0', last_ingested_at: '2026-11-24T00:00:00Z', sources: [{ id: 's', name: 'Dados Abertos', base_url: 'https://x', documentation_url: null }],
+}
+const seat = (i: number) => ({ person_id: `per_${i}`, code: String(i), name: `Senador ${i}`, uf: 'SP', party: i % 2 ? 'PL' : 'PT', participation: i === 3 ? 'suplente' : 'titular' })
+const src = [{ url: 'https://www25.senado.leg.br/x', outlet: 'Senado', date: '2025-02-01', kind: 'official' }]
+const posterior = { 'Davi Alcolumbre': 0.9, 'Astronauta Marcos Pontes': 0.05, 'Eduardo Girão': 0.05 }
 const DATA: Record<string, unknown> = {
-  '/v1/institutions': [inst('ins_br_senado', 'Senado', 81), inst('ins_pe_alepe', 'ALEPE', null)],
-  '/v1/institutions/ins_br_senado/composition': { institution_id: 'ins_br_senado', seat_count: 81, seat_count_status: 'verified', observed_members: 2, seats: [seat(0, 'Ana'), seat(1, 'Bia'), ...Array.from({ length: 79 }, (_, i) => ({ index: i + 2, person_id: null, mandate_id: null, name: null, party_abbreviation: null, party_id: null, represented_unit: null, participation: null, state: 'unobserved' }))], groups: [{ party, count: 2 }], discrepancy: '79 seats without an observed member' },
-  '/v1/institutions/ins_pe_alepe/composition': { institution_id: 'ins_pe_alepe', seat_count: null, seat_count_status: 'unverified', observed_members: 2, seats: [seat(0, 'Caio'), seat(1, 'Duda')], groups: [{ party, count: 2 }], discrepancy: 'Official seat count not verified; composition shows observed members only' },
-  '/v1/institutions/ins_br_senado/capabilities': [{ capability: 'members', status: 'available', record_count: 2, coverage: {}, last_success_at: null, note: null, issues: [] }],
-  '/v1/institutions/ins_pe_alepe/capabilities': [{ capability: 'party_history', status: 'unavailable_in_source', record_count: null, coverage: {}, last_success_at: null, note: 'Source publishes no party history', issues: [] }],
-  '/v1/entities/per_Ana': { id: 'per_Ana', kind: 'person', label: 'Ana', attributes: { profile_url: 'https://www25.senado.leg.br/ana' }, identifiers: [{ scheme: 'senado.parlamentar', value: '1', quality: 'official' }], sources: [{ raw_record_id: 'r1', url: 'https://legis.senado.leg.br/dadosabertos/senador/lista/atual', record_kind: 'member_list', json_path: '$.x', retrieved_at: '2026-11-12T00:00:00Z', content_sha256: 'a'.repeat(64) }] },
-  '/v1/entities/per_Ana/relationships': [{ id: 'm1', kind: 'holds_mandate', source: 'per_Ana', target: 'man_Ana', label: 'Senador(a) titular', valid_from: '2023-02-01', valid_to: null, is_current: true, epistemic_status: 'verified', explanation: 'x', sources: [] }],
-  '/v1/entities/per_Ana/timeline': [],
+  '/v1/institutions': [inst],
+  '/v1/institutions/ins_br_senado/capabilities': [{ capability: 'members', status: 'available', record_count: 81, coverage: {}, last_success_at: null, note: null, issues: [] }],
+  '/v1/senado/composicao': { date: '2026-11-24', observed: 81, seats: Array.from({ length: 81 }, (_, i) => seat(i)) },
+  '/v1/senado/mudancas': [],
+  '/v1/senadores/per_1': {
+    id: 'per_1', code: '1', name: 'Senador 1', full_name: 'Senador Um', photo_url: null, links: { perfil_oficial: 'https://www25.senado.leg.br/1' },
+    social_note: 'nota', mandates: [{ id: 'm', uf: 'SP', participation: 'holder', start: '2023-02-01', end: '2031-01-31' }], exercises: [],
+    parties: [{ party: 'PL', from: '2022-01-01', to: null, basis: 'affiliation_history' }], vote_summary: { Sim: 3 }, votes: [], speeches: [], news: [], claims: [],
+  },
+  '/v1/presidencia/2025': {
+    available: true,
+    contest: { title: 'Eleição para a Presidência do Senado (biênio 2025–2026)', note: 'O voto foi secreto.', result: [
+      { candidate: 'Davi Alcolumbre', votes: 73, party: 'UNIÃO', uf: 'AP' }, { candidate: 'Astronauta Marcos Pontes', votes: 4, party: 'PL', uf: 'SP' },
+      { candidate: 'Eduardo Girão', votes: 4, party: 'NOVO', uf: 'CE' }] },
+    contest_sources: src, model: { method: 'Programação dinâmica', caveats: ['Hipótese'] }, model_sources: src,
+    parties: [{ party: 'PL', senators: 14, support: { candidate: 'Davi Alcolumbre', support: 'declared' }, support_sources: src, expected_votes: posterior }],
+    senators: Array.from({ length: 81 }, (_, i) => ({ ...seat(i), prior: posterior, posterior, most_likely: 'Davi Alcolumbre', justification: [{ kind: 'analysis', text: `Justificativa ${i}` }] })),
+    summary: { declared_support_seats: 76, votes: { 'Davi Alcolumbre': 73 }, expected_check: { 'Davi Alcolumbre': 73, 'Astronauta Marcos Pontes': 4, 'Eduardo Girão': 4 } },
+  },
 }
 
 function mockFetch() {
-  vi.stubGlobal('fetch', vi.fn(async (url: string) => {
-    const path = url.split('?')[0]
-    const body = DATA[path] ?? (path.endsWith('/members') || path.endsWith('/proposals') ? { items: [], total: 0, limit: 50, offset: 0 } : [])
-    return new Response(JSON.stringify(body), { status: 200 })
-  }))
+  vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(DATA[url.split('?')[0]] ?? []), { status: 200 })))
 }
-
 const renderApp = () => render(<QueryClientProvider client={new QueryClient()}><App /></QueryClientProvider>)
 
 beforeEach(() => {
-  useStore.setState({ institutionId: null, view: 'overview', selectedId: null, partyFilter: null, search: '' })
+  useStore.setState({ institutionId: null, view: 'senado', selectedId: null, partyFilter: null, search: '' })
   mockFetch()
 })
 
-describe('Politeia terminal', () => {
-  it('lays out exactly the institution seat count', () => {
-    expect(hemicycleLayout(81, 640).points).toHaveLength(81)
-    expect(hemicycleLayout(49, 640).points).toHaveLength(49)
+describe('hemicycleLayout', () => {
+  it('places exactly one point per seat', () => {
+    for (const n of [11, 49, 81, 513]) expect(hemicycleLayout(n, 600).points).toHaveLength(n)
   })
+})
 
-  it('renders composition from the API and switches institution through the same interface', async () => {
+describe('Monitor do Senado', () => {
+  it('desenha as 81 cadeiras e abre o perfil do senador', async () => {
     renderApp()
-    expect(await screen.findByText('Senado oficial', { selector: 'h1' })).toBeInTheDocument()
     await waitFor(() => expect(screen.getAllByTestId('seat')).toHaveLength(81))
-    await userEvent.selectOptions(screen.getByLabelText('Instituição'), 'ins_pe_alepe')
-    expect(await screen.findByText('ALEPE oficial', { selector: 'h1' })).toBeInTheDocument()
-    await waitFor(() => expect(screen.getAllByTestId('seat')).toHaveLength(2))
-    expect(screen.getByText(/Official seat count not verified/)).toBeInTheDocument()
-    expect(screen.getAllByText('Indisponível na fonte').length).toBeGreaterThan(0)
+    await userEvent.click(screen.getAllByTestId('seat').find((s) => s.textContent?.startsWith('Senador 1 '))!)
+    expect(await screen.findByText('Senador Um')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Perfil oficial/ })).toHaveAttribute('href', 'https://www25.senado.leg.br/1')
   })
 
-  it('selecting a seat opens the inspector with identifiers and official source', async () => {
+  it('mostra o voto secreto de 2025 como inferência com justificativa', async () => {
     renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: /Presidência 2025/ }))
+    expect(await screen.findByText(/O voto foi secreto/)).toBeInTheDocument()
     await waitFor(() => expect(screen.getAllByTestId('seat')).toHaveLength(81))
     await userEvent.click(screen.getAllByTestId('seat')[0])
-    const inspector = screen.getByLabelText('Inspetor')
-    expect(await within(inspector).findByText('senado.parlamentar')).toBeInTheDocument()
-    expect(within(inspector).getByText('Página oficial ↗')).toHaveAttribute('href', 'https://www25.senado.leg.br/ana')
-    expect(within(inspector).getByText(/legis\.senado\.leg\.br/)).toBeInTheDocument()
+    expect(await screen.findByText(/Justificativa/)).toBeInTheDocument()
+    expect(screen.getAllByText('Hipótese').length).toBeGreaterThan(0)
   })
 })

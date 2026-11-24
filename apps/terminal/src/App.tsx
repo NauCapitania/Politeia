@@ -6,20 +6,27 @@ import { useStore } from './store'
 import { TopBar } from './components/TopBar'
 import { Sidebar } from './components/Sidebar'
 import { Inspector } from './components/Inspector'
-import { Overview } from './views/Overview'
-import { People } from './views/People'
 import { Proposals } from './views/Proposals'
-import { GraphView } from './views/GraphView'
 import { Sources } from './views/Sources'
+import { Senado } from './views/Senado'
+import { Votacoes } from './views/Votacoes'
+import { Presidencia2025 } from './views/Presidencia2025'
+import { Presidencia2027 } from './views/Presidencia2027'
+import { Stf } from './views/Stf'
+import { Noticias } from './views/Noticias'
+import { SenatorPanel } from './components/SenatorPanel'
 
-const VIEWS = { overview: Overview, people: People, proposals: Proposals, graph: GraphView, sources: Sources }
+const VIEWS = {
+  senado: Senado, votacoes: Votacoes, presidencia2025: Presidencia2025, presidencia2027: Presidencia2027, stf: Stf,
+  noticias: Noticias, proposals: Proposals, sources: Sources,
+}
 
 export default function App() {
   const { data, isLoading, error } = useInstitutions()
-  const { institutionId, setInstitution, view } = useStore()
+  const { institutionId, setInstitution, view, selectedId } = useStore()
 
   useEffect(() => {
-    if (!institutionId && data?.length) setInstitution(data[0].id)
+    if (!institutionId && data?.length) setInstitution(data.find((i) => i.id === 'ins_br_senado')?.id ?? data[0].id)
   }, [data, institutionId, setInstitution])
 
   const inst = data?.find((i) => i.id === institutionId)
@@ -27,7 +34,7 @@ export default function App() {
 
   return (
     <div className="bp6-dark shell">
-      <TopBar institutions={data ?? []} current={inst} />
+      <TopBar current={inst} />
       <Sidebar inst={inst} />
       <main className="canvas">
         {isLoading && <div style={{ padding: 48 }}><Spinner size={24} /></div>}
@@ -44,7 +51,7 @@ export default function App() {
           )}
         </AnimatePresence>
       </main>
-      <Inspector inst={inst} />
+      {view === 'proposals' || view === 'sources' || !selectedId?.startsWith('per_') ? <Inspector inst={inst} /> : <SenatorPanel id={selectedId} />}
     </div>
   )
 }

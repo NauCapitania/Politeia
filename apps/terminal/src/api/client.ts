@@ -93,3 +93,24 @@ export const useIngestion = (institution?: string) =>
     queryFn: () => api<{ runs: IngestionRun[] }>('/ingestion/status', { institution }),
     enabled: !!institution,
   })
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type Src = { url: string; outlet: string; date?: string | null; kind: string }
+export type SeatRow = {
+  person_id: string; code?: string; name: string; photo_url?: string; uf?: string; party?: string | null
+  participation: string; exercise_start?: string; exercise_end?: string | null; mandate_end?: string | null
+}
+const get = <T,>(path: string, params?: Record<string, string | number | undefined | null>) => () => api<T>(path, params)
+export const useSeats = (data: string) =>
+  useQuery({ queryKey: ['seats', data], queryFn: get<{ date: string; observed: number; seats: SeatRow[]; note?: string }>('/senado/composicao', { data }), placeholderData: keepPreviousData })
+export const useChanges = () => useQuery({ queryKey: ['changes'], queryFn: get<any[]>('/senado/mudancas') })
+export const useSenator = (id?: string | null) =>
+  useQuery({ queryKey: ['senator', id], queryFn: get<any>(`/senadores/${id}`), enabled: !!id })
+export const useVotes = (q?: string, secreta?: string) =>
+  useQuery({ queryKey: ['votes', q, secreta], queryFn: get<any[]>('/votacoes', { q, secreta, limit: 200 }), placeholderData: keepPreviousData })
+export const useVote = (id?: string | null) => useQuery({ queryKey: ['vote', id], queryFn: get<any>(`/votacoes/${id}`), enabled: !!id })
+export const useNews = (tema?: string, entidade?: string) =>
+  useQuery({ queryKey: ['news', tema, entidade], queryFn: get<any[]>('/noticias', { tema, entidade, limit: 120 }), placeholderData: keepPreviousData })
+export const useDossier = (d: string) => useQuery({ queryKey: ['dossier', d], queryFn: get<any>(`/dossies/${d}`) })
+export const usePres2025 = () => useQuery({ queryKey: ['pres2025'], queryFn: get<any>('/presidencia/2025') })
+export const usePres2027 = () => useQuery({ queryKey: ['pres2027'], queryFn: get<any>('/presidencia/2027') })
