@@ -11,6 +11,7 @@ import { SenadoHub } from './views/SenadoHub'
 import { Stf } from './views/Stf'
 import { Noticias } from './views/Noticias'
 import { SenatorPanel } from './components/SenatorPanel'
+import { Agente } from './agente/Agente'
 
 const VIEWS = { senado: SenadoHub, stf: Stf, noticias: Noticias, sources: Sources }
 
@@ -45,6 +46,7 @@ export default function App() {
         </AnimatePresence>
       </main>
       {(view === 'senado' && senadoTab === 'proposicoes') || view === 'sources' || !selectedId?.startsWith('per_') ? <Inspector inst={inst} /> : <SenatorPanel id={selectedId} />}
+      <Agente />
     </div>
   )
 }
