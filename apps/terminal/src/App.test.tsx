@@ -43,8 +43,48 @@ function mockFetch() {
 const renderApp = () => render(<QueryClientProvider client={new QueryClient()}><App /></QueryClientProvider>)
 
 beforeEach(() => {
-  useStore.setState({ institutionId: null, view: 'senado', selectedId: null, partyFilter: null, search: '' })
+  useStore.setState({ institutionId: null, view: 'senado', senadoTab: 'composicao', sidebarCollapsed: false, selectedId: null, partyFilter: null, search: '' })
   mockFetch()
+})
+
+describe('Espaço de trabalho', () => {
+  it('abre a central com dados da base e navega pelo mapa de poder', async () => {
+    useStore.setState({ view: 'inicio' })
+    renderApp()
+    expect(await screen.findByRole('heading', { name: 'A política em perspectiva.' })).toBeInTheDocument()
+    expect(screen.queryByLabelText('Painel de evidências')).not.toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole('button', { name: /Distribuição de poder/ })).toHaveTextContent('2 partidos'))
+    expect(screen.getByRole('img', { name: /PT: 41 cadeiras; PL: 40 cadeiras/ })).toBeInTheDocument()
+    screen.getByRole('main').scrollTop = 124
+    await userEvent.click(screen.getByRole('button', { name: /Explorar composição/ }))
+    expect(screen.getByRole('main').scrollTop).toBe(0)
+    await waitFor(() => expect(screen.getAllByTestId('seat')).toHaveLength(81))
+  })
+
+  it('busca um senador e abre e fecha suas evidências', async () => {
+    useStore.setState({ view: 'inicio' })
+    renderApp()
+    await screen.findByRole('heading', { name: 'A política em perspectiva.' })
+    await userEvent.keyboard('{Control>}k{/Control}')
+    const input = await screen.findByRole('combobox')
+    await userEvent.type(input, 'Senador 1')
+    await userEvent.click(await screen.findByText('Senador 1', { exact: true }))
+    expect(await screen.findByText('Senador Um')).toBeInTheDocument()
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByLabelText('Painel de evidências')).not.toBeInTheDocument())
+  })
+
+  it('navega por teclado e encaminha buscas à base de proposições', async () => {
+    renderApp()
+    await screen.findByRole('tab', { name: 'Composição' })
+    await userEvent.click(screen.getByRole('button', { name: /Buscar ou navegar/ }))
+    const input = await screen.findByRole('combobox')
+    await userEvent.type(input, 'sucessao inexistente')
+    await userEvent.keyboard('{ArrowDown}{ArrowUp}{Enter}')
+    expect(useStore.getState()).toMatchObject({ view: 'senado', senadoTab: 'proposicoes', search: 'sucessao inexistente' })
+    await waitFor(() => expect(screen.queryByRole('combobox', { name: 'Buscar espaços, senadores ou proposições' })).not.toBeInTheDocument())
+  })
 })
 
 describe('hemicycleLayout', () => {

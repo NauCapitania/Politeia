@@ -22,7 +22,7 @@ export function Sources({ inst }: { inst: Institution }) {
       </section>
       <section className="panel" style={{ marginBottom: 16 }}>
         <div className="panel-head">Cobertura</div>
-        <table className="table">
+        <div className="table-wrap" role="region" aria-label="Cobertura por capacidade" tabIndex={0}><table className="table">
           <thead><tr><th>Capacidade</th><th>Status</th><th>Registros</th><th>Último sucesso</th><th>Detalhe</th></tr></thead>
           <tbody>{caps.data?.map((c) => (
             <tr key={c.capability}>
@@ -32,11 +32,11 @@ export function Sources({ inst }: { inst: Institution }) {
               <td className="mono">{fmtDateTime(c.last_success_at)}</td>
               <td className="mono faint" style={{ fontSize: 10.5 }}>{c.note ?? (Object.keys(c.coverage ?? {}).length ? JSON.stringify(c.coverage) : '—')}</td>
             </tr>))}</tbody>
-        </table>
+        </table></div>
       </section>
       <section className="panel">
         <div className="panel-head">Execuções de ingestão</div>
-        <table className="table">
+        <div className="table-wrap" role="region" aria-label="Histórico de ingestão" tabIndex={0}><table className="table">
           <thead><tr><th>Início</th><th>Escopo</th><th>Status</th><th>Conector</th><th>Estatísticas</th><th>Problemas</th></tr></thead>
           <tbody>{runs.data?.runs.map((r) => (
             <tr key={r.id}>
@@ -47,7 +47,7 @@ export function Sources({ inst }: { inst: Institution }) {
               <td className="mono faint" style={{ fontSize: 10.5 }}>{Object.entries(r.stats).filter(([, v]) => typeof v === 'number').map(([k, v]) => `${k}=${v}`).join(' ')}</td>
               <td className="faint" style={{ fontSize: 11 }}>{r.error ?? r.issues.map((i) => `${i.code} ×${i.count}`).join(', ')}</td>
             </tr>))}</tbody>
-        </table>
+        </table></div>
       </section>
     </div>
   )
