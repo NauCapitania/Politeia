@@ -8,7 +8,7 @@ export default defineConfig({
     host: true,
     proxy: {
       '/v1': { target: process.env.POLITEIA_API ?? 'http://localhost:8000', changeOrigin: true },
-      '/api': { target: process.env.POLITEIA_AGENTE ?? 'http://localhost:8788', changeOrigin: true },
+      '/api': { target: process.env.POLITEIA_AGENTE ?? 'http://localhost:8788' },
     },
   },
   test: { environment: 'jsdom', setupFiles: ['./src/test/setup.ts'], css: false },
