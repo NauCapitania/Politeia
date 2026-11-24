@@ -81,6 +81,9 @@ def test_cartacapital_politics_uses_public_google_news_rss():
     payload = b"""<rss><channel><item>
         <title>Noticia de politica - CartaCapital</title>
         <link>https://news.google.com/rss/articles/abc</link>
+        <description>
+        &lt;a href="https://news.google.com/rss/articles/abc" target="_blank"&gt;Noticia de politica&lt;/a&gt;
+        &amp;nbsp;&amp;nbsp;&lt;font color="#6f6f6f"&gt;CartaCapital&lt;/font&gt;</description>
         <source url="https://www.cartacapital.com.br">CartaCapital</source>
     </item></channel></rss>"""
 
@@ -94,6 +97,7 @@ def test_cartacapital_politics_uses_public_google_news_rss():
     assert not batch.issues
     [news] = batch.news
     assert (news.feed, news.outlet, news.title) == ("cartacapital_politica", "CartaCapital", "Noticia de politica")
+    assert news.excerpt is None
 
 
 def test_curated_dossiers_are_sourced_and_keep_messias_out_of_the_court():
