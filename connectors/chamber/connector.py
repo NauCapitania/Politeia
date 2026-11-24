@@ -141,12 +141,14 @@ class ChamberConnector(Connector):
         ids: list[str] = []
         while start <= end:  # the API rejects ranges that cross a month boundary on large windows
             stop = min(end, (start.replace(day=1) + timedelta(days=32)).replace(day=1) - timedelta(days=1))
-            params = {"idOrgao": PLENARIO, "dataInicio": start.isoformat(), "dataFim": stop.isoformat(),
+            # dataFim excludes votes registered during that day, so the window ends on the next day.
+            params = {"idOrgao": PLENARIO, "dataInicio": start.isoformat(),
+                      "dataFim": (stop + timedelta(days=1)).isoformat(),
                       "ordem": "DESC", "ordenarPor": "dataHoraRegistro"}
             for idx in self._pages(batch, "/votacoes", params, "vote_list", start.isoformat()[:7]):
                 ids += [str(v["id"]) for v in batch.raw[idx].json().get("dados") or [] if v.get("id")]
             start = stop + timedelta(days=1)
-        for vid in ids[: int(self.config.get("max_vote_details", 600))]:
+        for vid in list(dict.fromkeys(ids))[: int(self.config.get("max_vote_details", 600))]:
             self._detail(batch, f"/votacoes/{vid}/votos", "vote_ballots", vid, "ballots_unavailable")
 
     def _fetch_committees(self, batch: Batch) -> None:
@@ -325,6 +327,7 @@ class ChamberConnector(Connector):
 
     def _normalize_votes(self, batch: Batch) -> None:
         ballots = self._by_key(batch, "vote_ballots")
+        seen: set[str] = set()
         for idx, raw in enumerate(batch.raw):
             if raw.record_kind != "vote_list":
                 continue
@@ -333,9 +336,10 @@ class ChamberConnector(Connector):
                 batch.issues.append(Issue("error", "schema_changed", "votacoes.dados missing", raw=idx))
                 continue
             for i, v in enumerate(rows):
-                if not v.get("id"):
+                if not v.get("id") or str(v["id"]) in seen:
                     continue
                 vid = str(v["id"])
+                seen.add(vid)
                 result = {1: "aprovado", 0: "rejeitado"}.get(v.get("aprovacao"))
                 ev = VoteEventRecord(
                     source_id=vid, ref=Ref(idx, f"$.dados[{i}]"), held_on=parse_date(v.get("data")),
