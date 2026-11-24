@@ -5,7 +5,7 @@ import uuid
 from collections.abc import Callable
 from datetime import UTC, datetime
 
-from sqlalchemy import and_, func, or_, select, text, update
+from sqlalchemy import and_, delete, func, or_, select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -259,6 +259,9 @@ class Persistor:
                 pid = self.ensure_person(v.person, v.name)
                 rows[pid] = dict(vote_event_id=vid, person_id=pid, party_abbreviation=v.party,
                                  represented_unit=v.unit, vote_code=v.vote_code, vote_label=v.vote_label)
+            if ev.secret:  # a secret ballot keeps only what the source still lists (participation), never stale choices
+                self.s.execute(delete(IndividualVote).where(
+                    IndividualVote.vote_event_id == vid, IndividualVote.person_id.not_in(list(rows))))
             if rows:
                 stmt = insert(IndividualVote).values(list(rows.values()))
                 self.s.execute(stmt.on_conflict_do_update(
