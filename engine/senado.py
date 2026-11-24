@@ -1,7 +1,7 @@
 """Senate-specific read models: who held each seat on a date, party on a date, change events."""
 
 from collections import defaultdict
-from datetime import date
+from datetime import date, timedelta
 
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
@@ -21,19 +21,22 @@ def person_codes(s: Session, ids: list[str] | None = None) -> dict[str, str]:
 
 
 def parties_on(s: Session, person_ids: list[str], on: date) -> dict[str, str]:
-    """Party abbreviation per person on a date. Dated affiliation history decides; the current roster is used only
-    for people without any affiliation history and only for dates on or after the roster was observed."""
+    """Party abbreviation per person on a date. Dated affiliation history decides; roster observations are used only
+    for people without any affiliation history, bounded by when the roster last listed them."""
     rows = s.execute(select(PartyMembership.person_id, Party.abbreviation, PartyMembership.basis,
-                            PartyMembership.valid_from, PartyMembership.valid_to, PartyMembership.is_current)
+                            PartyMembership.valid_from, PartyMembership.valid_to, PartyMembership.is_current,
+                            PartyMembership.last_observed_at)
                      .join(Party, Party.id == PartyMembership.party_id)
                      .where(PartyMembership.person_id.in_(person_ids))).all()
     with_history = {r.person_id for r in rows if r.basis == "affiliation_history"}
     best: dict[str, tuple] = {}
-    for pid, abbr, basis, vf, vt, current in rows:
-        if basis == "affiliation_history":
-            if (vf and vf > on) or (vt and vt <= on):
+    for pid, abbr, basis, vf, vt, current, seen in rows:
+        if basis != "affiliation_history":
+            if pid in with_history:
                 continue
-        elif pid in with_history or not current or (vf and vf > on):
+            if vt is None and not current and seen is not None:
+                vt = seen.date() + timedelta(days=1)
+        if (vf and vf > on) or (vt and vt <= on):
             continue
         rank = vf or date.min
         if pid not in best or rank > best[pid][0]:
