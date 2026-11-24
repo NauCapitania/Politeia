@@ -229,9 +229,9 @@ describe('Plataforma modular', () => {
     await userEvent.type(screen.getByLabelText('Pergunta ao agente'), 'Minha pergunta ainda não enviada')
     await userEvent.click(screen.getByRole('button', { name: 'Fechar agente' }))
     await userEvent.click(screen.getByRole('button', { name: 'Investigar com o agente →' }))
-    const input = await screen.findByLabelText('Pergunta ao agente')
-    expect(input).toHaveValue(expect.stringContaining('Minha pergunta ainda não enviada'))
-    expect(input).toHaveValue(expect.stringContaining('Quais comissões?'))
+    const input = await screen.findByLabelText('Pergunta ao agente') as HTMLTextAreaElement
+    expect(input.value).toContain('Minha pergunta ainda não enviada')
+    expect(input.value).toContain('Quais comissões?')
     expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
   })
 

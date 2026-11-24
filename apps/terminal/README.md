@@ -4,7 +4,7 @@ As instituições e as análises são espaços independentes. `src/platform.ts` 
 
 `src/views/InstitutionModules.tsx` integra os módulos pelas exportações nomeadas `Camara`, `Executivo` e `Partidos`, nos respectivos arquivos de `src/views/`, sem props obrigatórias. Antes de cada módulo ser entregue, o destino mostra explicitamente a lacuna de cobertura; o build continua independente. Cada módulo deve tratar seus próprios estados de coleta, erro e ausência de dados, sem reutilizar o identificador institucional do Senado.
 
-Os cadernos em **Análises → Nova análise** guardam pergunta e notas apenas no `localStorage` deste navegador (`politeia.analises.v1`). Não há sincronização ou coleta automática. **Investigar com o agente** prepara uma pergunta para revisão antes do envio; notas não são enviadas automaticamente.
+Os cadernos em **Análises → Nova análise** guardam pergunta e notas apenas no `localStorage` deste navegador (`politeia.analises.v1`). Abas deste navegador veem alterações, mas não há sincronização entre dispositivos ou coleta automática. **Investigar com o agente** acrescenta uma pergunta ao rascunho para revisão antes do envio; título e notas privados não entram no contexto oculto do agente.
 
 # Snapshot estático e Cloudflare Pages
 
@@ -30,7 +30,7 @@ Se o banco limitar conexões, experimente `SNAPSHOT_WORKERS=1`.
 Com os secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit) e `CLOUDFLARE_ACCOUNT_ID` no ambiente, rode
 `npm --prefix apps/terminal run deploy:pages` para exportar, compilar e publicar no projeto
 `politeia`. No primeiro deploy, vincule `politeia.pedropcventura.com` como domínio personalizado
-no Cloudflare Pages. O site é público, sem Cloudflare Access.
+no Cloudflare Pages. A publicação está protegida pelo Cloudflare Access; confirme o deploy pela API do Pages quando não houver sessão autenticada no domínio.
 
 # React + TypeScript + Vite
 
