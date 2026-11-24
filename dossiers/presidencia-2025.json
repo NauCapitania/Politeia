@@ -360,7 +360,7 @@
     "caveats": [
      "Os parâmetros são hipóteses explícitas, não medições; mudar um parâmetro muda o resultado.",
      "Uma probabilidade alta não indica como o senador votou; indica onde o modelo coloca os votos dissidentes dado o placar.",
-     "Declarações públicas individuais (claims) com fonte substituem a hipótese partidária para aquele senador."
+     "Declarações públicas individuais com fonte substituem a hipótese partidária para aquele senador."
     ]
    },
    "sources": [

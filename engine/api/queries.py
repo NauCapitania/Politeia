@@ -289,8 +289,8 @@ def relationships(s: Session, entity_id: str, limit: int = 200) -> list[S.Relati
             rels.append(S.Relationship(
                 id=m.id, kind="holds_mandate", source=entity_id, target=m.institution_id,
                 label=f"{inst.terminology.get('member', m.role_type)} {part}".strip(),
-                explanation=f"Listed as current member by {inst.short_name} ({m.represented_unit or 'unit n/a'})"
-                if m.status == "in_exercise" else "No longer listed as current member",
+                explanation=f"Listado como membro atual por {inst.short_name} ({m.represented_unit or 'UF n/d'})"
+                if m.status == "in_exercise" else "Não consta mais como membro atual",
                 valid_from=m.start_date, valid_to=m.end_date, is_current=m.status == "in_exercise",
                 epistemic_status=m.epistemic_status))
         for pm, party in s.execute(select(PartyMembership, Party).join(Party, Party.id == PartyMembership.party_id)
@@ -299,8 +299,8 @@ def relationships(s: Session, entity_id: str, limit: int = 200) -> list[S.Relati
             rels.append(S.Relationship(
                 id=pm.id, kind="party_affiliation" if history else "current_party", source=entity_id, target=party.id,
                 label=party.abbreviation,
-                explanation="Party affiliation record from the source's affiliation history" if history
-                else "Party shown in the institution's current member listing",
+                explanation="Filiação registrada no histórico partidário da fonte" if history
+                else "Partido exibido na lista atual de membros da instituição",
                 valid_from=pm.valid_from, valid_to=pm.valid_to, is_current=pm.is_current,
                 epistemic_status=pm.epistemic_status))
         for a, p in s.execute(select(ProposalAuthor, Proposal).join(Proposal, Proposal.id == ProposalAuthor.proposal_id)
@@ -308,27 +308,27 @@ def relationships(s: Session, entity_id: str, limit: int = 200) -> list[S.Relati
                               .order_by(Proposal.introduced_on.desc().nulls_last()).limit(limit)):
             rels.append(S.Relationship(
                 id=a.id, kind="authored", source=entity_id, target=p.id, label=p.identifier,
-                explanation="Author by official parliamentary identifier" if a.resolution == "official_id"
-                else "Author name matched to member name (no identifier in source)",
+                explanation="Autoria pelo identificador parlamentar oficial" if a.resolution == "official_id"
+                else "Nome do autor associado ao nome do parlamentar (fonte sem identificador)",
                 valid_from=p.introduced_on, epistemic_status=a.epistemic_status))
     elif kind == "party":
         for pm, person in s.execute(select(PartyMembership, Person).join(Person, Person.id == PartyMembership.person_id)
                                     .where(PartyMembership.party_id == entity_id, PartyMembership.is_current.is_(True),
                                            PartyMembership.basis == "current_listing").limit(limit)):
             rels.append(S.Relationship(id=pm.id, kind="current_party", source=person.id, target=entity_id,
-                                       label=person.name, explanation="Current member listed with this party",
+                                       label=person.name, explanation="Membro atual listado neste partido",
                                        is_current=True, epistemic_status=pm.epistemic_status))
     elif kind == "proposal":
         prop = s.get(Proposal, entity_id)
         for a in s.scalars(select(ProposalAuthor).where(ProposalAuthor.proposal_id == entity_id)):
             if a.person_id:
                 rels.append(S.Relationship(id=a.id, kind="authored", source=a.person_id, target=entity_id,
-                                           label=a.author_name, explanation=f"Author ({a.resolution})",
+                                           label=a.author_name, explanation="Autor(a) da proposição",
                                            valid_from=prop.introduced_on, epistemic_status=a.epistemic_status))
         if prop:
             rels.append(S.Relationship(id=f"{entity_id}:inst", kind="submitted_to", source=entity_id,
-                                       target=prop.institution_id, label="submitted to",
-                                       explanation="Proposal registered by this institution's source system",
+                                       target=prop.institution_id, label="apresentada a",
+                                       explanation="Proposição registrada no sistema de origem da instituição",
                                        epistemic_status="verified"))
     for kind_name in ("mandate", "party_membership", "proposal_author"):
         ids = [r.id for r in rels]
@@ -343,13 +343,14 @@ def timeline(s: Session, entity_id: str) -> list[S.TimelineItem]:
     items: list[S.TimelineItem] = []
     for r in relationships(s, entity_id):
         if r.valid_from:
-            verb = {"holds_mandate": "Mandate starts", "party_affiliation": "Joins party", "authored": "Presents",
-                    "current_party": "Party"}.get(r.kind, r.kind)
+            verb = {"holds_mandate": "Início de mandato", "party_affiliation": "Filia-se a", "authored": "Apresenta",
+                    "current_party": "Partido"}.get(r.kind, r.kind)
             items.append(S.TimelineItem(date=r.valid_from, kind=r.kind, label=f"{verb}: {r.label}",
                                         related_id=r.target if r.source == entity_id else r.source,
                                         epistemic_status=r.epistemic_status))
         if r.valid_to and r.kind == "party_affiliation":
-            items.append(S.TimelineItem(date=r.valid_to, kind="party_disaffiliation", label=f"Leaves party: {r.label}",
+            items.append(S.TimelineItem(date=r.valid_to, kind="party_disaffiliation",
+                                        label=f"Deixa o partido: {r.label}",
                                         related_id=r.target, epistemic_status=r.epistemic_status))
     if entity_kind(entity_id) == "proposal":
         for e in s.scalars(select(LegislativeEvent).where(LegislativeEvent.proposal_id == entity_id)):
@@ -376,8 +377,8 @@ def graph(s: Session, inst: Institution, focus: str | None, limit: int = 60) -> 
                 node(g.party.id, "party", g.party.abbreviation, members=g.count, name=g.party.name)
                 edges.append(S.Relationship(
                     id=f"{inst.id}:{g.party.id}", kind="represented_in", source=g.party.id, target=inst.id,
-                    label=f"{g.count} seats",
-                    explanation=f"{g.count} current members listed with {g.party.abbreviation}",
+                    label=f"{g.count} cadeiras",
+                    explanation=f"{g.count} membros atuais listados no {g.party.abbreviation}",
                     is_current=True, epistemic_status="derived"))
         return S.Graph(focus=inst.id, nodes=list(nodes.values()), edges=edges, truncated=False)
 

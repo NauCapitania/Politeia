@@ -163,7 +163,7 @@
     },
     "committees": {
       "declared": "not_ingested",
-      "note": "Available at /senador/{codigo}/comissoes and /comissao; planned."
+      "note": "Disponível em /senador/{codigo}/comissoes e /comissao; ainda não ingerido."
     },
     "composition_history": {
       "scope": "composition"

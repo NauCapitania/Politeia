@@ -1,6 +1,6 @@
 import type { Institution } from '../api/client'
 import { useCapabilities, useIngestion } from '../api/client'
-import { CAPABILITY_LABEL, STATUS_LABEL, fmtDateTime } from '../format'
+import { CAPABILITY_LABEL, RUN_STATUS_LABEL, SCOPE_LABEL, STATUS_LABEL, fmtDateTime } from '../format'
 
 export function Sources({ inst }: { inst: Institution }) {
   const runs = useIngestion(inst.id)
@@ -30,7 +30,7 @@ export function Sources({ inst }: { inst: Institution }) {
               <td><span className={`status ${c.status}`}>{STATUS_LABEL[c.status] ?? c.status}</span></td>
               <td className="mono">{c.record_count ?? '—'}</td>
               <td className="mono">{fmtDateTime(c.last_success_at)}</td>
-              <td className="mono faint" style={{ fontSize: 10.5 }}>{c.note ?? JSON.stringify(c.coverage)}</td>
+              <td className="mono faint" style={{ fontSize: 10.5 }}>{c.note ?? (Object.keys(c.coverage ?? {}).length ? JSON.stringify(c.coverage) : '—')}</td>
             </tr>))}</tbody>
         </table>
       </section>
@@ -41,8 +41,8 @@ export function Sources({ inst }: { inst: Institution }) {
           <tbody>{runs.data?.runs.map((r) => (
             <tr key={r.id}>
               <td className="mono">{fmtDateTime(r.started_at)}</td>
-              <td>{r.scope.join(', ')}</td>
-              <td><span className={`status ${r.status}`}>{r.status}</span></td>
+              <td>{r.scope.map((x) => SCOPE_LABEL[x] ?? x).join(', ')}</td>
+              <td><span className={`status ${r.status}`}>{RUN_STATUS_LABEL[r.status] ?? r.status}</span></td>
               <td className="mono">{r.connector}@{r.connector_version}</td>
               <td className="mono faint" style={{ fontSize: 10.5 }}>{Object.entries(r.stats).filter(([, v]) => typeof v === 'number').map(([k, v]) => `${k}=${v}`).join(' ')}</td>
               <td className="faint" style={{ fontSize: 11 }}>{r.error ?? r.issues.map((i) => `${i.code} ×${i.count}`).join(', ')}</td>

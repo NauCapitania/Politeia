@@ -3,7 +3,7 @@ import { motion } from 'motion/react'
 import type { Institution, Relationship } from '../api/client'
 import { useEntity, useRelationships, useTimeline } from '../api/client'
 import { useStore } from '../store'
-import { EPISTEMIC_LABEL, fmtDate, partyColor } from '../format'
+import { AUTHOR_KIND_LABEL, RESOLUTION_LABEL, EPISTEMIC_LABEL, fmtDate, partyColor } from '../format'
 import { SourceLink } from './SourceLink'
 
 const KIND_LABEL: Record<string, string> = { person: 'Pessoa', party: 'Partido', mandate: 'Mandato', proposal: 'Proposição', institution: 'Instituição' }
@@ -191,7 +191,7 @@ function ProposalDetail({ a }: { a: Record<string, any> }) {
         {(a.authors ?? []).map((au: any) => (
           <div key={au.ordinal} style={{ marginBottom: 6 }}>
             {au.person_id ? <a className="link" style={{ cursor: 'pointer' }} onClick={() => select(au.person_id)}>{au.name}</a> : <span>{au.name}</span>}
-            <span className="faint"> · {au.kind}</span> <span className={`status ${au.epistemic_status}`}>{au.resolution}</span>
+            <span className="faint"> · {AUTHOR_KIND_LABEL[au.kind] ?? au.kind}</span> <span className={`status ${au.epistemic_status}`}>{RESOLUTION_LABEL[au.resolution] ?? au.resolution}</span>
             {au.note && <div className="faint" style={{ fontSize: 11 }}>{au.note}</div>}
           </div>
         ))}

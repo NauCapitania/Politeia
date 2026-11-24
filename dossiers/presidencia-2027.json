@@ -116,7 +116,7 @@
      "PSB": 4,
      "NOVO": 3,
      "PSDB": 2,
-     "PODEMOS": 2,
+     "PODE": 2,
      "REDE": 1,
      "PDT": 1,
      "S/PARTIDO": 1
@@ -325,7 +325,7 @@
    "kind": "elected_2026",
    "payload": {
     "name": "Rayssa Furlan",
-    "party": "PODEMOS",
+    "party": "PODE",
     "uf": "AP",
     "term": "2027–2035",
     "note": null
@@ -1175,7 +1175,7 @@
    "kind": "elected_2026",
    "payload": {
     "name": "Styvenson Valentim",
-    "party": "PODEMOS",
+    "party": "PODE",
     "uf": "RN",
     "term": "2027–2035",
     "note": null

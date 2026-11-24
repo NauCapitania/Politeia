@@ -36,6 +36,35 @@ export const CAPABILITY_LABEL: Record<string, string> = {
   proposal_events: 'Tramitação',
   committees: 'Comissões',
   votes: 'Votações',
+  composition_history: 'Histórico de composição',
+  mandate_exercises: 'Exercícios de mandato',
+  speeches: 'Discursos',
+  news: 'Notícias',
+}
+
+export const SCOPE_LABEL: Record<string, string> = {
+  ...CAPABILITY_LABEL,
+  composition: 'Composição',
+}
+
+export const RUN_STATUS_LABEL: Record<string, string> = {
+  running: 'Em andamento',
+  succeeded: 'Concluída',
+  partial: 'Parcial',
+  failed: 'Falhou',
+}
+
+export const RESOLUTION_LABEL: Record<string, string> = {
+  official_id: 'ID oficial',
+  name_match: 'por nome',
+  unresolved: 'não resolvido',
+}
+
+export const AUTHOR_KIND_LABEL: Record<string, string> = {
+  member: 'senador(a)',
+  committee: 'comissão',
+  executive: 'Poder Executivo',
+  external: 'externo',
 }
 
 export const EPISTEMIC_LABEL: Record<string, string> = {
