@@ -188,7 +188,7 @@ describe('Snapshot estático', () => {
       const user = userEvent.setup()
       await user.click(screen.getByPlaceholderText('Ementa ou número…'))
       await user.paste('CRÉDITO URBANO')
-      expect(await screen.findByText('1 registros ingeridos')).toBeInTheDocument()
+      expect(await screen.findByText('1 registro ingerido')).toBeInTheDocument()
       expect(screen.getByText('PL 51/2026')).toBeInTheDocument()
       expect(screen.queryByText('PEC 1/2026')).not.toBeInTheDocument()
 

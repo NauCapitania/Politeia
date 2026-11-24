@@ -15,7 +15,7 @@ export function Proposals({ inst }: { inst: Institution }) {
   const total = page.data?.total ?? 0
   return (
     <div className="view">
-      <div className="view-header"><h1>Proposições</h1><span className="sub">{total} registros ingeridos</span></div>
+      <div className="view-header"><h1>Proposições</h1><span className="sub">{total} {total === 1 ? 'registro ingerido' : 'registros ingeridos'}</span></div>
       <div className="toolbar">
         <InputGroup leftIcon="search" placeholder="Ementa ou número…" value={search} onValueChange={(v) => { setSearch(v); setOffset(0) }} style={{ width: 300 }} />
         <HTMLSelect aria-label="Tipo" value={type} onChange={(e) => { setType(e.currentTarget.value); setOffset(0) }}

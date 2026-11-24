@@ -102,11 +102,13 @@ class ChamberConnector(Connector):
                 break
         return out
 
-    def _detail(self, batch: Batch, path: str, kind: str, key: str, issue: str) -> int | None:
+    def _detail(self, batch: Batch, path: str, kind: str, key: str, issue: str,
+                missing_ok: bool = False) -> int | None:
         try:
             return batch.add_raw(RawResponse(self.client.get(f"{self.base}{path}"), kind, key))
         except SourceAccessError as exc:
-            batch.issues.append(Issue("warning", issue, str(exc), {"id": key}))
+            severity = "info" if missing_ok and exc.status == 404 else "warning"
+            batch.issues.append(Issue(severity, issue, str(exc), {"id": key}))
             return None
 
     def _fetch_members(self, batch: Batch) -> None:
@@ -149,7 +151,8 @@ class ChamberConnector(Connector):
                 ids += [str(v["id"]) for v in batch.raw[idx].json().get("dados") or [] if v.get("id")]
             start = stop + timedelta(days=1)
         for vid in list(dict.fromkeys(ids))[: int(self.config.get("max_vote_details", 600))]:
-            self._detail(batch, f"/votacoes/{vid}/votos", "vote_ballots", vid, "ballots_unavailable")
+            # Symbolic votes have no ballots endpoint (404), so a missing one is expected.
+            self._detail(batch, f"/votacoes/{vid}/votos", "vote_ballots", vid, "ballots_unavailable", missing_ok=True)
 
     def _fetch_committees(self, batch: Batch) -> None:
         ids: list[str] = []

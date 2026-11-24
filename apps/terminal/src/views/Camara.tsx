@@ -61,7 +61,7 @@ function Composicao() {
               <div key={g.party?.id ?? 'none'} className="camara-bar-row">
                 <span className="mono camara-label">{g.party?.abbreviation ?? 's/ partido'}</span>
                 <span className="camara-track"><span className="camara-bar" style={{ width: `${(g.count / comp.data!.groups[0].count) * 100}%`, background: partyColor(g.party?.abbreviation) }} /></span>
-                <span className="mono faint">{g.count} · {((g.count / total) * 100).toFixed(1)}%</span>
+                <span className="mono faint">{g.count} · {((g.count / total) * 100).toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%</span>
               </div>
             ))}
           </div>
@@ -176,8 +176,8 @@ function Votacoes() {
     <div>
       <p className="lede">Votações do Plenário publicadas nos Dados Abertos da Câmara. Só as votações nominais (painel eletrônico) trazem o voto de cada deputado; as simbólicas registram apenas o resultado.</p>
       <div className="toolbar">
-        <InputGroup leftIcon="search" placeholder="Filtrar por descrição ou proposição" value={q} onValueChange={(v) => { setQ(v); setLimit(PAGE) }} small />
-        <HTMLSelect minimal value={kind} onChange={(e) => { setKind(e.currentTarget.value); setLimit(PAGE) }}
+        <InputGroup leftIcon="search" placeholder="Filtrar por descrição ou proposição" value={q} onValueChange={(v) => { setQ(v); setLimit(PAGE); setOpen(null) }} small />
+        <HTMLSelect minimal value={kind} onChange={(e) => { setKind(e.currentTarget.value); setLimit(PAGE); setOpen(null) }}
           options={[{ value: 'true', label: 'Nominais' }, { value: 'false', label: 'Simbólicas' }, { value: '', label: 'Todas' }]} />
       </div>
       <div className="split">
