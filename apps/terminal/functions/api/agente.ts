@@ -48,7 +48,8 @@ export const onRequestPost = async ({ request, env, waitUntil }: { request: Requ
   const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>()
   const writer = writable.getWriter()
   const encoder = new TextEncoder()
-  const emit = (event: AgentEvent) => { void writer.write(encoder.encode(`${JSON.stringify(event)}\n`)) }
+  const stop = new AbortController()
+  const emit = (event: AgentEvent) => { writer.write(encoder.encode(`${JSON.stringify(event)}\n`)).catch(() => stop.abort()) }
 
   const work = runAgent({
     apiKey: env.GEMINI_API_KEY,
@@ -59,14 +60,16 @@ export const onRequestPost = async ({ request, env, waitUntil }: { request: Requ
       return res.text()
     },
     searchNews: (query) => searchGoogleNews(query),
+    signal: stop.signal,
   }, body.mensagens, body.contexto, emit)
     .catch((error: unknown) => {
+      if (stop.signal.aborted) return
       const status = (error as { status?: number }).status
       emit({ tipo: 'erro', texto: status === 429
         ? 'Limite gratuito do Gemini atingido no momento. Espere um minuto e tente de novo.'
         : 'O agente não conseguiu responder agora. Tente de novo em instantes.' })
     })
-    .finally(() => writer.close())
+    .finally(() => writer.close().catch(() => {}))
 
   waitUntil(work)
   return new Response(readable, {

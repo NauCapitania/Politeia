@@ -31,6 +31,7 @@ export type AgentDeps = {
   readData: (path: string) => Promise<string | null>
   searchNews: (query: string) => Promise<NewsItem[]>
   fetchImpl?: typeof fetch
+  signal?: AbortSignal
 }
 export type NewsItem = { titulo: string; link: string; data: string; veiculo: string }
 
@@ -44,7 +45,14 @@ const TOOLS = [{
     {
       name: 'ler_dados',
       description: 'Lê um arquivo JSON do snapshot do Politeia (Senado, STF, caso Master, notícias). Veja o catálogo nas instruções.',
-      parameters: { type: 'object', properties: { caminho: { type: 'string', description: 'Ex.: /senado/composicao/2026-11-24 ou /senadores/per_xxx' } }, required: ['caminho'] },
+      parameters: {
+        type: 'object',
+        properties: {
+          caminho: { type: 'string', description: 'Ex.: /senado/composicao/2026-11-24 ou /senadores/per_xxx' },
+          inicio: { type: 'number', description: 'Posição (em caracteres) para continuar um arquivo grande; use o valor de "proximo_inicio" da leitura anterior.' },
+        },
+        required: ['caminho'],
+      },
     },
     {
       name: 'buscar_noticias',
@@ -118,7 +126,7 @@ export function validChart(value: unknown): ChartSpec | null {
   if (!c || !['barra', 'linha', 'pizza'].includes(c.tipo as string) || typeof c.titulo !== 'string') return null
   if (!Array.isArray(c.rotulos) || !Array.isArray(c.series) || !c.rotulos.length || c.rotulos.length > 60) return null
   const rotulos = c.rotulos.map(String)
-  const series = c.series.slice(0, 6).map((s) => ({
+  const series = c.series.slice(0, c.tipo === 'pizza' ? 1 : 6).map((s) => ({
     nome: String(s?.nome ?? ''),
     valores: (Array.isArray(s?.valores) ? s.valores : []).slice(0, rotulos.length).map(Number),
   })).filter((s) => s.valores.length === rotulos.length && s.valores.every(Number.isFinite))
@@ -172,6 +180,7 @@ async function generate(deps: AgentDeps, model: string, system: string, contents
   const res = await (deps.fetchImpl ?? fetch)(`${GEMINI}/${model}:generateContent`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-goog-api-key': deps.apiKey },
+    signal: deps.signal,
     body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents, tools: TOOLS, generationConfig: { temperature: 0.4 } }),
   })
   if (!res.ok) throw new GeminiError(res.status, `Gemini ${res.status}`)
@@ -191,8 +200,11 @@ async function generateWithFallback(deps: AgentDeps, state: { model: number }, s
   }
 }
 
-function clip(text: string) {
-  return text.length > MAX_TOOL_CHARS ? `${text.slice(0, MAX_TOOL_CHARS)}… [truncado: arquivo grande; peça um recorte mais específico]` : text
+export function page(text: string, inicio = 0) {
+  const start = Math.max(0, Math.min(text.length, Math.floor(inicio) || 0))
+  const end = start + MAX_TOOL_CHARS
+  if (start === 0 && end >= text.length) return { conteudo: text }
+  return { conteudo: text.slice(start, end), total: text.length, ...(end < text.length ? { proximo_inicio: end } : {}) }
 }
 
 async function runTool(deps: AgentDeps, call: NonNullable<Part['functionCall']>, emit: (e: AgentEvent) => void): Promise<unknown> {
@@ -202,7 +214,7 @@ async function runTool(deps: AgentDeps, call: NonNullable<Part['functionCall']>,
     emit({ tipo: 'passo', texto: `Lendo ${path}` })
     if (!DATA_PATH.test(path) || path.includes('..')) return { erro: 'Caminho inválido.' }
     const body = await deps.readData(path)
-    return body === null ? { erro: `Arquivo ${path} não existe no snapshot.` } : { conteudo: clip(body) }
+    return body === null ? { erro: `Arquivo ${path} não existe no snapshot.` } : page(body, Number(args.inicio ?? 0))
   }
   if (call.name === 'buscar_noticias') {
     const query = String(args.consulta ?? '').slice(0, 200)
@@ -243,6 +255,7 @@ export async function runAgent(
   const state = { model: 0 }
   emit({ tipo: 'passo', texto: 'Pensando' })
   for (let step = 0; step < MAX_STEPS; step++) {
+    deps.signal?.throwIfAborted()
     const content = await generateWithFallback(deps, state, system, contents)
     const parts = content.parts ?? []
     contents.push({ role: 'model', parts })

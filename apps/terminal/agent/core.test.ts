@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { parseNewsRss, runAgent, validChart, validNetwork, type AgentEvent } from './core'
+import { page, parseNewsRss, runAgent, validChart, validNetwork, type AgentEvent } from './core'
 
 const reply = (parts: unknown[]) => new Response(JSON.stringify({ candidates: [{ content: { role: 'model', parts } }] }))
 
@@ -69,5 +69,22 @@ describe('validNetwork', () => {
   })
   it('rejeita rede com menos de 2 nós', () => {
     expect(validNetwork({ titulo: 'x', nos: [{ id: 'a', rotulo: 'A' }], arestas: [] })).toBeNull()
+  })
+})
+
+describe('page', () => {
+  it('pagina arquivos grandes com proximo_inicio', () => {
+    const texto = 'x'.repeat(45_000)
+    const primeira = page(texto)
+    expect(primeira.conteudo).toHaveLength(40_000)
+    expect(primeira.proximo_inicio).toBe(40_000)
+    const segunda = page(texto, primeira.proximo_inicio)
+    expect(segunda.conteudo).toHaveLength(5_000)
+    expect(segunda.proximo_inicio).toBeUndefined()
+    expect(page('{"a":1}')).toEqual({ conteudo: '{"a":1}' })
+  })
+  it('pizza mantém só uma série', () => {
+    const c = validChart({ tipo: 'pizza', titulo: 'P', rotulos: ['a', 'b'], series: [{ nome: 's1', valores: [1, 2] }, { nome: 's2', valores: [3, 4] }] })
+    expect(c?.series).toHaveLength(1)
   })
 })
