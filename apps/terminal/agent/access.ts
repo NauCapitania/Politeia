@@ -11,7 +11,7 @@ function b64url(input: string) {
 
 async function certs(team: string, fetchImpl: typeof fetch, fresh = false): Promise<Jwk[]> {
   const cached = certCache.get(team)
-  if (!fresh && cached && Date.now() - cached.at < 3_600_000) return cached.keys
+  if (cached && Date.now() - cached.at < (fresh ? 60_000 : 3_600_000)) return cached.keys
   const res = await fetchImpl(`https://${team}/cdn-cgi/access/certs`)
   if (!res.ok) throw new Error('certs')
   const { keys } = await res.json() as { keys: Jwk[] }
