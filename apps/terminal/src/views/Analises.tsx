@@ -1,8 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Icon } from '@blueprintjs/core'
 import { ANALYSES, loadNotebooks, NOTEBOOK_KEY, type Notebook } from '../analyses'
 import { useStore } from '../store'
 import { MasterAnalysis } from './MasterAnalysis'
+
+function mergeNotebooks(saved: Notebook[], updates: Notebook[]) {
+  return [...new Map([...saved, ...updates].map((n) => [n.id, n])).values()]
+}
 
 export function Analises() {
   const { analysisId, setAnalysis, setView, setSenadoTab, setAgentDraft } = useStore()
@@ -11,23 +15,24 @@ export function Analises() {
   const [title, setTitle] = useState('')
   const [question, setQuestion] = useState('')
   const [saveError, setSaveError] = useState(false)
+  const pending = useRef<Notebook[]>([])
   const current = notebooks.find((n) => n.id === analysisId)
 
   useEffect(() => {
-    const refresh = (event: StorageEvent) => { if (event.key === NOTEBOOK_KEY || event.key === null) setNotebooks(loadNotebooks()) }
+    const refresh = (event: StorageEvent) => { if (event.key === NOTEBOOK_KEY || event.key === null) setNotebooks(mergeNotebooks(loadNotebooks(), pending.current)) }
     window.addEventListener('storage', refresh)
     return () => window.removeEventListener('storage', refresh)
   }, [])
 
   function save(notebook: Notebook) {
-    const merge = (all: Notebook[]) => all.some((n) => n.id === notebook.id) ? all.map((n) => n.id === notebook.id ? notebook : n) : [...all, notebook]
+    pending.current = mergeNotebooks(pending.current, [notebook])
+    const next = mergeNotebooks(loadNotebooks(), pending.current)
+    setNotebooks(next)
     try {
-      const next = merge(loadNotebooks())
       localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(next))
-      setNotebooks(next)
+      pending.current = []
       setSaveError(false)
     } catch {
-      setNotebooks((all) => merge(all))
       setSaveError(true)
     }
   }

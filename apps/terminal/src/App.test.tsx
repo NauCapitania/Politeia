@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
@@ -262,6 +262,31 @@ describe('Plataforma modular', () => {
     await userEvent.click(input)
     await userEvent.keyboard('{Enter}')
     expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
+  })
+
+  it('preserva notas não salvas após erro de cota e atualização de outra aba', async () => {
+    const first = { id: 'local-one', title: 'Educação', question: 'Pergunta um', notes: '' }
+    const other = { id: 'local-two', title: 'Saúde', question: 'Pergunta dois', notes: 'Outra aba' }
+    const key = 'politeia.analises.v1'
+    localStorage.setItem(key, JSON.stringify([first]))
+    useStore.setState({ view: 'analises', analysisId: first.id })
+    renderApp()
+    const input = await screen.findByLabelText('Evidências, links e hipóteses')
+    const write = Storage.prototype.setItem
+    const failure = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, name, value) {
+      if (name === key) throw new DOMException('Full', 'QuotaExceededError')
+      write.call(this, name, value)
+    })
+    await userEvent.type(input, 'Nota não salva')
+    expect(screen.getByRole('status')).toHaveTextContent('Não foi possível salvar')
+    failure.mockRestore()
+    localStorage.setItem(key, JSON.stringify([first, other]))
+    act(() => window.dispatchEvent(new StorageEvent('storage', { key })))
+    expect(input).toHaveValue('Nota não salva')
+    await userEvent.click(screen.getByRole('button', { name: 'Todas as análises' }))
+    await userEvent.click(screen.getByRole('button', { name: /Saúde/ }))
+    await userEvent.type(screen.getByLabelText('Evidências, links e hipóteses'), '!')
+    expect(JSON.parse(localStorage.getItem(key)!)).toEqual([{ ...first, notes: 'Nota não salva' }, { ...other, notes: 'Outra aba!' }])
   })
 
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
