@@ -39,7 +39,7 @@ export function LocalTerminal({ onClose }: { onClose: () => void }) {
       const target = normalized.slice(6)
       if (target === 'senado' || target === 'votacoes') { setSenadoTab(target === 'senado' ? 'composicao' : 'votacoes'); onClose(); return }
       const views = { inicio: 'inicio', stf: 'stf', noticias: 'noticias', fontes: 'sources' } as const
-      if (target in views) { setView(views[target as keyof typeof views]); onClose(); return }
+      if (Object.hasOwn(views, target)) { setView(views[target as keyof typeof views]); onClose(); return }
       entry.lines = ['Pasta não encontrada. Digite ajuda para ver os destinos disponíveis.']
     } else if (normalized.startsWith('buscar ')) {
       const term = normalized.slice(7).trim()
