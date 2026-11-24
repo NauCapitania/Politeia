@@ -167,6 +167,10 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
 
     proposals = read("institutions/ins_br_senado/proposals")
     assert proposals == api.get("/v1/institutions/ins_br_senado/proposals").json()["items"]
+    for row in proposals:
+        path = f"entities/{row['id']}"
+        for suffix in ("", "/relationships", "/timeline"):
+            assert read(path + suffix) == api.get(f"/v1/{path}{suffix}").json()
     proposal = read(f"entities/{proposals[0]['id']}")
     assert proposal["sources"]
     for source in proposal["sources"]:

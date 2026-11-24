@@ -4,8 +4,10 @@ import argparse
 import json
 import sys
 from collections import defaultdict
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta
+from itertools import batched
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from zoneinfo import ZoneInfo
@@ -20,6 +22,8 @@ OUTPUT = ROOT / "apps/terminal/public/data"
 START = date(2023, 2, 1)
 NEWS_TOPICS = ("impeachment_stf", "pgr", "stf", "caso_master", "presidencia_senado", "senado")
 SENATE_SOURCE = "src_br_senado_dadosabertos"
+WORKERS = 12
+PROPOSAL_BATCH = 100
 
 
 class SnapshotError(Exception):
@@ -37,6 +41,11 @@ def objects(value: object) -> Iterator[dict]:
 
 
 def export_snapshot(api: TestClient, output: Path, now: datetime) -> None:
+    with ThreadPoolExecutor(max_workers=WORKERS) as executor:
+        _export_snapshot(api, output, now, executor)
+
+
+def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: ThreadPoolExecutor) -> None:
     today = now.astimezone(ZoneInfo("America/Sao_Paulo")).date()
     people: set[str] = set()
     sources: dict[str, set[str]] = defaultdict(set)
@@ -67,6 +76,19 @@ def export_snapshot(api: TestClient, output: Path, now: datetime) -> None:
         write(file or path, data)
         collect(data)
         return data
+
+    def fetch_many[T](requests: Iterable[tuple[str, T, dict]]):
+        def fetch(request):
+            path, file, params = request
+            return file, get(path, **params)
+
+        for batch in batched(requests, WORKERS):
+            yield from executor.map(fetch, batch)
+
+    def save_many(requests: Iterable[tuple[str, str, dict]]) -> None:
+        for file, data in fetch_many(requests):
+            write(file, data)
+            collect(data)
 
     institutions = save("institutions")
     if not any(inst["id"] == INSTITUTION for inst in institutions):
@@ -102,11 +124,18 @@ def export_snapshot(api: TestClient, output: Path, now: datetime) -> None:
             raise SnapshotError("A lista de proposições mudou durante a exportação.")
         write(f"{base}/proposals", proposals)
         collect(proposals)
-        for proposal in proposals:
-            path = f"entities/{proposal['id']}"
-            save(path)
-            save(f"{path}/relationships")
-            save(f"{path}/timeline")
+        detail_requests = (("proposals/details", ids, {"ids": ids})
+                           for ids in batched((p["id"] for p in proposals), PROPOSAL_BATCH))
+        for ids, details in fetch_many(detail_requests):
+            for proposal_id in ids:
+                if proposal_id not in details:
+                    raise SnapshotError("A lista de proposições mudou durante a exportação.")
+                detail = details[proposal_id]
+                path = f"entities/{proposal_id}"
+                for file, value in ((path, detail["entity"]), (f"{path}/relationships", detail["relationships"]),
+                                    (f"{path}/timeline", detail["timeline"])):
+                    write(file, value)
+                    collect(value)
 
     changes = save("senado/mudancas")
     dates = {START, date(2025, 2, 1), today}
@@ -115,46 +144,48 @@ def export_snapshot(api: TestClient, output: Path, now: datetime) -> None:
         dates.add(day)
         dates.add(day + timedelta(days=1))
     composition_dates = sorted(day.isoformat() for day in dates if START <= day <= today)
-    for day in composition_dates:
-        save("senado/composicao", f"senado/composicao/{day}", data=day)
+    save_many(("senado/composicao", f"senado/composicao/{day}", {"data": day}) for day in composition_dates)
     save("senado/composicao/2027")
 
     for path in ("presidencia/2025", "presidencia/2027"):
         save(path)
     save("dossies/stf-caso-master", optional=True)
-    for committee in save("comissoes"):
-        save(f"comissoes/{committee['id']}")
-    for vote in save("votacoes", limit=2000):
-        save(f"votacoes/{vote['id']}")
+    committees = save("comissoes")
+    votes = save("votacoes", limit=2000)
+    details = (f"{route}/{row['id']}" for route, rows in (("comissoes", committees), ("votacoes", votes))
+               for row in rows)
+    save_many((path, path, {}) for path in details)
     save("noticias", limit=120)
-    for topic in NEWS_TOPICS:
-        save("noticias", f"noticias/{topic}", limit=120, tema=topic)
+    save_many(("noticias", f"noticias/{topic}", {"limit": 120, "tema": topic}) for topic in NEWS_TOPICS)
 
     parties = set()
-    for person in sorted(people):
-        profile = get(f"senadores/{person}", optional=True)
+    exported_people = []
+    for person, profile in fetch_many((f"senadores/{p}", p, {"optional": True}) for p in sorted(people)):
         if profile is None:
             continue
+        exported_people.append(person)
         write(f"senadores/{person}", profile)
-        path = f"entities/{person}"
-        save(path)
-        for relationship in save(f"{path}/relationships"):
-            if relationship["kind"] == "current_party":
-                parties.add(relationship["target"])
-        save(f"{path}/timeline")
-    for party in sorted(parties):
-        path = f"entities/{party}"
-        save(path)
-        save(f"{path}/relationships")
-        save(f"{path}/timeline")
 
-    for raw_id, paths in sorted(sources.items()):
-        records = {}
-        for path in sorted(paths):
-            record = get(f"sources/{raw_id}", path=path or None)
-            record["response_headers"] = {}
-            records[path] = record
-        write(f"sources/{raw_id}", records)
+    def entity_requests(ids: Iterable[str]):
+        for entity_id in ids:
+            for suffix in ("", "/relationships", "/timeline"):
+                path = f"entities/{entity_id}{suffix}"
+                yield path, path, {}
+
+    for path, data in fetch_many(entity_requests(exported_people)):
+        write(path, data)
+        collect(data)
+        if path.endswith("/relationships"):
+            parties.update(rel["target"] for rel in data if rel["kind"] == "current_party")
+    save_many(entity_requests(sorted(parties)))
+
+    records = defaultdict(dict)
+    for raw_id, record in fetch_many((f"sources/{raw_id}", raw_id, {"path": path or None})
+                                     for raw_id, paths in sorted(sources.items()) for path in sorted(paths)):
+        record["response_headers"] = {}
+        records[raw_id][record["ref"]["json_path"] or ""] = record
+        if len(records[raw_id]) == len(sources[raw_id]):
+            write(f"sources/{raw_id}", records.pop(raw_id))
 
     write("meta", {"generated_at": now.isoformat(), "composition_dates": composition_dates})
 
