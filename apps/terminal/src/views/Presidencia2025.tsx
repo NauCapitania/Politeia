@@ -54,6 +54,7 @@ export function Presidencia2025() {
           </svg>
           <div className="chip-legend">{cands.map((c) => <span key={c}><i style={{ background: color(c) }} />{c}</span>)}<span className="muted">opacidade = probabilidade · contorno = partido</span></div>
           <h3>Apoio partidário × cadeiras</h3>
+          <div className="table-wrap">
           <table className="table">
             <thead><tr><th>Partido</th><th>Senadores</th><th>Apoio declarado</th><th>Votos esperados</th><th>Fontes</th></tr></thead>
             <tbody>
@@ -68,6 +69,7 @@ export function Presidencia2025() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
         <div className="card">
           {!sel && <p className="muted">Clique num senador para ver a probabilidade e a justificativa.</p>}

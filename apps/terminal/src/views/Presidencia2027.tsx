@@ -59,11 +59,14 @@ export function Presidencia2027() {
       <div className="cards">
         {d.party_composition.map((pc: any) => {
           const entries = Object.entries(pc.parties as Record<string, number>).sort((a, b) => b[1] - a[1])
+          const known = entries.reduce((t, [, n]) => t + n, 0)
+          const missing = Math.max(0, c.voters - known)
           return (
             <div key={pc.id} className="card">
               <h4>{pc.label}</h4>
-              <div className="stack-bar">{entries.map(([p, n]) => <div key={p} style={{ flex: n, background: partyColor(p) }} title={`${p}: ${n}`}>{n >= 3 ? p : ''}</div>)}</div>
-              <div className="chip-legend">{entries.map(([p, n]) => <span key={p}><i style={{ background: partyColor(p) }} />{p} {n}</span>)}</div>
+              <div className="stack-bar">{entries.map(([p, n]) => <div key={p} style={{ flex: n, background: partyColor(p) }} title={`${p}: ${n}`}>{n >= 3 ? p : ''}</div>)}
+                {missing > 0 && <div style={{ flex: missing, background: 'var(--bg-3)', color: 'var(--fg-2)' }} title={`Não informado pela fonte: ${missing}`}>{missing >= 10 ? 'não informado' : ''}</div>}</div>
+              <div className="chip-legend">{entries.map(([p, n]) => <span key={p}><i style={{ background: partyColor(p) }} />{p} {n}</span>)}{missing > 0 && <span className="muted">não informado pela fonte: {missing} de {c.voters}</span>}</div>
               <p className="small muted">{pc.note}</p>
               <SrcList sources={pc.sources} />
             </div>
