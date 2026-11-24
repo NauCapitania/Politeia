@@ -535,7 +535,7 @@ kbd { font: 9px var(--mono); padding: 2px 4px; border: 1px solid var(--line-stro
 .agente-launcher.com-evidencias, .agente-janela.com-evidencias:not(.wide) { right: calc(min(420px, 100vw - 32px) + 32px); }
 @media (max-width: 760px) {
   .agente-launcher { right: 12px; bottom: 112px; }
-  .agente-launcher.com-evidencias { padding: 10px; gap: 0; font-size: 0; }
+  .agente-launcher.com-evidencias { right: 12px; padding: 10px; gap: 0; font-size: 0; }
   .agente-launcher.com-evidencias kbd { display: none; }
   .agente-ampliar { display: none; }
   .agente-janela, .agente-janela.wide, .agente-janela.com-evidencias:not(.wide) { right: 8px; left: 8px; width: auto; top: 66px; bottom: 102px; height: auto; }
