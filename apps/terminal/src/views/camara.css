@@ -8,3 +8,4 @@
 .camara-diverge { position: relative; flex: 1; height: 10px; background: var(--bg-2); border-radius: 2px; }
 .camara-diverge i { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
 .camara-bar-row > .mono:last-child, .list-row > .faint.mono:last-child { flex: none; min-width: 64px; text-align: right; }
+.camara-uf-row { width: 100%; align-items: center; }

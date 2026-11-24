@@ -72,7 +72,7 @@ function Composicao() {
           {ufs.map(([u, row]) => {
             const n = [...row.values()].reduce((a, b) => a + b, 0)
             return (
-              <button key={u} className={`list-row ${uf === u ? 'active' : ''}`} onClick={() => setUf(uf === u ? '' : u)}>
+              <button key={u} className={`list-row camara-uf-row ${uf === u ? 'active' : ''}`} onClick={() => setUf(uf === u ? '' : u)}>
                 <b className="mono camara-label" style={{ width: 28 }}>{u}</b>
                 <span className="camara-track">
                   <span className="camara-stack" style={{ width: `${(n / maxUf) * 100}%` }}>
