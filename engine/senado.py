@@ -21,15 +21,21 @@ def person_codes(s: Session, ids: list[str] | None = None) -> dict[str, str]:
 
 
 def parties_on(s: Session, person_ids: list[str], on: date) -> dict[str, str]:
-    """Party abbreviation per person on a date: affiliation history first, then current listing."""
+    """Party abbreviation per person on a date. Dated affiliation history decides; the current roster is used only
+    for people without any affiliation history and only for dates on or after the roster was observed."""
     rows = s.execute(select(PartyMembership.person_id, Party.abbreviation, PartyMembership.basis,
-                            PartyMembership.valid_from).join(Party, Party.id == PartyMembership.party_id).where(
-        PartyMembership.person_id.in_(person_ids),
-        or_(PartyMembership.valid_from.is_(None), PartyMembership.valid_from <= on),
-        or_(PartyMembership.valid_to.is_(None), PartyMembership.valid_to > on))).all()
+                            PartyMembership.valid_from, PartyMembership.valid_to, PartyMembership.is_current)
+                     .join(Party, Party.id == PartyMembership.party_id)
+                     .where(PartyMembership.person_id.in_(person_ids))).all()
+    with_history = {r.person_id for r in rows if r.basis == "affiliation_history"}
     best: dict[str, tuple] = {}
-    for pid, abbr, basis, vf in rows:
-        rank = (basis == "affiliation_history", vf or date.min)
+    for pid, abbr, basis, vf, vt, current in rows:
+        if basis == "affiliation_history":
+            if (vf and vf > on) or (vt and vt <= on):
+                continue
+        elif pid in with_history or not current or (vf and vf > on):
+            continue
+        rank = vf or date.min
         if pid not in best or rank > best[pid][0]:
             best[pid] = (rank, abbr)
     return {pid: abbr for pid, (_, abbr) in best.items()}
