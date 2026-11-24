@@ -50,6 +50,93 @@
         "votes_since": "2025-01-01",
         "speeches_since": "2025-01-01"
       }
+    },
+    {
+      "id": "src_noticias_rss",
+      "name": "Feeds RSS públicos de veículos de imprensa",
+      "base_url": "https://news.google.com",
+      "documentation_url": null,
+      "allowed_hosts": [
+        "agenciabrasil.ebc.com.br",
+        "feeds.folha.uol.com.br",
+        "g1.globo.com",
+        "news.google.com",
+        "www.cartacapital.com.br",
+        "www.estadao.com.br",
+        "www.gazetadopovo.com.br",
+        "www.metropoles.com",
+        "www.poder360.com.br",
+        "www12.senado.leg.br"
+      ],
+      "connector": "news-rss",
+      "max_requests_per_second": 2,
+      "config": {
+        "feeds": [
+          {
+            "id": "agencia_senado",
+            "outlet": "Agência Senado",
+            "url": "https://www12.senado.leg.br/noticias/rss"
+          },
+          {
+            "id": "g1_politica",
+            "outlet": "g1",
+            "url": "https://g1.globo.com/rss/g1/politica/"
+          },
+          {
+            "id": "folha_poder",
+            "outlet": "Folha de S.Paulo",
+            "url": "https://feeds.folha.uol.com.br/poder/rss091.xml"
+          },
+          {
+            "id": "estadao_politica",
+            "outlet": "Estadão",
+            "url": "https://www.estadao.com.br/arc/outboundfeeds/feeds/rss/sections/politica/"
+          },
+          {
+            "id": "poder360",
+            "outlet": "Poder360",
+            "url": "https://www.poder360.com.br/feed/"
+          },
+          {
+            "id": "gazeta_republica",
+            "outlet": "Gazeta do Povo",
+            "url": "https://www.gazetadopovo.com.br/feed/rss/republica.xml"
+          },
+          {
+            "id": "metropoles",
+            "outlet": "Metrópoles",
+            "url": "https://www.metropoles.com/feed"
+          },
+          {
+            "id": "agencia_brasil_politica",
+            "outlet": "Agência Brasil",
+            "url": "https://agenciabrasil.ebc.com.br/rss/politica/feed.xml"
+          },
+          {
+            "id": "cartacapital_politica",
+            "outlet": "CartaCapital",
+            "url": "https://www.cartacapital.com.br/politica/feed/"
+          },
+          {
+            "id": "gnews_impeachment_stf",
+            "outlet": "Google Notícias",
+            "aggregator": true,
+            "url": "https://news.google.com/rss/search?q=impeachment+ministro+STF+Senado&hl=pt-BR&gl=BR&ceid=BR:pt-419"
+          },
+          {
+            "id": "gnews_caso_master",
+            "outlet": "Google Notícias",
+            "aggregator": true,
+            "url": "https://news.google.com/rss/search?q=Banco+Master+STF&hl=pt-BR&gl=BR&ceid=BR:pt-419"
+          },
+          {
+            "id": "gnews_presidencia_senado",
+            "outlet": "Google Notícias",
+            "aggregator": true,
+            "url": "https://news.google.com/rss/search?q=eleição+presidência+do+Senado+2027&hl=pt-BR&gl=BR&ceid=BR:pt-419"
+          }
+        ]
+      }
     }
   ],
   "capabilities": {
@@ -89,6 +176,10 @@
     },
     "speeches": {
       "scope": "speeches"
+    },
+    "news": {
+      "scope": "news",
+      "note": "Somente título, link, data e trecho curto de feeds RSS públicos."
     }
   }
 }

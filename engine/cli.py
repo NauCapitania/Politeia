@@ -9,7 +9,7 @@ from sqlalchemy import select
 from engine.db.models import SourceSystem
 from engine.db.session import session_factory
 from engine.ingestion.sync import sync_source
-from engine.registry import bootstrap
+from engine.registry import CONNECTORS, bootstrap
 
 
 def main() -> None:
@@ -27,7 +27,7 @@ def main() -> None:
         bootstrap(s)
         if args.cmd == "bootstrap":
             return
-        q = select(SourceSystem.id)
+        q = select(SourceSystem.id).where(SourceSystem.connector.in_(list(CONNECTORS)))
         if args.institution:
             q = q.where(SourceSystem.institution_id.in_(args.institution))
         source_ids = list(s.scalars(q))

@@ -11,6 +11,7 @@ from engine.api import queries as Q
 from engine.api import schemas as S
 from engine.db.models import Institution
 from engine.db.session import get_session
+from engine.registry import load_packs
 from engine.settings import get_settings
 
 app = FastAPI(title="Politeia Engine API", version="0.1.0",
@@ -38,7 +39,8 @@ def health() -> dict:
 
 @app.get("/v1/institutions", response_model=list[S.Institution])
 def list_institutions(s: DB):
-    return [Q.institution(s, i) for i in s.scalars(select(Institution).order_by(Institution.official_name.desc()))]
+    q = select(Institution).where(Institution.id.in_(list(load_packs()))).order_by(Institution.official_name.desc())
+    return [Q.institution(s, i) for i in s.scalars(q)]
 
 
 @app.get("/v1/institutions/{institution_id}", response_model=S.Institution)

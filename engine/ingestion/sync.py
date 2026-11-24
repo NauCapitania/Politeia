@@ -352,7 +352,8 @@ def sync_source(factory: sessionmaker, source_id: str, scopes: list[str] | None 
     with factory() as session:
         source = session.get(SourceSystem, source_id)
         connector = build_connector(source, client)
-        for scope in scopes or connector.discover():
+        wanted = connector.discover() if scopes is None else [sc for sc in scopes if sc in connector.scopes]
+        for scope in wanted:
             results.append(_sync_scope(session, source, connector, scope))
         recompute_capabilities(session, source.institution_id)
         session.commit()

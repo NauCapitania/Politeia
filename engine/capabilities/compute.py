@@ -15,6 +15,8 @@ from engine.db.models import (
     LegislativeEvent,
     Mandate,
     MandateExercise,
+    NewsItem,
+    NewsMention,
     PartyMembership,
     Proposal,
     ProposalAuthor,
@@ -74,6 +76,10 @@ def _counts(s: Session, inst: str, capability: str) -> tuple[int, dict]:
         n = s.scalar(select(func.count()).select_from(Speech).join(Mandate, Mandate.person_id == Speech.person_id)
                      .where(Mandate.institution_id == inst, Mandate.status == "in_exercise")) or 0
         return n, {}
+    if capability == "news":
+        n = s.scalar(select(func.count()).select_from(NewsItem)) or 0
+        linked = s.scalar(select(func.count(func.distinct(NewsMention.news_item_id)))) or 0
+        return n, {"linked_to_entities": linked}
     if capability == "proposal_events":
         n = s.scalar(select(func.count()).where(LegislativeEvent.institution_id == inst)) or 0
         return n, {}
