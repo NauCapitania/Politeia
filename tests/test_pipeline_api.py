@@ -167,6 +167,7 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
         with make_client(lambda _: httpx.Response(200, text="""<rss><channel>
             <item><link>https://www.metropoles.com/brasil/ultima-hora</link><category>Política</category></item>
             <item><link>https://www.metropoles.com/brasil/sao-paulo</link><category>Brasil</category></item>
+            <item><link>https://www.metropoles.com/brasil/patrocinio</link><category>Esportes</category></item>
         </channel></rss>"""), hosts=("www.metropoles.com",)) as client:
             connector = NewsConnector({"feeds": [feed]}, client)
             batch = connector.fetch("news")
@@ -192,6 +193,8 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
                              "Erika Hilton recebe ameaça de morte", 21, []),
                             ("nws_categoria", "brasil/ultima-hora", "Notícia de última hora", 20, []),
                             ("nws_brasil", "brasil/sao-paulo", "Notícia de São Paulo", 19, []),
+                            ("nws_patrocinio", "brasil/patrocinio",
+                             "Time renova patrocínio com o BRB", 24, ["caso_master"]),
                         ))
         session.add(M.NewsItem(id="nws_master", source_system_id=source.id, feed="gnews_caso_master",
                                outlet="Exemplo", url="https://news.google.com/rss/articles/abc",

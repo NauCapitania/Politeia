@@ -17,18 +17,16 @@ from engine.db.models import DossierItem, Mandate, NewsItem, NewsMention, Person
 def political_news(s: Session, candidates: Iterable[NewsItem]) -> Iterator[NewsItem]:
     rss_by_raw_id: dict[uuid.UUID, dict[str, tuple[str, ...]]] = {}
     for n in candidates:
-        if is_political_news(n.url, n.title, n.excerpt, n.feed, topics=n.topics):
-            yield n
-        elif n.raw_record_id is not None:
+        categories = ()
+        if n.raw_record_id is not None:
             if n.raw_record_id not in rss_by_raw_id:
                 payload = s.scalar(select(RawRecord.payload_text).where(
                     RawRecord.id == n.raw_record_id, RawRecord.record_kind == "rss_feed",
                 ))
                 rss_by_raw_id[n.raw_record_id] = rss_categories(payload)
             categories = rss_by_raw_id[n.raw_record_id].get(n.url, ())
-            if categories and is_political_news(n.url, n.title, n.excerpt, n.feed, topics=n.topics,
-                                                categories=categories):
-                yield n
+        if is_political_news(n.url, n.title, n.excerpt, n.feed, topics=n.topics, categories=categories):
+            yield n
 
 
 def _patterns(s: Session) -> list[tuple[str, str, re.Pattern, str]]:

@@ -109,6 +109,8 @@ def test_metropoles_rss_uses_politics_section_and_ignores_unrelated_items():
           <category>Política</category></item>
         <item><title>Lula é citado em reportagem sobre reality show</title>
           <link>https://www.metropoles.com/entretenimento/televisao/reality-show</link></item>
+        <item><title>Time renova patrocínio com o BRB</title>
+          <link>https://www.metropoles.com/brasil/patrocinio</link><category>Esportes</category></item>
         <item><title>Erika Hilton recebe ameaça de morte</title>
           <link>https://www.metropoles.com/brasil/politica-brasil/erika-hilton</link></item>
         <item><title>Eleições 2026: brasileiros reclamam de filas</title>
