@@ -91,6 +91,13 @@ def get_entity(entity_id: str, s: DB):
     return ent
 
 
+@app.get("/v1/proposals/details", include_in_schema=False)
+def get_proposal_details(
+    s: DB, ids: Annotated[list[str], Query(min_length=1, max_length=100)],
+) -> dict[str, S.ProposalDetail]:
+    return Q.proposal_details(s, ids)
+
+
 @app.get("/v1/entities/{entity_id}/relationships", response_model=list[S.Relationship])
 def get_relationships(entity_id: str, s: DB):
     if not Q.entity_kind(entity_id):

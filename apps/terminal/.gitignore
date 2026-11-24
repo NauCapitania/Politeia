@@ -1,3 +1,5 @@
+/public/data/
+/public/.politeia-snapshot-*/
 # Logs
 logs
 *.log

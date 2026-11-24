@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { NonIdealState, Spinner } from '@blueprintjs/core'
-import { useInstitutions } from './api/client'
+import { isStatic, useInstitutions } from './api/client'
 import { useStore } from './store'
 import { TopBar } from './components/TopBar'
 import { Sidebar } from './components/Sidebar'
@@ -31,7 +31,7 @@ export default function App() {
       <Sidebar inst={inst} />
       <main className="canvas">
         {isLoading && <div style={{ padding: 48 }}><Spinner size={24} /></div>}
-        {error && <NonIdealState icon="offline" title="Engine API indisponível" description={String(error)} />}
+        {error && <NonIdealState icon="offline" title={isStatic() ? 'Snapshot indisponível' : 'Engine API indisponível'} description={String(error)} />}
         {data && !data.length && (
           <NonIdealState icon="database" title="Nenhuma instituição registrada" description="Execute `python -m engine.cli sync`." />
         )}
