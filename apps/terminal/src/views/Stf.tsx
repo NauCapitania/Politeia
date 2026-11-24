@@ -63,7 +63,7 @@ export function Stf() {
               const r = m.master_report ? REPORT[m.master_report.status] : null
               return (
                 <g key={m.id} data-testid="minister" onClick={() => setFocus(m.id)} style={{ cursor: 'pointer' }}>
-                  <circle cx={p.x} cy={p.y} r={layout.seatR} fill={r?.color ?? 'transparent'} stroke={focus === m.id ? '#fff' : r ? 'none' : 'var(--line-strong)'}
+                  <circle cx={p.x} cy={p.y} r={layout.seatR} fill={r?.color ?? 'transparent'} stroke={focus === m.id ? 'var(--fg-0)' : r ? 'none' : 'var(--line-strong)'}
                     strokeDasharray={r ? undefined : '3 2'} strokeWidth={focus === m.id ? 2.5 : 1.5} />
                   <text x={p.x} y={p.y + layout.seatR + 13} textAnchor="middle" fontSize={10} fill="var(--fg-1)">{m.name.split(' ').slice(-1)[0]}</text>
                   <title>{m.name}</title>

@@ -35,7 +35,7 @@ export function CommandPalette({ onClose }: { onClose: () => void }) {
     actions.push({ label: `Buscar proposições: “${query.trim()}”`, detail: 'Pesquisar na base legislativa', icon: 'search', run: () => { setSearch(query.trim()); setSenadoTab('proposicoes') } })
   }
   const execute = (i: number) => { actions[i]?.run(); onClose() }
-  return <Dialog isOpen onClose={onClose} className="bp6-dark command-dialog" aria-label="Central de comandos">
+  return <Dialog isOpen onClose={onClose} className="command-dialog" aria-label="Central de comandos">
     <div className="command-input"><Icon icon="search" size={18} /><input autoFocus aria-label="Buscar espaços, senadores ou proposições" placeholder="O que você quer investigar?" value={query} onChange={(e) => { setQuery(e.target.value); setActive(0) }}
       aria-controls="command-results" aria-activedescendant={`command-${active}`} role="combobox" aria-expanded="true" autoComplete="off"
       onKeyDown={(e) => {

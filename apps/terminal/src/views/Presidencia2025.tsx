@@ -46,7 +46,7 @@ export function Presidencia2025() {
               return (
                 <g key={s.person_id} onClick={() => setFocus(s.person_id)} style={{ cursor: 'pointer' }} data-testid="seat">
                   <circle cx={p.x} cy={p.y} r={layout.seatR} fill={color(top)} opacity={0.25 + 0.75 * conf}
-                    stroke={focus === s.person_id ? '#fff' : partyColor(s.party)} strokeWidth={focus === s.person_id ? 2 : 1.5} />
+                    stroke={focus === s.person_id ? 'var(--fg-0)' : partyColor(s.party)} strokeWidth={focus === s.person_id ? 2 : 1.5} />
                   <title>{`${s.name} (${s.party}) · ${cands.map((c) => `${c}: ${pct(s.posterior[c])}`).join(' · ')}`}</title>
                 </g>
               )

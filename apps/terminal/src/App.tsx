@@ -15,10 +15,12 @@ import { Overview } from './views/Overview'
 import { CommandPalette } from './components/CommandPalette'
 import { StatusBar } from './components/StatusBar'
 import { LocalTerminal } from './components/LocalTerminal'
+import { useTheme } from './useTheme'
 
 const VIEWS = { inicio: Overview, senado: SenadoHub, stf: Stf, noticias: Noticias, sources: Sources }
 
 export default function App() {
+  const { theme, toggleTheme } = useTheme()
   const { data, isLoading, error } = useInstitutions()
   const { institutionId, setInstitution, view, senadoTab, selectedId, sidebarCollapsed } = useStore()
   const [commandOpen, setCommandOpen] = useState(false)
@@ -44,9 +46,9 @@ export default function App() {
   const View = VIEWS[view]
 
   return (
-    <MotionConfig reducedMotion="user"><div className={`bp6-dark shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+    <MotionConfig reducedMotion="user"><div className={`shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <a className="skip-link" href="#workspace">Pular para o conteúdo</a>
-      <TopBar current={inst} onCommand={() => setCommandOpen(true)} onTerminal={() => setTerminalOpen(true)} />
+      <TopBar current={inst} onCommand={() => setCommandOpen(true)} onTerminal={() => setTerminalOpen(true)} theme={theme} onTheme={toggleTheme} />
       <Sidebar inst={inst} onTerminal={() => setTerminalOpen(true)} />
       <main className="canvas" id="workspace" tabIndex={-1} ref={canvas}>
         {isLoading && <div style={{ padding: 48 }}><Spinner size={24} /></div>}
@@ -56,7 +58,7 @@ export default function App() {
         )}
         <AnimatePresence mode="wait">
           {inst && (
-            <motion.div key={`${inst.id}:${view}:${view === 'senado' ? senadoTab : ''}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+            <motion.div key={`${inst.id}:${view}`} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }} transition={{ duration: 0.18, ease: 'easeOut' }}>
               <View inst={inst} />
             </motion.div>

@@ -49,7 +49,7 @@ export function LocalTerminal({ onClose }: { onClose: () => void }) {
     setEntries((old) => [...old, entry].slice(-40))
   }
 
-  return <Dialog isOpen onClose={onClose} className="bp6-dark local-terminal" aria-label="Terminal local">
+  return <Dialog isOpen onClose={onClose} className="local-terminal" aria-label="Terminal local">
     <div className="terminal-titlebar"><Icon icon="console" size={14} /><b>Terminal local</b><span>politeia / observatório</span><button onClick={onClose} aria-label="Fechar terminal"><Icon icon="cross" size={16} /></button></div>
     <div className="terminal-output" ref={output} role="log" aria-label="Saída do terminal" aria-live="polite">
       <p className="terminal-welcome">Seu observatório, por comandos.</p>

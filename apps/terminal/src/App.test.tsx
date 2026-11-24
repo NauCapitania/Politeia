@@ -43,11 +43,26 @@ function mockFetch(overrides: Record<string, unknown> = {}) {
 const renderApp = () => render(<QueryClientProvider client={new QueryClient()}><App /></QueryClientProvider>)
 
 beforeEach(() => {
+  localStorage.clear()
   useStore.setState({ institutionId: null, view: 'senado', senadoTab: 'composicao', sidebarCollapsed: false, selectedId: null, partyFilter: null, search: '' })
   mockFetch()
 })
 
 describe('Espaço de trabalho', () => {
+  it('alterna entre temas e preserva a escolha ao reabrir o aplicativo', async () => {
+    const first = renderApp()
+    await userEvent.click(screen.getByRole('button', { name: 'Alternar para modo claro' }))
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light')
+    expect(document.documentElement).not.toHaveClass('bp6-dark')
+    expect(localStorage.getItem('politeia-theme')).toBe('light')
+    first.unmount()
+    renderApp()
+    expect(screen.getByRole('button', { name: 'Alternar para modo escuro' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Alternar para modo escuro' }))
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+    expect(document.documentElement).toHaveClass('bp6-dark')
+  })
+
   it('executa consultas locais, mantém histórico e navega pelo terminal', async () => {
     useStore.setState({ view: 'inicio' })
     renderApp()
