@@ -8,7 +8,7 @@ import { askAgent, type ChartSpec, type NetworkSpec } from './client'
 import { Grafico } from './Grafico'
 import { Rede } from './Rede'
 import { viewLabel } from '../platform'
-import { ANALYSES, loadNotebooks } from '../analyses'
+import { ANALYSES } from '../analyses'
 
 type Turn = { papel: 'usuario' | 'agente'; texto: string; graficos?: ChartSpec[]; redes?: NetworkSpec[]; passos?: string[]; erro?: boolean }
 
@@ -78,7 +78,7 @@ export function Agente() {
     try {
       await askAgent(
         history.map(({ papel, texto }) => ({ papel, texto })),
-        { tela: view === 'senado' ? TELAS[senadoTab] : view === 'analises' && analysisId ? `Análise: ${ANALYSES.find((a) => a.id === analysisId)?.title ?? loadNotebooks().find((a) => a.id === analysisId)?.title ?? 'Caderno pessoal'}`.slice(0, 80) : viewLabel(view), selecionado: selectedId },
+        { tela: view === 'senado' ? TELAS[senadoTab] : view === 'analises' && analysisId ? `Análise: ${ANALYSES.find((a) => a.id === analysisId)?.title ?? 'Caderno pessoal'}` : viewLabel(view), selecionado: selectedId },
         (event) => {
           if (event.tipo === 'passo') patchLast((t) => ({ ...t, passos: [...(t.passos ?? []), event.texto] }))
           else if (event.tipo === 'grafico') patchLast((t) => ({ ...t, graficos: [...(t.graficos ?? []), event.grafico] }))

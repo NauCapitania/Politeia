@@ -190,6 +190,22 @@ describe('Plataforma modular', () => {
     expect(screen.getByText('Como funciona o Congresso')).toBeInTheDocument()
   })
 
+  it('envia apenas a pergunta revisada, sem título ou notas privados no contexto', async () => {
+    localStorage.setItem('politeia.analises.v1', JSON.stringify([{ id: 'local-private', title: 'Título reservado', question: 'Pergunta reservada', notes: 'Notas privadas' }]))
+    useStore.setState({ view: 'analises', analysisId: 'local-private' })
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Investigar com o agente →' }))
+    const input = await screen.findByLabelText('Pergunta ao agente')
+    await userEvent.clear(input)
+    await userEvent.type(input, 'Como funciona o Congresso?{Enter}')
+    await waitFor(() => expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(true))
+    const body = vi.mocked(fetch).mock.calls.find(([url]) => url === '/api/agente')![1]!.body as string
+    expect(body).toContain('Como funciona o Congresso?')
+    expect(body).not.toContain('Título reservado')
+    expect(body).not.toContain('Pergunta reservada')
+    expect(body).not.toContain('Notas privadas')
+  })
+
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
     useStore.setState({ view: 'congresso' })
     renderApp()
