@@ -49,6 +49,7 @@ export function Sources({ inst }: { inst: Institution }) {
             </tr>))}</tbody>
         </table></div>
       </section>
+      <p className="art-credit">Identidade visual: <i>Escola de Atenas</i>, Rafael, 1509–1511. Obra em domínio público.</p>
     </div>
   )
 }

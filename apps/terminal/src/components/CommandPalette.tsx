@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Dialog, Icon, type IconName } from '@blueprintjs/core'
 import { useSeats } from '../api/client'
 import { useStore, type View, type SenadoTab } from '../store'
+import { normalize } from '../format'
 
 const DESTINATIONS: { label: string; detail: string; icon: IconName; view?: View; tab?: SenadoTab }[] = [
   { label: 'Central de situação', detail: 'Visão geral do observatório', icon: 'control', view: 'inicio' },
@@ -15,7 +16,6 @@ const DESTINATIONS: { label: string; detail: string; icon: IconName; view?: View
   { label: 'Notícias', detail: 'Últimas notícias coletadas', icon: 'feed', view: 'noticias' },
   { label: 'Fontes e cobertura', detail: 'Origem e limites dos dados', icon: 'database', view: 'sources' },
 ]
-const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
 
 export function CommandPalette({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState('')

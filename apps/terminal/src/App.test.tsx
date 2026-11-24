@@ -48,6 +48,34 @@ beforeEach(() => {
 })
 
 describe('Espaço de trabalho', () => {
+  it('executa consultas locais, mantém histórico e navega pelo terminal', async () => {
+    useStore.setState({ view: 'inicio' })
+    renderApp()
+    await userEvent.click(screen.getByRole('button', { name: 'Abrir terminal local' }))
+    const input = screen.getByRole('textbox', { name: 'Comando do terminal' })
+    await userEvent.type(input, 'resumo{Enter}')
+    expect(await screen.findByText('81 cadeiras observadas; 2 partidos identificados.')).toBeInTheDocument()
+    await userEvent.type(input, '{ArrowUp}')
+    expect(input).toHaveValue('resumo')
+    await userEvent.clear(input)
+    await userEvent.type(input, 'limpar{Enter}')
+    expect(screen.queryByText('81 cadeiras observadas; 2 partidos identificados.')).not.toBeInTheDocument()
+    await userEvent.type(input, 'abrir notícias{Enter}')
+    await waitFor(() => expect(screen.queryByRole('textbox', { name: 'Comando do terminal' })).not.toBeInTheDocument())
+    expect(useStore.getState().view).toBe('noticias')
+  })
+
+  it('recolhe pastas sem alterar o espaço de trabalho atual', async () => {
+    renderApp()
+    const folder = screen.getByRole('button', { name: 'Instituições' })
+    expect(folder).toHaveAttribute('aria-expanded', 'true')
+    await userEvent.click(folder)
+    expect(folder).toHaveAttribute('aria-expanded', 'false')
+    expect(useStore.getState().view).toBe('senado')
+    await userEvent.click(folder)
+    expect(folder).toHaveAttribute('aria-expanded', 'true')
+  })
+
   it('não transforma filiação desconhecida em um partido adicional', async () => {
     useStore.setState({ view: 'inicio' })
     mockFetch({ '/v1/senado/composicao': { date: '2026-11-24', observed: 3, seats: [seat(0), seat(1), { ...seat(2), party: null }] } })

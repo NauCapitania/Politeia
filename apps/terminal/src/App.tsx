@@ -14,6 +14,7 @@ import { SenatorPanel } from './components/SenatorPanel'
 import { Overview } from './views/Overview'
 import { CommandPalette } from './components/CommandPalette'
 import { StatusBar } from './components/StatusBar'
+import { LocalTerminal } from './components/LocalTerminal'
 
 const VIEWS = { inicio: Overview, senado: SenadoHub, stf: Stf, noticias: Noticias, sources: Sources }
 
@@ -21,18 +22,19 @@ export default function App() {
   const { data, isLoading, error } = useInstitutions()
   const { institutionId, setInstitution, view, senadoTab, selectedId, sidebarCollapsed } = useStore()
   const [commandOpen, setCommandOpen] = useState(false)
+  const [terminalOpen, setTerminalOpen] = useState(false)
   const canvas = useRef<HTMLElement>(null)
 
   useEffect(() => { if (canvas.current) canvas.current.scrollTop = 0 }, [view, senadoTab])
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setCommandOpen((open) => !open) }
-      if (e.key === 'Escape' && !commandOpen) useStore.getState().select(null)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setTerminalOpen(false); setCommandOpen((open) => !open) }
+      if (e.key === 'Escape' && !commandOpen && !terminalOpen) useStore.getState().select(null)
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
-  }, [commandOpen])
+  }, [commandOpen, terminalOpen])
 
   useEffect(() => {
     if (!institutionId && data?.length) setInstitution(data.find((i) => i.id === 'ins_br_senado')?.id ?? data[0].id)
@@ -44,8 +46,8 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user"><div className={`bp6-dark shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <a className="skip-link" href="#workspace">Pular para o conteúdo</a>
-      <TopBar current={inst} onCommand={() => setCommandOpen(true)} />
-      <Sidebar inst={inst} />
+      <TopBar current={inst} onCommand={() => setCommandOpen(true)} onTerminal={() => setTerminalOpen(true)} />
+      <Sidebar inst={inst} onTerminal={() => setTerminalOpen(true)} />
       <main className="canvas" id="workspace" tabIndex={-1} ref={canvas}>
         {isLoading && <div style={{ padding: 48 }}><Spinner size={24} /></div>}
         {error && <NonIdealState icon="offline" title="Não foi possível carregar a base" description="Os dados estão indisponíveis nesta consulta. Tente novamente em instantes." />}
@@ -67,6 +69,7 @@ export default function App() {
       </motion.section>}</AnimatePresence>
       <StatusBar onCommand={() => setCommandOpen(true)} />
       {commandOpen && <CommandPalette onClose={() => setCommandOpen(false)} />}
+      {terminalOpen && <LocalTerminal onClose={() => setTerminalOpen(false)} />}
     </div></MotionConfig>
   )
 }
