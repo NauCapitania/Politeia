@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from engine.api import queries as Q
 from engine.api import schemas as S
+from engine.api.monitor import router as monitor_router
 from engine.db.models import Institution
 from engine.db.session import get_session
 from engine.registry import load_packs
@@ -16,6 +17,7 @@ from engine.settings import get_settings
 
 app = FastAPI(title="Politeia Engine API", version="0.1.0",
               description="Institution-agnostic access to normalized legislative data with provenance.")
+app.include_router(monitor_router)
 app.add_middleware(CORSMiddleware, allow_origins=get_settings().cors_origins.split(","), allow_methods=["GET"],
                    allow_headers=["*"])
 
