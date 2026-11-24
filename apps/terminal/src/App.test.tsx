@@ -221,6 +221,20 @@ describe('Plataforma modular', () => {
     expect(saved).toContainEqual({ ...first, notes: 'Nova nota' })
   })
 
+  it('conserva a pergunta não enviada ao preparar uma investigação de caderno', async () => {
+    localStorage.setItem('politeia.analises.v1', JSON.stringify([{ id: 'local-draft', title: 'Orçamento', question: 'Quais comissões?', notes: '' }]))
+    useStore.setState({ view: 'analises', analysisId: 'local-draft' })
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Abrir agente político' }))
+    await userEvent.type(screen.getByLabelText('Pergunta ao agente'), 'Minha pergunta ainda não enviada')
+    await userEvent.click(screen.getByRole('button', { name: 'Fechar agente' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Investigar com o agente →' }))
+    const input = await screen.findByLabelText('Pergunta ao agente')
+    expect(input).toHaveValue(expect.stringContaining('Minha pergunta ainda não enviada'))
+    expect(input).toHaveValue(expect.stringContaining('Quais comissões?'))
+    expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
+  })
+
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
     useStore.setState({ view: 'congresso' })
     renderApp()

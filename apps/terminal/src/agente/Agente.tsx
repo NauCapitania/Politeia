@@ -62,7 +62,7 @@ export function Agente() {
 
   useEffect(() => { if (open) input.current?.focus() }, [open])
   useEffect(() => {
-    if (agentDraft) { setOpen(true); setDraft(agentDraft); setAgentDraft(null) }
+    if (agentDraft) { setOpen(true); setDraft((current) => current.trim() ? `${current}\n\n${agentDraft}` : agentDraft); setAgentDraft(null) }
   }, [agentDraft, setAgentDraft])
 
   const patchLast = (fn: (t: Turn) => Turn) => setTurns((all) => [...all.slice(0, -1), fn(all[all.length - 1])])
