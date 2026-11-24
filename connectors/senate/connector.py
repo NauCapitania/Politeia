@@ -431,7 +431,7 @@ class SenateConnector(Connector):
                 abbreviation=c.get("SiglaColegiado"), ref=Ref(idx, base),
                 committee_type=(c.get("TipoColegiado") or {}).get("TipoColegiado"),
                 attributes={
-                    "subtitle": info.get("DescricaoSubtitulo"), "purpose": info.get("TextoFinalidade"),
+                    "active": True, "subtitle": info.get("DescricaoSubtitulo"), "purpose": info.get("TextoFinalidade"),
                     "start_date": info.get("DataInicio") or c.get("DataInicio"),
                     "seats": {"titulares": qty.get("SenadoresTitulares"), "suplentes": qty.get("SenadoresSuplentes")},
                     "secretary": sec.get("Secretario"), "email": sec.get("eMail"),

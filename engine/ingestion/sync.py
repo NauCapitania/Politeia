@@ -4,7 +4,7 @@ import logging
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import func, select, text, update
+from sqlalchemy import func, or_, select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -316,6 +316,15 @@ class Persistor:
                 CommitteeMembership.last_observed_at < self.now).values(is_current=False, valid_to=today))
             n_members += len(rows)
         self._count("committee_members", n_members)
+        if not any(i.code in ("committee_list_unavailable", "committee_unavailable") for i in batch.issues):
+            # Complete listing: committees absent from it are no longer active (e.g. a CPI that ended).
+            gone = select(Committee.id).where(Committee.institution_id == inst, or_(
+                Committee.last_observed_at.is_(None), Committee.last_observed_at < self.now))
+            self.s.execute(update(CommitteeMembership).where(
+                CommitteeMembership.committee_id.in_(gone), CommitteeMembership.is_current.is_(True))
+                .values(is_current=False, valid_to=today))
+            self.s.execute(update(Committee).where(Committee.id.in_(gone)).values(
+                attributes=Committee.attributes.op("||")(func.jsonb_build_object("active", False))))
 
     def persist_news(self, batch: Batch) -> None:
         from engine.media import persist_news

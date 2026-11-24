@@ -184,7 +184,8 @@ def comissoes(s: DB):
                             .join(Person, Person.id == CommitteeMembership.person_id)
                             .where(CommitteeMembership.is_current.is_(True),
                                    CommitteeMembership.role == "PRESIDENTE")).all())
-    rows = s.scalars(select(Committee).where(Committee.institution_id == INSTITUTION)
+    rows = s.scalars(select(Committee).where(Committee.institution_id == INSTITUTION,
+                                             Committee.attributes["active"].astext.is_distinct_from("false"))
                      .order_by(Committee.committee_type, Committee.abbreviation)).all()
     return [{"id": c.id, "abbreviation": c.abbreviation, "name": c.name, "type": c.committee_type,
              "subtitle": (c.attributes or {}).get("subtitle"), "chair": chairs.get(c.id),
