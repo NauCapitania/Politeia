@@ -3,18 +3,16 @@ import { Dialog, Icon, type IconName } from '@blueprintjs/core'
 import { useCurrentSeats } from '../useCurrentSeats'
 import { useStore, type View, type SenadoTab } from '../store'
 import { normalize } from '../format'
+import { SPACES } from '../platform'
 
-const DESTINATIONS: { label: string; detail: string; icon: IconName; view?: View; tab?: SenadoTab }[] = [
-  { label: 'Central de situação', detail: 'Visão geral do observatório', icon: 'control', view: 'inicio' },
+const DESTINATIONS: { label: string; aliases?: string[]; detail: string; icon: IconName; view?: View; tab?: SenadoTab }[] = [
+  ...SPACES.map((s) => ({ label: s.label, aliases: s.aliases, detail: 'Espaço da plataforma', icon: s.icon, view: s.view })),
   { label: 'Composição do Senado', detail: 'Cadeiras, partidos e histórico', icon: 'layout-circle', tab: 'composicao' },
   { label: 'Votações', detail: 'Como votam os senadores', icon: 'series-search', tab: 'votacoes' },
   { label: 'Presidência 2025', detail: 'Resultado e inferências do voto secreto', icon: 'history', tab: 'presidencia2025' },
   { label: 'Presidência 2027', detail: 'Cenários e apoios', icon: 'predictive-analysis', tab: 'presidencia2027' },
   { label: 'Comissões', detail: 'Composição e presidências', icon: 'people', tab: 'comissoes' },
   { label: 'Proposições', detail: 'Pesquisar a atividade legislativa', icon: 'document', tab: 'proposicoes' },
-  { label: 'STF e caso Master', detail: 'Evidências e caminhos institucionais', icon: 'take-action', view: 'stf' },
-  { label: 'Notícias', detail: 'Últimas notícias coletadas', icon: 'feed', view: 'noticias' },
-  { label: 'Fontes e cobertura', detail: 'Origem e limites dos dados', icon: 'database', view: 'sources' },
 ]
 
 export function CommandPalette({ onClose }: { onClose: () => void }) {
@@ -22,11 +20,12 @@ export function CommandPalette({ onClose }: { onClose: () => void }) {
   const [active, setActive] = useState(0)
   useEffect(() => { document.getElementById(`command-${active}`)?.scrollIntoView?.({ block: 'nearest' }) }, [active])
   const seats = useCurrentSeats()
-  const { setView, setSenadoTab, setSearch, select } = useStore()
+  const { setView, setAnalysis, setSenadoTab, setSearch, select } = useStore()
   const term = normalize(query.trim())
-  const actions = DESTINATIONS.filter((d) => !term || normalize(`${d.label} ${d.detail}`).includes(term)).map((d) => ({
+  const actions = DESTINATIONS.filter((d) => !term || normalize(`${d.label} ${d.detail} ${d.aliases?.join(' ') ?? ''}`).includes(term)).map((d) => ({
     label: d.label, detail: d.detail, icon: d.icon, run: () => d.tab ? setSenadoTab(d.tab) : setView(d.view!),
   }))
+  if (!term || normalize('caso Master atualizações').includes(term)) actions.push({ label: 'Caso Master', detail: 'Análise temática · linha do tempo e evidências', icon: 'timeline-events', run: () => setAnalysis('caso-master') })
   if (term) {
     for (const s of (seats.data?.seats ?? []).filter((s) => normalize(`${s.name} ${s.full_name ?? ''} ${s.party} ${s.uf}`).includes(term)).slice(0, 6)) {
       actions.push({ label: s.name, detail: `${s.party ?? 'Sem partido'} · ${s.uf ?? ''} · Perfil do senador`, icon: 'person', run: () => { setSenadoTab('composicao'); select(s.person_id) } })

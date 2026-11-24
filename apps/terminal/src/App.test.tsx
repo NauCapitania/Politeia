@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
@@ -17,6 +17,10 @@ const src = [{ url: 'https://www25.senado.leg.br/x', outlet: 'Senado', date: '20
 const posterior = { 'Davi Alcolumbre': 0.9, 'Astronauta Marcos Pontes': 0.05, 'Eduardo Girão': 0.05 }
 const DATA: Record<string, unknown> = {
   '/v1/institutions': [inst],
+  '/v1/executivo': {
+    institution_id: 'ins_br_executivo', presidency: null, bodies: [], unmatched: [], sources: [],
+    counts: { bodies: 0, top_level: 0, ministries: 0, entities: 0, ministers_in_office: 0, terms: 0 },
+  },
   '/v1/institutions/ins_br_senado/capabilities': [{ capability: 'members', status: 'available', record_count: 81, coverage: {}, last_success_at: null, note: null, issues: [] }],
   '/v1/senado/composicao': { date: '2026-11-24', observed: 81, seats: Array.from({ length: 81 }, (_, i) => seat(i)) },
   '/v1/senado/mudancas': [],
@@ -44,7 +48,7 @@ const renderApp = () => render(<QueryClientProvider client={new QueryClient()}><
 
 beforeEach(() => {
   localStorage.clear()
-  useStore.setState({ institutionId: null, view: 'senado', senadoTab: 'composicao', sidebarCollapsed: false, selectedId: null, partyFilter: null, search: '' })
+  useStore.setState({ institutionId: null, view: 'senado', analysisId: null, agentDraft: null, senadoTab: 'composicao', sidebarCollapsed: false, selectedId: null, partyFilter: null, search: '' })
   mockFetch()
 })
 
@@ -144,6 +148,190 @@ describe('Espaço de trabalho', () => {
     await userEvent.keyboard('{ArrowDown}{ArrowUp}{Enter}')
     expect(useStore.getState()).toMatchObject({ view: 'senado', senadoTab: 'proposicoes', search: 'sucessao inexistente' })
     await waitFor(() => expect(screen.queryByRole('combobox', { name: 'Buscar espaços, senadores ou proposições' })).not.toBeInTheDocument())
+  })
+})
+
+describe('Plataforma modular', () => {
+  it('separa a instituição Supremo da análise Master e preserva a linha do tempo', async () => {
+    mockFetch({ '/v1/dossies/stf-caso-master': { items: {
+      minister: [{ id: 'min-1', name: 'Ministro de teste', seat: 1, sources: src }],
+      procedure_actor: [], impeachment_step: [], timeline_event: [{ id: 'ev-1', date: '2026-11-24', track: 'caso', text: 'Evento de teste com fonte', status: 'fact_reported', sources: src }],
+    } } })
+    renderApp()
+    await userEvent.click(screen.getByRole('button', { name: 'Supremo Tribunal Federal' }))
+    expect(await screen.findByRole('heading', { name: 'Supremo Tribunal Federal' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Ministro de teste' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Linha do tempo' })).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Abrir análise do caso Master →' }))
+    expect(await screen.findByRole('heading', { name: 'Caso Master' })).toBeInTheDocument()
+    expect(screen.getByText('Evento de teste com fonte', { exact: false })).toBeInTheDocument()
+    expect(useStore.getState()).toMatchObject({ view: 'analises', analysisId: 'caso-master' })
+    await userEvent.click(screen.getByRole('button', { name: 'Todas as análises' }))
+    expect(await screen.findByRole('heading', { name: 'Análises' })).toBeInTheDocument()
+  })
+
+  it('cria outra análise, conserva suas notas e prepara uma pergunta sem enviar automaticamente', async () => {
+    useStore.setState({ view: 'analises' })
+    const app = renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Nova análise' }))
+    await userEvent.type(screen.getByLabelText('Título'), 'Orçamento e educação')
+    await userEvent.type(screen.getByLabelText('Pergunta de análise'), 'Quais comissões examinam o orçamento?')
+    await userEvent.click(screen.getByRole('button', { name: 'Criar caderno' }))
+    await userEvent.type(screen.getByLabelText('Evidências, links e hipóteses'), 'Hipótese a verificar, sem conclusão.')
+    app.unmount()
+    renderApp()
+    expect(await screen.findByLabelText('Evidências, links e hipóteses')).toHaveValue('Hipótese a verificar, sem conclusão.')
+    await userEvent.click(screen.getByRole('button', { name: 'Investigar com o agente →' }))
+    expect((await screen.findByLabelText('Pergunta ao agente') as HTMLTextAreaElement).value).toContain('Quais comissões examinam o orçamento?')
+    expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
+  })
+
+  it('mantém o mapa e os guias acessíveis mesmo sem uma instituição ingerida', async () => {
+    mockFetch({ '/v1/institutions': [] })
+    useStore.setState({ view: 'congresso' })
+    renderApp()
+    expect(await screen.findByRole('heading', { name: 'Congresso Nacional' })).toBeInTheDocument()
+    expect(screen.getByText('Como funciona o Congresso')).toBeInTheDocument()
+  })
+
+  it('envia apenas a pergunta revisada, sem título ou notas privados no contexto', async () => {
+    localStorage.setItem('politeia.analises.v1', JSON.stringify([{ id: 'local-private', title: 'Título reservado', question: 'Pergunta reservada', notes: 'Notas privadas' }]))
+    useStore.setState({ view: 'analises', analysisId: 'local-private' })
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Investigar com o agente →' }))
+    const input = await screen.findByLabelText('Pergunta ao agente')
+    await userEvent.clear(input)
+    await userEvent.type(input, 'Como funciona o Congresso?{Enter}')
+    await waitFor(() => expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(true))
+    const body = vi.mocked(fetch).mock.calls.find(([url]) => url === '/api/agente')![1]!.body as string
+    expect(body).toContain('Como funciona o Congresso?')
+    expect(body).not.toContain('Título reservado')
+    expect(body).not.toContain('Pergunta reservada')
+    expect(body).not.toContain('Notas privadas')
+  })
+
+  it('preserva cadernos alterados em outra aba ao salvar notas locais', async () => {
+    const first = { id: 'local-one', title: 'Educação', question: 'Pergunta um', notes: '' }
+    const other = { id: 'local-two', title: 'Saúde', question: 'Pergunta dois', notes: 'Evidência salva em outra aba' }
+    localStorage.setItem('politeia.analises.v1', JSON.stringify([first]))
+    useStore.setState({ view: 'analises', analysisId: first.id })
+    renderApp()
+    const input = await screen.findByLabelText('Evidências, links e hipóteses')
+    // Another tab saves after this tab has loaded its local state.
+    localStorage.setItem('politeia.analises.v1', JSON.stringify([first, other]))
+    await userEvent.type(input, 'Nova nota')
+    const saved = JSON.parse(localStorage.getItem('politeia.analises.v1')!)
+    expect(saved).toContainEqual(other)
+    expect(saved).toContainEqual({ ...first, notes: 'Nova nota' })
+  })
+
+  it('conserva a pergunta não enviada ao preparar uma investigação de caderno', async () => {
+    localStorage.setItem('politeia.analises.v1', JSON.stringify([{ id: 'local-draft', title: 'Orçamento', question: 'Quais comissões?', notes: '' }]))
+    useStore.setState({ view: 'analises', analysisId: 'local-draft' })
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Abrir agente político' }))
+    await userEvent.type(screen.getByLabelText('Pergunta ao agente'), 'Minha pergunta ainda não enviada')
+    await userEvent.click(screen.getByRole('button', { name: 'Fechar agente' }))
+    await userEvent.click(screen.getByRole('button', { name: 'Investigar com o agente →' }))
+    const input = await screen.findByLabelText('Pergunta ao agente') as HTMLTextAreaElement
+    expect(input.value).toContain('Minha pergunta ainda não enviada')
+    expect(input.value).toContain('Quais comissões?')
+    expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
+  })
+
+  it('abre o catálogo ao voltar da central depois de visitar uma análise', async () => {
+    useStore.setState({ view: 'inicio', analysisId: 'caso-master' })
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Todas as análises' }))
+    expect(await screen.findByRole('heading', { name: 'Análises' })).toBeInTheDocument()
+    expect(useStore.getState().analysisId).toBeNull()
+  })
+
+  it('encontra o Supremo pela sigla STF sem renomear a instituição', async () => {
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Buscar ou navegar' }))
+    await userEvent.type(screen.getByRole('combobox', { name: 'Buscar espaços, senadores ou proposições' }), 'STF')
+    expect(screen.getByRole('option', { name: /Supremo Tribunal Federal/ })).toBeInTheDocument()
+    await userEvent.keyboard('{Enter}')
+    expect(await screen.findByRole('heading', { name: 'Supremo Tribunal Federal' })).toBeInTheDocument()
+  })
+
+  it('não envia nem corta silenciosamente um rascunho acima do limite do agente', async () => {
+    useStore.setState({ view: 'analises', agentDraft: 'a'.repeat(8001) })
+    renderApp()
+    const input = await screen.findByLabelText('Pergunta ao agente') as HTMLTextAreaElement
+    expect(input.value).toHaveLength(8001)
+    expect(screen.getByRole('alert')).toHaveTextContent('Reduza para até 8.000')
+    expect(screen.getByRole('button', { name: 'Enviar' })).toBeDisabled()
+    await userEvent.click(input)
+    await userEvent.keyboard('{Enter}')
+    expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
+  })
+
+  it('preserva notas não salvas após erro de cota e atualização de outra aba', async () => {
+    const first = { id: 'local-one', title: 'Educação', question: 'Pergunta um', notes: '' }
+    const other = { id: 'local-two', title: 'Saúde', question: 'Pergunta dois', notes: 'Outra aba' }
+    const key = 'politeia.analises.v1'
+    localStorage.setItem(key, JSON.stringify([first]))
+    useStore.setState({ view: 'analises', analysisId: first.id })
+    renderApp()
+    const input = await screen.findByLabelText('Evidências, links e hipóteses')
+    const write = Storage.prototype.setItem
+    const failure = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, name, value) {
+      if (name === key) throw new DOMException('Full', 'QuotaExceededError')
+      write.call(this, name, value)
+    })
+    await userEvent.type(input, 'Nota não salva')
+    expect(screen.getByRole('status')).toHaveTextContent('Não foi possível salvar')
+    failure.mockRestore()
+    const remote = { ...first, notes: 'Nova evidência em outra aba' }
+    localStorage.setItem(key, JSON.stringify([remote, other]))
+    act(() => window.dispatchEvent(new StorageEvent('storage', { key })))
+    expect(input).toHaveValue('Nota não salva')
+    await userEvent.click(screen.getByRole('button', { name: 'Todas as análises' }))
+    await userEvent.click(screen.getByRole('button', { name: /Saúde/ }))
+    await userEvent.type(screen.getByLabelText('Evidências, links e hipóteses'), '!')
+    expect(JSON.parse(localStorage.getItem(key)!)).toEqual([remote, { ...other, notes: 'Outra aba!' }])
+    expect(screen.getByRole('status')).toHaveTextContent('Não foi possível salvar')
+    await userEvent.click(screen.getByRole('button', { name: 'Todas as análises' }))
+    await userEvent.click(screen.getByRole('button', { name: /Educação/ }))
+    expect(screen.getByLabelText('Evidências, links e hipóteses')).toHaveValue('Nota não salva')
+  })
+
+  it('mostra deputados no inspetor de pessoas sem abrir um perfil do Senado', async () => {
+    mockFetch({ '/v1/entities/per_deputado': { id: 'per_deputado', kind: 'person', label: 'Deputada de teste', attributes: {}, identifiers: [], sources: [] } })
+    useStore.setState({ view: 'camara' })
+    renderApp()
+    await waitFor(() => expect(useStore.getState().institutionId).toBe(inst.id))
+    act(() => useStore.getState().select('per_deputado'))
+    expect(await screen.findByText('Deputada de teste')).toBeInTheDocument()
+    expect(screen.getByLabelText('Inspetor')).toBeInTheDocument()
+    expect(vi.mocked(fetch).mock.calls.some(([url]) => String(url).includes('/senadores/per_deputado'))).toBe(false)
+  })
+
+  it('preserva o perfil completo do senador aberto nas notícias', async () => {
+    useStore.setState({ view: 'noticias' })
+    renderApp()
+    await waitFor(() => expect(useStore.getState().institutionId).toBe(inst.id))
+    act(() => useStore.getState().select('per_1'))
+    expect(await screen.findByText('Senador Um')).toBeInTheDocument()
+  })
+
+  it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
+    useStore.setState({ view: 'congresso' })
+    renderApp()
+    await screen.findByRole('heading', { name: 'Congresso Nacional' })
+    await userEvent.click(screen.getByRole('button', { name: /Sanção ou veto/ }))
+    expect(screen.getByText(/PECs seguem rito próprio/)).toBeInTheDocument()
+    expect(screen.getByText(/não andamento de uma proposição específica/)).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Judiciário' }))
+    expect(await screen.findByRole('heading', { name: 'Supremo Tribunal Federal' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Executivo' }))
+    expect(useStore.getState().view).toBe('executivo')
+    expect(await screen.findByText('Como funciona o Executivo')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Legislativo' }))
+    await userEvent.click(await screen.findByRole('tab', { name: 'Senado Federal' }))
+    expect(await screen.findByRole('tab', { name: 'Composição' })).toBeInTheDocument()
   })
 })
 

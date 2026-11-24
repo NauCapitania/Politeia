@@ -7,13 +7,16 @@ import { useStore } from '../store'
 import { askAgent, type ChartSpec, type NetworkSpec } from './client'
 import { Grafico } from './Grafico'
 import { Rede } from './Rede'
+import { viewLabel } from '../platform'
+import { ANALYSES } from '../analyses'
 
 type Turn = { papel: 'usuario' | 'agente'; texto: string; graficos?: ChartSpec[]; redes?: NetworkSpec[]; passos?: string[]; erro?: boolean }
 
 const STORAGE = 'politeia.agente.conversa'
+const MAX_QUESTION = 8000
 const SUGESTOES = [
   'Quem deve ganhar a Presidência do Senado em 2027, e por quê?',
-  'O caso Master vai dar em pizza? Quais as evidências?',
+  'Quais são as atualizações do caso Master e o que ainda está em aberto?',
   'Faça um gráfico das bancadas por partido hoje.',
   'Como cada partido tende a votar num impeachment de ministro do STF?',
 ]
@@ -27,7 +30,7 @@ function load(): Turn[] {
 }
 
 export function Agente() {
-  const { view, senadoTab, selectedId } = useStore()
+  const { view, senadoTab, analysisId, selectedId, agentDraft, setAgentDraft } = useStore()
   const [open, setOpen] = useState(false)
   const [wide, setWide] = useState(false)
   const [turns, setTurns] = useState<Turn[]>(load)
@@ -38,6 +41,7 @@ export function Agente() {
   const janela = useRef<HTMLElement>(null)
   const input = useRef<HTMLTextAreaElement>(null)
   const drag = useDragControls()
+  const tooLong = draft.trim().length > MAX_QUESTION
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE, JSON.stringify(turns.slice(-40))) } catch { /* histórico é opcional */ }
@@ -59,12 +63,15 @@ export function Agente() {
   }, [])
 
   useEffect(() => { if (open) input.current?.focus() }, [open])
+  useEffect(() => {
+    if (agentDraft) { setOpen(true); setDraft((current) => current.trim() ? `${current}\n\n${agentDraft}` : agentDraft); setAgentDraft(null) }
+  }, [agentDraft, setAgentDraft])
 
   const patchLast = (fn: (t: Turn) => Turn) => setTurns((all) => [...all.slice(0, -1), fn(all[all.length - 1])])
 
   async function send(text: string) {
     const pergunta = text.trim()
-    if (!pergunta || busy) return
+    if (!pergunta || pergunta.length > MAX_QUESTION || busy) return
     const history = [...turns.filter((t) => !t.erro), { papel: 'usuario' as const, texto: pergunta }]
     setTurns([...turns, { papel: 'usuario', texto: pergunta }, { papel: 'agente', texto: '', passos: [], graficos: [], redes: [] }])
     setDraft('')
@@ -73,7 +80,7 @@ export function Agente() {
     try {
       await askAgent(
         history.map(({ papel, texto }) => ({ papel, texto })),
-        { tela: view === 'senado' ? TELAS[senadoTab] : view, selecionado: selectedId },
+        { tela: view === 'senado' ? TELAS[senadoTab] : view === 'analises' && analysisId ? `Análise: ${ANALYSES.find((a) => a.id === analysisId)?.title ?? 'Caderno pessoal'}` : viewLabel(view), selecionado: selectedId },
         (event) => {
           if (event.tipo === 'passo') patchLast((t) => ({ ...t, passos: [...(t.passos ?? []), event.texto] }))
           else if (event.tipo === 'grafico') patchLast((t) => ({ ...t, graficos: [...(t.graficos ?? []), event.grafico] }))
@@ -124,7 +131,7 @@ export function Agente() {
             <div className="agente-corpo" ref={scroller}>
               {!turns.length && (
                 <div className="agente-vazio">
-                  <p>Pergunte sobre o Senado, o STF e o caso Master. O agente consulta os dados do app, pesquisa notícias e desenha gráficos.</p>
+                  <p>Investigue instituições, projetos e análises como o caso Master. O agente consulta as fontes disponíveis, pesquisa notícias e desenha gráficos; lacunas de cobertura não são conclusões.</p>
                   {SUGESTOES.map((s) => <button key={s} className="agente-sugestao" onClick={() => send(s)}>{s}</button>)}
                 </div>
               )}
@@ -153,8 +160,9 @@ export function Agente() {
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(draft) } }} />
               {busy
                 ? <Button icon="stop" onClick={() => abort.current?.abort()} aria-label="Parar" title="Parar" />
-                : <Button type="submit" intent="primary" icon="send-message" disabled={!draft.trim()} aria-label="Enviar" title="Enviar (Enter)" />}
+                : <Button type="submit" intent="primary" icon="send-message" disabled={!draft.trim() || tooLong} aria-label="Enviar" title="Enviar (Enter)" />}
             </form>
+            {tooLong && <p className="agente-aviso warn-text" role="alert">A pergunta tem {draft.trim().length} caracteres. Reduza para até 8.000 antes de enviar; o rascunho foi preservado.</p>}
             <p className="agente-aviso">Análises e previsões são inferência, não fato. Confira as fontes.</p>
           </motion.section>
         )}

@@ -35,7 +35,7 @@ function TerminalSession({ onClose, entries, setEntries, history, setHistory }: 
     const entry: Entry = { command, lines: [] }
     if (normalized === 'limpar') { setEntries([]); return }
     if (normalized === 'ajuda') {
-      entry.lines = ['resumo — composição consultada do Senado', 'buscar NOME — localizar um senador', 'abrir inicio | senado | votacoes | stf | noticias | fontes', 'limpar — limpar a tela; ↑ e ↓ — histórico de comandos']
+      entry.lines = ['resumo — composição consultada do Senado', 'buscar NOME — localizar um senador', 'abrir inicio | analises | master | congresso | senado | camara | votacoes | stf | executivo | partidos | noticias | fontes', 'limpar — limpar a tela; ↑ e ↓ — histórico de comandos']
     } else if (normalized === 'resumo') {
       entry.lines = seats.isLoading ? ['Consultando a base… Execute resumo novamente em instantes.'] : seats.isError ? ['Não foi possível consultar a composição. Abra fontes para verificar a cobertura.'] : !seats.data ? ['Sem composição disponível.'] : [
         `Composição consultada: ${seats.data.date}`,
@@ -44,8 +44,9 @@ function TerminalSession({ onClose, entries, setEntries, history, setHistory }: 
       ]
     } else if (normalized.startsWith('abrir ')) {
       const target = normalized.slice(6)
+      if (target === 'master') { useStore.getState().setAnalysis('caso-master'); onClose(); return }
       if (target === 'senado' || target === 'votacoes') { setSenadoTab(target === 'senado' ? 'composicao' : 'votacoes'); onClose(); return }
-      const views = { inicio: 'inicio', stf: 'stf', noticias: 'noticias', fontes: 'sources' } as const
+      const views = { inicio: 'inicio', analises: 'analises', congresso: 'congresso', camara: 'camara', stf: 'stf', executivo: 'executivo', partidos: 'partidos', noticias: 'noticias', fontes: 'sources' } as const
       if (Object.hasOwn(views, target)) { setView(views[target as keyof typeof views]); onClose(); return }
       entry.lines = ['Pasta não encontrada. Digite ajuda para ver os destinos disponíveis.']
     } else if (normalized.startsWith('buscar ')) {

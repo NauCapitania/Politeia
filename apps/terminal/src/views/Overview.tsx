@@ -3,12 +3,13 @@ import { useChanges, useNews, type Institution } from '../api/client'
 import { useCurrentSeats } from '../useCurrentSeats'
 import { fmtDate, fmtDateTime, partyColor } from '../format'
 import { useStore } from '../store'
+import { PowerMap } from '../components/InstitutionGuide'
 
 export function Overview({ inst }: { inst: Institution }) {
   const seats = useCurrentSeats()
   const news = useNews()
   const changes = useChanges()
-  const { setView, setSenadoTab, select } = useStore()
+  const { setView, setAnalysis, setSenadoTab, select } = useStore()
   const rows = seats.data?.seats ?? []
   const parties = [...rows.reduce((m, s) => m.set(s.party ?? 'Filiação não informada', (m.get(s.party ?? 'Filiação não informada') ?? 0) + 1), new Map<string, number>())]
     .sort((a, b) => b[1] - a[1])
@@ -55,9 +56,10 @@ export function Overview({ inst }: { inst: Institution }) {
 
       <section className="workspace-card watch-card">
         <div className="workspace-card-head"><div><div className="eyebrow">03 / FRENTES DE ANÁLISE</div><h2>Acompanhe de perto</h2></div><Icon icon="locate" size={18} /></div>
-        <button className="analysis-row" onClick={() => setView('stf')}><span className="analysis-icon"><Icon icon="take-action" /></span><span><b>STF e caso Master</b><small>Fatos, evidências e caminhos institucionais</small></span><Icon icon="arrow-right" size={14} /></button>
+        <button className="analysis-row" onClick={() => setAnalysis('caso-master')}><span className="analysis-icon"><Icon icon="take-action" /></span><span><b>Caso Master</b><small>Fatos, evidências e caminhos institucionais</small></span><Icon icon="arrow-right" size={14} /></button>
         <button className="analysis-row" onClick={() => setSenadoTab('presidencia2027')}><span className="analysis-icon amber"><Icon icon="predictive-analysis" /></span><span><b>A sucessão no Senado</b><small>Presidência de 2027 · cenários, não certezas</small></span><Icon icon="arrow-right" size={14} /></button>
         <button className="analysis-row" onClick={() => setSenadoTab('votacoes')}><span className="analysis-icon blue"><Icon icon="series-search" /></span><span><b>Como o Senado vota</b><small>Votos nominais e limites do voto secreto</small></span><Icon icon="arrow-right" size={14} /></button>
+        <div className="card-bottom"><span>Outras perguntas, outros recortes</span><Button minimal endIcon="arrow-right" onClick={() => setView('analises')}>Todas as análises</Button></div>
       </section>
 
       <section className="workspace-card movement-card">
@@ -69,6 +71,7 @@ export function Overview({ inst }: { inst: Institution }) {
         <div className="method-note"><Icon icon="info-sign" size={12} />A interface se move. Os fatos só mudam com novas fontes.</div>
       </section>
     </div>
+    <PowerMap />
     <div className="overview-footnote"><span>POLITEIA / INTELIGÊNCIA POLÍTICA</span><span>Dados documentados. Análise com responsabilidade.</span></div>
   </div>
 }

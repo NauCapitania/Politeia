@@ -1,3 +1,11 @@
+# Plataforma modular
+
+As instituições e as análises são espaços independentes. `src/platform.ts` centraliza os destinos e as abas por poder; `src/analyses.ts` registra os recortes analíticos. O caso Master usa o dossiê existente, sem transformar o cadastro do Supremo em um caso específico.
+
+`src/views/InstitutionModules.tsx` integra os módulos pelas exportações nomeadas `Camara`, `Executivo` e `Partidos`, nos respectivos arquivos de `src/views/`, sem props obrigatórias. Antes de cada módulo ser entregue, o destino mostra explicitamente a lacuna de cobertura; o build continua independente. Cada módulo deve tratar seus próprios estados de coleta, erro e ausência de dados, sem reutilizar o identificador institucional do Senado.
+
+Os cadernos em **Análises → Nova análise** guardam pergunta e notas apenas no `localStorage` deste navegador (`politeia.analises.v1`). Abas deste navegador veem alterações, mas não há sincronização entre dispositivos ou coleta automática. **Investigar com o agente** acrescenta uma pergunta ao rascunho para revisão antes do envio; título e notas privados não entram no contexto oculto do agente.
+
 # Snapshot estático e Cloudflare Pages
 
 O terminal usa a API por padrão. Em `VITE_DATA_MODE=static`, lê o snapshot JSON de `public/data/`
@@ -22,37 +30,29 @@ Se o banco limitar conexões, experimente `SNAPSHOT_WORKERS=1`.
 Com os secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit) e `CLOUDFLARE_ACCOUNT_ID` no ambiente, rode
 `npm --prefix apps/terminal run deploy:pages` para exportar, compilar e publicar no projeto
 `politeia`. No primeiro deploy, vincule `politeia.pedropcventura.com` como domínio personalizado
-no Cloudflare Pages. O site é público, sem Cloudflare Access.
+no Cloudflare Pages. A publicação está protegida pelo Cloudflare Access; confirme o deploy pela API do Pages quando não houver sessão autenticada no domínio.
 
-# React + TypeScript + Vite
+# Agente e desenvolvimento
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+`functions/api/agente.ts` atende `/api/agente` com Gemini e verifica a identidade do Cloudflare Access.
+No Pages, configure `GEMINI_API_KEY`, `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` e `ACCESS_ALLOWED_EMAILS`
+(lista separada por vírgulas), nos ambientes de produção e preview. Sem configuração válida, a função
+nega acesso; nenhum segredo deve usar o prefixo `VITE_`.
 
-Currently, two official plugins are available:
+Para testar localmente a Function depois do build estático, **neste diretório**:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+npx wrangler pages dev dist --port 8788 --binding AGENTE_DEV_SEM_ACCESS=1
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+A exceção de Access funciona somente com hostname `localhost`; nunca a configure na publicação.
+Forneça a chave Gemini apenas ao ambiente local do Wrangler. A UI em Vite, sozinha, não executa a Pages Function.
+
+Publique deste diretório para o Wrangler incluir `functions/`:
+
+```sh
+npx wrangler pages deploy dist --project-name politeia --branch main
+```
+
+Validação: `npm test`, `npm run lint`, `npm run build` (API) ou `npm run build:static` (snapshot).
+O roteiro completo de coleta, atualização e publicação está no [README principal](../../README.md).
