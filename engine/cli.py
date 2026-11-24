@@ -37,6 +37,8 @@ def main() -> None:
         except ValueError as exc:
             replay.error(str(exc))
         print(json.dumps(result, ensure_ascii=False, default=str))
+        if result["status"] == "failed":
+            raise SystemExit(1)
         return
 
     with factory() as s:
