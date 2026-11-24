@@ -16,6 +16,7 @@ from sqlalchemy import create_engine, func, select
 from sqlalchemy.orm import sessionmaker
 
 from connectors.base.protocol import Batch
+from connectors.news.connector import NewsConnector
 from connectors.senate.connector import SenateConnector
 from engine.capabilities.compute import recompute_capabilities
 from engine.db import models as M
@@ -161,9 +162,24 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
     monkeypatch.setattr(queries, "capabilities", capabilities_with_private_diagnostics)
     with factory() as session:
         load_dossiers(session)
+        source = session.get(M.SourceSystem, "src_noticias_rss")
+        feed = next(f for f in source.config["feeds"] if f["id"] == "metropoles")
+        with make_client(lambda _: httpx.Response(200, text="""<rss><channel>
+            <item><link>https://www.metropoles.com/brasil/ultima-hora</link><category>Política</category></item>
+            <item><link>https://www.metropoles.com/brasil/sao-paulo</link><category>Brasil</category></item>
+        </channel></rss>"""), hosts=("www.metropoles.com",)) as client:
+            connector = NewsConnector({"feeds": [feed]}, client)
+            batch = connector.fetch("news")
+        run = M.IngestionRun(institution_id=source.institution_id, source_system_id=source.id,
+                             connector=connector.id, connector_version=connector.version,
+                             scope=["news"], status="succeeded")
+        session.add(run)
+        session.flush()
+        [raw_id] = store_raw(session, run, source, batch)
         session.add_all(M.NewsItem(id=id_, source_system_id="src_noticias_rss", feed="metropoles",
                                    outlet="Metrópoles", url=f"https://www.metropoles.com/{path}",
-                                   title=title, published_at=datetime(2026, 11, day, tzinfo=UTC), topics=topics)
+                                   title=title, published_at=datetime(2026, 11, day, tzinfo=UTC), topics=topics,
+                                   raw_record_id=raw_id)
                         for id_, path, title, day, topics in (
                             ("nws_esporte", "esportes/futebol/real-madrid",
                              "Real Madrid deve igualar salário de Bellingham ao de Vini Jr. em renovação", 24, []),
@@ -174,7 +190,8 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
                             ("nws_senado", "brasil/relatorio", "Senado discute novo relatório", 22, ["senado"]),
                             ("nws_secao", "brasil/politica-brasil/erika-hilton",
                              "Erika Hilton recebe ameaça de morte", 21, []),
-                            ("nws_categoria", "brasil/ultima-hora", "Notícia de última hora", 20, ["politica"]),
+                            ("nws_categoria", "brasil/ultima-hora", "Notícia de última hora", 20, []),
+                            ("nws_brasil", "brasil/sao-paulo", "Notícia de São Paulo", 19, []),
                         ))
         session.commit()
     now = datetime(2026, 11, 24, 1, 30, tzinfo=ZoneInfo("UTC"))

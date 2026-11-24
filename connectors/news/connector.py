@@ -5,6 +5,7 @@ import re
 from email.utils import parsedate_to_datetime
 
 from defusedxml import ElementTree
+from defusedxml.common import DefusedXmlException
 
 from connectors.base.http import SourceAccessError
 from connectors.base.protocol import Batch, Connector, Issue, NewsRecord, RawResponse, Ref, normalize_name
@@ -27,6 +28,20 @@ TOPICS = {
 def _text(el, tag: str) -> str | None:
     child = el.find(tag)
     return child.text.strip() if child is not None and child.text else None
+
+
+def _categories(item) -> tuple[str, ...]:
+    return tuple(c.text for c in item.findall("category") if c.text)
+
+
+def rss_categories(payload: str | None) -> dict[str, tuple[str, ...]]:
+    if not payload:
+        return {}
+    try:
+        root = ElementTree.fromstring(payload)
+    except (DefusedXmlException, ElementTree.ParseError, ValueError):
+        return {}
+    return {link: _categories(item) for item in root.iter("item") if (link := _text(item, "link"))}
 
 
 def clean_excerpt(value: str | None) -> str | None:
@@ -82,7 +97,7 @@ class NewsConnector(Connector):
                     title = re.sub(rf"\s+-\s+{re.escape(outlet)}$", "", title)
                 title = html.unescape(title)
                 excerpt = None if aggregated else clean_excerpt(_text(item, "description"))
-                categories = [c.text for c in item.findall("category") if c.text]
+                categories = _categories(item)
                 if not is_political_news(link, title, excerpt, feed["id"], categories=categories):
                     continue
                 seen.add(link)

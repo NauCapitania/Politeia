@@ -8,7 +8,6 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from connectors.news.politics import is_political_news
 from engine.analysis.presidencia import _claim, analysis_2025, analysis_2027
 from engine.db.models import (
     Claim,
@@ -27,6 +26,7 @@ from engine.db.models import (
     VoteEvent,
 )
 from engine.db.session import get_session
+from engine.media import political_news
 from engine.senado import INSTITUTION, change_events, person_codes, seats_2027, seats_on
 
 router = APIRouter(prefix="/v1")
@@ -160,9 +160,7 @@ def noticias(s: DB, tema: str | None = None, entidade: str | None = None,
         stmt = stmt.join(NewsMention, NewsMention.news_item_id == NewsItem.id).where(NewsMention.entity_id == entidade)
     candidates = s.scalars(stmt.order_by(NewsItem.published_at.desc().nulls_last()).execution_options(yield_per=200))
     try:
-        rows = list(islice((n for n in candidates if is_political_news(
-            n.url, n.title, n.excerpt, n.feed, topics=n.topics,
-        )), limit))
+        rows = list(islice(political_news(s, candidates), limit))
     finally:
         candidates.close()
     mentions: dict[str, list] = {}
