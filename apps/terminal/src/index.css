@@ -177,3 +177,7 @@ pre.excerpt { font-family: var(--mono); font-size: 10.5px; background: var(--bg-
 .steps { padding-left: 18px; font-size: 12px; }
 .steps li { margin-bottom: 8px; }
 .master-timeline li { grid-template-columns: 76px 90px 1fr; }
+.profile-id img { flex: none; }
+.profile .bp6-tab-list { flex-wrap: wrap; gap: 0 14px; }
+.profile .bp6-tab-list > * { margin-right: 0 !important; }
+.inspector { overflow-x: hidden; }

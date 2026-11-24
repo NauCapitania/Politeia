@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Callout, Spinner, Tag } from '@blueprintjs/core'
 import { useDossier, useNews } from '../api/client'
-import { hemicycleLayout } from './Hemicycle'
 import { fmtDate, fmtDateTime } from '../format'
 import { SrcList } from '../components/SrcList'
 
@@ -19,7 +18,14 @@ export function Stf() {
   const [focus, setFocus] = useState<string | null>(null)
   const [track, setTrack] = useState('')
   const width = 520
-  const layout = useMemo(() => hemicycleLayout(11, width), [])
+  const layout = useMemo(() => {
+    const r = width / 2 - 40
+    const points = Array.from({ length: 11 }, (_, i) => {
+      const a = Math.PI - (Math.PI * i) / 10
+      return { x: width / 2 + r * Math.cos(a), y: r + 24 - r * Math.sin(a) }
+    })
+    return { points, seatR: 17, height: r + 60 }
+  }, [])
   const d = q.data
   if (q.isLoading) return <div className="view"><Spinner size={24} /></div>
   if (!d) return <div className="view"><Callout intent="warning">Dossiê STF / caso Master não carregado.</Callout></div>
