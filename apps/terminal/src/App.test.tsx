@@ -37,8 +37,8 @@ const DATA: Record<string, unknown> = {
   },
 }
 
-function mockFetch() {
-  vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(DATA[url.split('?')[0]] ?? []), { status: 200 })))
+function mockFetch(overrides: Record<string, unknown> = {}) {
+  vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(({ ...DATA, ...overrides })[url.split('?')[0]] ?? []), { status: 200 })))
 }
 const renderApp = () => render(<QueryClientProvider client={new QueryClient()}><App /></QueryClientProvider>)
 
@@ -48,6 +48,14 @@ beforeEach(() => {
 })
 
 describe('Espaço de trabalho', () => {
+  it('não transforma filiação desconhecida em um partido adicional', async () => {
+    useStore.setState({ view: 'inicio' })
+    mockFetch({ '/v1/senado/composicao': { date: '2026-11-24', observed: 3, seats: [seat(0), seat(1), { ...seat(2), party: null }] } })
+    renderApp()
+    await waitFor(() => expect(screen.getByRole('button', { name: /Distribuição de poder/ })).toHaveTextContent('2 partidos'))
+    expect(screen.getByRole('img', { name: /Filiação não informada: 1 cadeiras/ })).toBeInTheDocument()
+  })
+
   it('abre a central com dados da base e navega pelo mapa de poder', async () => {
     useStore.setState({ view: 'inicio' })
     renderApp()

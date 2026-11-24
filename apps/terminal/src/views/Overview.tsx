@@ -11,8 +11,9 @@ export function Overview({ inst }: { inst: Institution }) {
   const changes = useChanges()
   const { setView, setSenadoTab, select } = useStore()
   const rows = seats.data?.seats ?? []
-  const parties = [...rows.reduce((m, s) => m.set(s.party ?? 'Sem partido', (m.get(s.party ?? 'Sem partido') ?? 0) + 1), new Map<string, number>())]
+  const parties = [...rows.reduce((m, s) => m.set(s.party ?? 'Filiação não informada', (m.get(s.party ?? 'Filiação não informada') ?? 0) + 1), new Map<string, number>())]
     .sort((a, b) => b[1] - a[1])
+  const partyCount = new Set(rows.map((s) => s.party).filter(Boolean)).size
   const latest = [...(news.data ?? [])].sort((a, b) => (b.published_at ?? '').localeCompare(a.published_at ?? '')).slice(0, 4)
   const recent = [...(changes.data ?? [])].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3)
 
@@ -25,7 +26,7 @@ export function Overview({ inst }: { inst: Institution }) {
 
     <div className="overview-metrics">
       <button className="metric" onClick={() => setSenadoTab('composicao')}><span>Senado em exercício <Icon icon="arrow-top-right" size={12} /></span><strong>{seats.isLoading ? '…' : seats.isError ? '—' : seats.data?.observed ?? '—'}<small> / {inst.seat_count ?? 81}</small></strong><em>Cadeiras identificadas na base</em></button>
-      <button className="metric" onClick={() => setSenadoTab('composicao')}><span>Distribuição de poder <Icon icon="arrow-top-right" size={12} /></span><strong>{seats.isLoading ? '…' : seats.isError ? '—' : parties.length}<small> partidos</small></strong><em>Na composição consultada</em></button>
+      <button className="metric" onClick={() => setSenadoTab('composicao')}><span>Distribuição de poder <Icon icon="arrow-top-right" size={12} /></span><strong>{seats.isLoading ? '…' : seats.isError ? '—' : partyCount}<small> partidos</small></strong><em>Na composição consultada</em></button>
       <button className="metric" onClick={() => setView('noticias')}><span>No radar de notícias <Icon icon="arrow-top-right" size={12} /></span><strong>{news.isLoading ? '…' : news.isError ? '—' : news.data?.length ?? 0}<small> registros</small></strong><em>Últimas notícias disponíveis na base</em></button>
       <button className="metric metric-focus" onClick={() => setSenadoTab('presidencia2027')}><span>Próxima disputa <Icon icon="arrow-top-right" size={12} /></span><strong>2027<small> · Senado</small></strong><em>Cenários, apoios e incertezas</em></button>
     </div>
