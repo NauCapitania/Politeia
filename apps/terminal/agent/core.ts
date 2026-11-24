@@ -184,7 +184,7 @@ async function generate(deps: AgentDeps, model: string, system: string, contents
     signal: deps.signal,
     body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents, tools: TOOLS, ...(final ? { toolConfig: { functionCallingConfig: { mode: 'NONE' } } } : {}), generationConfig: { temperature: 0.4 } }),
   })
-  if (!res.ok) throw new GeminiError(res.status, `Gemini ${res.status}`)
+  if (!res.ok) throw new GeminiError(res.status, `Gemini ${model} ${res.status}: ${(await res.text().catch(() => '')).slice(0, 300)}`)
   const data = await res.json() as { candidates?: { content?: Content; finishReason?: string }[] }
   return data.candidates?.[0]?.content ?? { role: 'model' as const, parts: [] }
 }

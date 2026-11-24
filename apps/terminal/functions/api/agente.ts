@@ -64,6 +64,7 @@ export const onRequestPost = async ({ request, env, waitUntil }: { request: Requ
   }, body.mensagens, body.contexto, emit)
     .catch((error: unknown) => {
       if (stop.signal.aborted) return
+      console.error('agente falhou', (error as { status?: number }).status ?? '', error instanceof Error ? error.message : String(error))
       const status = (error as { status?: number }).status
       emit({ tipo: 'erro', texto: status === 429
         ? 'Limite gratuito do Gemini atingido no momento. Espere um minuto e tente de novo.'
