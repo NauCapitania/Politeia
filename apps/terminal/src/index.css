@@ -599,6 +599,10 @@ kbd { font: 9px var(--mono); padding: 2px 4px; border: 1px solid var(--line-stro
   .agente-ampliar { display: none; }
   .agente-janela, .agente-janela.wide, .agente-janela.com-evidencias:not(.wide) { right: 8px; left: 8px; width: auto; top: 66px; bottom: 102px; height: auto; }
 }
+@media (max-width: 760px) and (max-height: 450px) {
+  .evidence-window { top: 8px; }
+  .evidence-titlebar { padding-block: 0; }
+}
 
 .agente-rede { margin: 4px 0 10px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-1); }
 .agente-rede figcaption { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
