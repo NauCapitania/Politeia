@@ -241,6 +241,27 @@ class Issue:
 
 
 @dataclass
+class ExecutiveBodyRecord:
+    """An organ or entity of the federal Executive as listed in SIORG (official organizational registry)."""
+
+    code: str
+    name: str
+    unit_type: str  # orgao | entidade
+    ref: Ref
+    parent_code: str | None = None
+    acronym: str | None = None
+    legal_nature: str | None = None
+    competence: str | None = None
+    purpose: str | None = None
+    mission: str | None = None
+    legal_basis: str | None = None
+    site: str | None = None
+    version: str | None = None
+    version_start: date | None = None
+    attributes: dict = field(default_factory=dict)
+
+
+@dataclass
 class Batch:
     scope: str
     raw: list[RawResponse] = field(default_factory=list)
@@ -254,6 +275,7 @@ class Batch:
     speeches: list[SpeechRecord] = field(default_factory=list)
     news: list[NewsRecord] = field(default_factory=list)
     committees: list[CommitteeRecord] = field(default_factory=list)
+    executive_bodies: list[ExecutiveBodyRecord] = field(default_factory=list)
     issues: list[Issue] = field(default_factory=list)
     complete_member_list: bool = False
 

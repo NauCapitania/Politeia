@@ -1,0 +1,63 @@
+{
+  "dossier": "poder-executivo",
+  "as_of": "2026-11-24",
+  "title": "Poder Executivo federal: como funciona",
+  "disclaimer": "Atribuições citadas da Constituição Federal e da Lei nº 14.600/2023. A estrutura vem do SIORG; os ocupantes dos cargos vêm da lista colaborativa da Wikipédia, com as referências citadas lá.",
+  "items": [
+    {
+      "id": "exe_overview",
+      "kind": "overview",
+      "payload": {
+        "title": "O que é o Poder Executivo",
+        "text": "O Poder Executivo da União é exercido pelo Presidente da República, auxiliado pelos Ministros de Estado (CF, art. 76). O Presidente é ao mesmo tempo chefe de Estado e chefe de governo: representa o país, dirige a administração federal, executa as leis e participa do processo legislativo propondo, sancionando ou vetando projetos. A organização da Presidência e dos ministérios é definida em lei (hoje a Lei nº 14.600/2023 e alterações), e o detalhamento de cada órgão sai em decreto de estrutura regimental."
+      },
+      "sources": [
+        {"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art76", "outlet": "Constituição Federal, art. 76", "kind": "official"},
+        {"url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14600.htm", "outlet": "Lei nº 14.600/2023", "date": "2023-06-19", "kind": "official"}
+      ]
+    },
+    {
+      "id": "exe_mandate",
+      "kind": "office",
+      "payload": {
+        "role": "Presidente da República",
+        "name": "Luiz Inácio Lula da Silva",
+        "party": "PT",
+        "since": "2023-01-01",
+        "rule": "Eleito com o Vice-Presidente para mandato de quatro anos, permitida uma reeleição (CF, arts. 14 §5º, 77 e 82). Pela EC nº 111/2021, o mandato iniciado em 2023 termina com a posse do sucessor em 5 de janeiro de 2027."
+      },
+      "sources": [
+        {"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art82", "outlet": "Constituição Federal, art. 82", "kind": "official"},
+        {"url": "https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc111.htm", "outlet": "Emenda Constitucional nº 111/2021", "kind": "official"}
+      ]
+    },
+    {
+      "id": "exe_vice",
+      "kind": "office",
+      "payload": {
+        "role": "Vice-Presidente da República",
+        "name": "Geraldo Alckmin",
+        "party": "PSB",
+        "since": "2023-01-01",
+        "rule": "Substitui o Presidente nos impedimentos e o sucede em caso de vaga; também cumpre missões especiais e pode acumular um ministério (CF, art. 79). Na linha sucessória seguem o Presidente da Câmara, o do Senado e o do STF (CF, art. 80)."
+      },
+      "sources": [
+        {"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art79", "outlet": "Constituição Federal, arts. 79 e 80", "kind": "official"}
+      ]
+    },
+    {"id": "pow_ministros", "kind": "power", "payload": {"group": "Governo e administração", "article": "Art. 84, I e II", "title": "Nomear e exonerar ministros; dirigir a administração", "text": "O Presidente escolhe e demite livremente os Ministros de Estado e exerce, com eles, a direção superior da administração federal.", "links": ["ministerios"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art84", "outlet": "Constituição Federal, art. 84", "kind": "official"}]},
+    {"id": "pow_decretos", "kind": "power", "payload": {"group": "Governo e administração", "article": "Art. 84, IV e VI", "title": "Decretos e regulamentos", "text": "Expede decretos para a fiel execução das leis e, por decreto autônomo, organiza a administração federal quando não houver aumento de despesa nem criação ou extinção de órgãos.", "links": ["ministerios"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art84", "outlet": "Constituição Federal, art. 84", "kind": "official"}]},
+    {"id": "pow_iniciativa", "kind": "power", "payload": {"group": "Relação com o Congresso", "article": "Arts. 61 e 84, III", "title": "Propor leis (iniciativa privativa em alguns temas)", "text": "Pode apresentar projetos de lei; tem iniciativa privativa, entre outros, sobre efetivo das Forças Armadas, criação de cargos na administração direta e criação e extinção de ministérios.", "links": ["congresso"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art61", "outlet": "Constituição Federal, art. 61", "kind": "official"}]},
+    {"id": "pow_mp", "kind": "power", "payload": {"group": "Relação com o Congresso", "article": "Art. 62", "title": "Medidas provisórias", "text": "Em caso de relevância e urgência, edita medidas provisórias com força de lei; o Congresso precisa aprová-las em até 60 dias, prorrogáveis por mais 60, ou elas perdem a eficácia. Após 45 dias, trancam a pauta da Casa em que estiverem.", "links": ["congresso"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art62", "outlet": "Constituição Federal, art. 62", "kind": "official"}]},
+    {"id": "pow_veto", "kind": "power", "payload": {"group": "Relação com o Congresso", "article": "Arts. 66 e 84, IV e V", "title": "Sancionar ou vetar projetos", "text": "Sanciona, promulga e publica as leis, ou veta projetos, no todo ou em parte, em 15 dias úteis. O veto pode ser derrubado pela maioria absoluta de deputados e senadores em sessão conjunta.", "links": ["congresso"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art66", "outlet": "Constituição Federal, art. 66", "kind": "official"}]},
+    {"id": "pow_orcamento", "kind": "power", "payload": {"group": "Relação com o Congresso", "article": "Arts. 84, XXIII, e 165", "title": "Orçamento e contas", "text": "Envia ao Congresso o plano plurianual, a LDO e a lei orçamentária anual, e presta contas anualmente; as contas são julgadas pelo Congresso com parecer do TCU.", "links": ["congresso", "tcu"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art165", "outlet": "Constituição Federal, art. 165", "kind": "official"}]},
+    {"id": "pow_stf", "kind": "power", "payload": {"group": "Relação com o Judiciário", "article": "Arts. 84, XIV e XVI, e 101", "title": "Indicar ministros do STF e de tribunais superiores", "text": "Nomeia os ministros do Supremo Tribunal Federal e dos tribunais superiores, o Procurador-Geral da República e o presidente do Banco Central, depois de aprovados pelo Senado.", "links": ["stf", "senado"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art101", "outlet": "Constituição Federal, art. 101", "kind": "official"}]},
+    {"id": "pow_externo", "kind": "power", "payload": {"group": "Estado e defesa", "article": "Art. 84, VII, VIII, XIII e XIX", "title": "Relações exteriores e Forças Armadas", "text": "Mantém relações com Estados estrangeiros, celebra tratados (sujeitos ao Congresso), é o comandante supremo das Forças Armadas e declara guerra quando autorizado pelo Congresso.", "links": ["congresso"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art84", "outlet": "Constituição Federal, art. 84", "kind": "official"}]},
+    {"id": "pow_excecao", "kind": "power", "payload": {"group": "Estado e defesa", "article": "Arts. 84, IX e X, 136 e 137", "title": "Estado de defesa, de sítio e intervenção federal", "text": "Decreta estado de defesa, estado de sítio (com autorização prévia do Congresso) e intervenção federal; o Congresso aprova ou suspende.", "links": ["congresso"]}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art136", "outlet": "Constituição Federal, arts. 136 e 137", "kind": "official"}]},
+    {"id": "chk_impeachment", "kind": "check", "payload": {"by": "Câmara e Senado", "article": "Arts. 51, I, 52, I, 85 e 86", "title": "Crime de responsabilidade (impeachment)", "text": "A Câmara autoriza o processo por dois terços dos deputados; o Senado julga, sob a presidência do presidente do STF, e a condenação exige dois terços dos senadores."}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art85", "outlet": "Constituição Federal, arts. 85 e 86", "kind": "official"}]},
+    {"id": "chk_crime_comum", "kind": "check", "payload": {"by": "STF", "article": "Arts. 86 e 102, I, b e c", "title": "Crimes comuns", "text": "Nas infrações penais comuns, o Presidente é julgado pelo STF, após autorização da Câmara; os ministros de Estado também são julgados pelo STF."}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art102", "outlet": "Constituição Federal, art. 102", "kind": "official"}]},
+    {"id": "chk_convocacao", "kind": "check", "payload": {"by": "Câmara, Senado e comissões", "article": "Art. 50", "title": "Convocação de ministros", "text": "A Câmara, o Senado ou qualquer de suas comissões podem convocar ministros para prestar informações; a ausência sem justificativa é crime de responsabilidade."}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art50", "outlet": "Constituição Federal, art. 50", "kind": "official"}]},
+    {"id": "chk_tcu", "kind": "check", "payload": {"by": "Congresso e TCU", "article": "Arts. 70 e 71", "title": "Controle externo das contas", "text": "O Congresso fiscaliza a administração federal com auxílio do Tribunal de Contas da União, que emite parecer sobre as contas do Presidente e julga as dos gestores."}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art71", "outlet": "Constituição Federal, art. 71", "kind": "official"}]},
+    {"id": "min_role", "kind": "ministers_role", "payload": {"article": "Art. 87", "text": "Ministros de Estado são escolhidos entre brasileiros maiores de 21 anos. Cabe a eles orientar e supervisionar os órgãos e entidades da sua área, referendar os atos e decretos do Presidente, expedir instruções e apresentar relatório anual. Autarquias, fundações e empresas estatais ficam vinculadas a um ministério, que exerce a supervisão."}, "sources": [{"url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art87", "outlet": "Constituição Federal, art. 87", "kind": "official"}]}
+  ]
+}

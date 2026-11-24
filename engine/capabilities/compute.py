@@ -13,6 +13,7 @@ from engine.db.models import (
     CapabilityState,
     Committee,
     CommitteeMembership,
+    ExecutiveBody,
     IngestionRun,
     LegislativeEvent,
     Mandate,
@@ -88,6 +89,10 @@ def _counts(s: Session, inst: str, capability: str) -> tuple[int, dict]:
             Committee, Committee.id == CommitteeMembership.committee_id).where(
             Committee.institution_id == inst, CommitteeMembership.is_current.is_(True))) or 0
         return n, {"current_seats": seats}
+    if capability == "executive_structure":
+        n = s.scalar(select(func.count()).where(ExecutiveBody.institution_id == inst,
+                                                ExecutiveBody.is_current.is_(True))) or 0
+        return n, {}
     if capability == "proposal_events":
         n = s.scalar(select(func.count()).where(LegislativeEvent.institution_id == inst)) or 0
         return n, {}
