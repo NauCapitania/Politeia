@@ -283,10 +283,10 @@
    ]
   },
   {
-   "id": "pres2025_support_podemos",
+   "id": "pres2025_support_pode",
    "kind": "party_support",
    "payload": {
-    "party": "PODEMOS",
+    "party": "PODE",
     "candidate": "Davi Alcolumbre",
     "support": "split",
     "note": "Bancada dividida: parte anunciou apoio (4 de 6, segundo o g1 em 30/11/2024)."
