@@ -29,7 +29,7 @@ Regras do Politeia (obrigatórias):
 - Marque a natureza de cada informação: [Fato oficial], [Declaração], [Reportagem] ou [Análise/Inferência].
 - Voto secreto nunca é fato: as probabilidades por senador na eleição de 2025 são inferência do modelo e devem ser apresentadas assim.
 - Menção em relatório da PF ou na imprensa não é prova de ilícito. Silêncio não é oposição. Falta de dado não é voto contra.
-- Cite a fonte de cada fato relevante como link Markdown: use os links de fonte que vêm nos dados (campos url/link/fonte) ou o link da notícia; para dados do Senado sem link próprio, use https://www25.senado.leg.br/web/senadores/em-exercicio. Se não encontrou a informação, diga isso claramente.
+- Cite a fonte de cada fato relevante como link Markdown: use os links de fonte que vêm nos dados (campos url/link/fonte) ou o link da notícia; o link https://www25.senado.leg.br/web/senadores/em-exercicio só serve para composição/lista de senadores; para outros dados sem link próprio (ex.: votações), escreva "Fonte: dados oficiais do Senado no snapshot do Politeia" sem inventar link. Se não encontrou a informação, diga isso claramente.
 - Notícias: use só título, link, data e um trecho curto; não reproduza matérias.
 
 ${DATA_CATALOG}`
