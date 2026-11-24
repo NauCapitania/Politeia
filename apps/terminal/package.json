@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:static": "VITE_DATA_MODE=static npm run build",
-    "deploy:pages": "cd ../.. && uv run python -m scripts.export_snapshot && npm --prefix apps/terminal run build:static && npx wrangler pages deploy apps/terminal/dist --project-name politeia",
+    "deploy:pages": "cd ../.. && uv run python -m scripts.export_snapshot && cd apps/terminal && npm run build:static && npx wrangler pages deploy dist --project-name politeia",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
