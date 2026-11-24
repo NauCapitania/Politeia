@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import { Dialog, Icon } from '@blueprintjs/core'
 import { useSeats, type SeatRow } from '../api/client'
 import { useStore } from '../store'
@@ -7,11 +7,18 @@ import { normalize } from '../format'
 type Entry = { command: string; lines: string[]; matches?: SeatRow[] }
 
 export function LocalTerminal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const [entries, setEntries] = useState<Entry[]>([])
+  const [history, setHistory] = useState<string[]>([])
+  return isOpen ? <TerminalSession onClose={onClose} entries={entries} setEntries={setEntries} history={history} setHistory={setHistory} /> : null
+}
+
+function TerminalSession({ onClose, entries, setEntries, history, setHistory }: {
+  onClose: () => void; entries: Entry[]; setEntries: Dispatch<SetStateAction<Entry[]>>
+  history: string[]; setHistory: Dispatch<SetStateAction<string[]>>
+}) {
   const [date] = useState(() => new Date().toISOString().slice(0, 10))
   const seats = useSeats(date)
   const [input, setInput] = useState('')
-  const [entries, setEntries] = useState<Entry[]>([])
-  const [history, setHistory] = useState<string[]>([])
   const [cursor, setCursor] = useState(-1)
   const output = useRef<HTMLDivElement>(null)
   const { setView, setSenadoTab, select } = useStore()
@@ -49,7 +56,7 @@ export function LocalTerminal({ isOpen, onClose }: { isOpen: boolean; onClose: (
     setEntries((old) => [...old, entry].slice(-40))
   }
 
-  return <Dialog isOpen={isOpen} onClose={onClose} className="local-terminal" aria-label="Terminal local">
+  return <Dialog isOpen onClose={onClose} className="local-terminal" aria-label="Terminal local">
     <div className="terminal-titlebar"><Icon icon="console" size={14} /><b>Terminal local</b><span>politeia / observatório</span><button onClick={onClose} aria-label="Fechar terminal"><Icon icon="cross" size={16} /></button></div>
     <div className="terminal-output" ref={output} role="log" aria-label="Saída do terminal" aria-live="polite">
       <p className="terminal-welcome">Seu observatório, por comandos.</p>
