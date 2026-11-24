@@ -113,9 +113,10 @@ def change_events(s: Session, since: date) -> list[dict]:
 def seats_2027(s: Session) -> dict:
     """The Senate from 1 Feb 2027: the 27 seats whose mandates run to 2031 plus the 54 elected in October 2026.
     Continuing seats show today's occupant and party; elected seats come from the sourced 2027 dossier."""
-    today = date.today()
+    # Read the outgoing legislature (never past 31 Jan 2027) so mandates ingested after the posse are not doubled.
+    today = min(date.today(), date(2027, 1, 31))
     continuing = [r | {"group": "continua"} for r in seats_on(s, today)
-                  if r["mandate_end"] and r["mandate_end"] >= date(2031, 1, 1)]
+                  if r["mandate_end"] and date(2031, 1, 1) <= r["mandate_end"] < date(2035, 1, 1)]
     elected = s.scalars(select(DossierItem).where(DossierItem.dossier == "presidencia-2027",
                                                   DossierItem.kind == "elected_2026")).all()
     current = {normalize_name(r["name"]): r for r in seats_on(s, today)}
