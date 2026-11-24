@@ -26,6 +26,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     func,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -285,7 +286,11 @@ class Committee(Base):
 
 class CommitteeMembership(Base):
     __tablename__ = "committee_memberships"
-    __table_args__ = (UniqueConstraint("committee_id", "person_id", "seat_kind"), {"schema": "core"})
+    __table_args__ = (
+        Index("uq_committee_memberships_current", "committee_id", "person_id", "seat_kind", unique=True,
+              postgresql_where=text("is_current")),
+        {"schema": "core"},
+    )
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     committee_id: Mapped[str] = mapped_column(ForeignKey("core.committees.id"), index=True)

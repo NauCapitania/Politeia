@@ -4,7 +4,7 @@ import logging
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import func, select, update
+from sqlalchemy import func, select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -305,11 +305,12 @@ class Persistor:
                     valid_from=today, last_observed_at=self.now, raw_record_id=self.raw_ids[m.ref.raw])
             if rows:
                 stmt = insert(CommitteeMembership).values(list(rows.values()))
+                # Only an open period is extended; a senator returning after leaving starts a new row.
                 self.s.execute(stmt.on_conflict_do_update(
-                    constraint="uq_committee_memberships_committee_id_person_id_seat_kind",
+                    index_elements=["committee_id", "person_id", "seat_kind"],
+                    index_where=text("is_current"),
                     set_={k: stmt.excluded[k] for k in ("role", "party_abbreviation", "represented_unit", "bloc",
-                                                        "is_current", "last_observed_at", "raw_record_id")}
-                    | {"valid_to": None}))
+                                                        "last_observed_at", "raw_record_id")}))
             self.s.execute(update(CommitteeMembership).where(
                 CommitteeMembership.committee_id == cid, CommitteeMembership.is_current.is_(True),
                 CommitteeMembership.last_observed_at < self.now).values(is_current=False, valid_to=today))
