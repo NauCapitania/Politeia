@@ -265,6 +265,7 @@ class Persistor:
         for sp in batch.speeches:
             pid = self.lookup("person", sp.person)
             if not pid:
+                self._count("speeches_unknown_person")
                 continue
             existing = self.s.scalar(select(Speech.id).where(
                 Speech.source_system_id == self.source.id, Speech.source_id == sp.source_id))
@@ -407,6 +408,7 @@ def _sync_scope(session: Session, source: SourceSystem, connector, scope: str) -
         session.commit()
         raise
     warnings = sum(1 for i in batch.issues if i.severity == "warning")
+    warnings += 1 if persistor.stats.get("speeches_unknown_person") else 0
     run.status = "partial" if warnings else "succeeded"
     run.stats = stats | persistor.stats | {"warnings": warnings}
     run.finished_at = _now()
