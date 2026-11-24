@@ -107,7 +107,8 @@ def recompute_capabilities(s: Session, inst: str) -> None:
             scope = spec["scope"]
             runs = s.scalars(select(IngestionRun).where(
                 IngestionRun.institution_id == inst, IngestionRun.scope.contains([scope]),
-                IngestionRun.status != "running").order_by(IngestionRun.started_at.desc())).all()
+                IngestionRun.status != "running", IngestionRun.is_source_fetch()
+            ).order_by(IngestionRun.started_at.desc())).all()
             ok = next((r for r in runs if r.status in ("succeeded", "partial")), None)
             count, coverage = _counts(s, inst, capability)
             row.update(record_count=count, coverage=coverage, last_success_at=ok.finished_at if ok else None)
