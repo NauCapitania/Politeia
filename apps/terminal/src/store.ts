@@ -38,7 +38,7 @@ export const useStore = create<State>((set) => ({
   partyFilter: null,
   search: '',
   setInstitution: (id) => set({ institutionId: id, selectedId: null, partyFilter: null, search: '', hoveredId: null }),
-  setView: (view) => set({ view, selectedId: null }),
+  setView: (view) => set({ view, selectedId: null, ...(view === 'analises' ? { analysisId: null } : {}) }),
   setAnalysis: (analysisId) => set({ view: 'analises', analysisId, selectedId: null }),
   setAgentDraft: (agentDraft) => set({ agentDraft }),
   setSenadoTab: (senadoTab) => set({ view: 'senado', senadoTab, selectedId: null }),

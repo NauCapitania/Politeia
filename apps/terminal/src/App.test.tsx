@@ -235,6 +235,14 @@ describe('Plataforma modular', () => {
     expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
   })
 
+  it('abre o catálogo ao voltar da central depois de visitar uma análise', async () => {
+    useStore.setState({ view: 'inicio', analysisId: 'caso-master' })
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Todas as análises' }))
+    expect(await screen.findByRole('heading', { name: 'Análises' })).toBeInTheDocument()
+    expect(useStore.getState().analysisId).toBeNull()
+  })
+
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
     useStore.setState({ view: 'congresso' })
     renderApp()
