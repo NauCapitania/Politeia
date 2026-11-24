@@ -89,7 +89,7 @@ export function Rede({ spec }: { spec: NetworkSpec }) {
             <feGaussianBlur stdDeviation="2.4" result="b" />
             <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
-          <radialGradient id="fundo-rede"><stop offset="0%" stopColor="#14213a" /><stop offset="100%" stopColor="#07090d" /></radialGradient>
+          <radialGradient id="fundo-rede"><stop offset="0%" style={{ stopColor: 'var(--rede-centro)' }} /><stop offset="100%" style={{ stopColor: 'var(--rede-borda)' }} /></radialGradient>
         </defs>
         <rect width={W} height={H} fill="url(#fundo-rede)" />
         <g className="arestas">

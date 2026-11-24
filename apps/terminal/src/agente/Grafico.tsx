@@ -75,7 +75,7 @@ function Pizza({ spec, color }: { spec: ChartSpec; color: (k: string) => string 
     <svg viewBox={`0 0 ${W} ${H}`} role="img">
       <g transform={`translate(${W / 2},${H / 2})`}>
         {slices.map((s, i) => (
-          <path key={spec.rotulos[i]} d={shape(s) ?? ''} fill={color(spec.rotulos[i])} stroke="#0a0c10">
+          <path key={spec.rotulos[i]} d={shape(s) ?? ''} fill={color(spec.rotulos[i])} style={{ stroke: 'var(--bg-1)' }}>
             <title>{`${spec.rotulos[i]}: ${fmt(values[i])} (${fmt((values[i] / total) * 100)}%)`}</title>
           </path>
         ))}

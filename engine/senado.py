@@ -71,7 +71,8 @@ def seats_on(s: Session, on: date) -> list[dict]:
     parties = parties_on(s, [p.id for _, _, _, p in by_seat.values()], on)
     out = []
     for (holder, leg), (_, ex, m, p) in by_seat.items():
-        out.append({"person_id": p.id, "code": codes.get(p.id), "name": p.name, "photo_url": p.photo_url,
+        out.append({"person_id": p.id, "code": codes.get(p.id), "name": p.name, "full_name": p.full_name,
+                    "photo_url": p.photo_url,
                     "uf": m.represented_unit, "party": parties.get(p.id), "participation":
                     "titular" if m.participation == "holder" else "suplente", "holder_code": holder,
                     "legislature": leg, "exercise_start": ex.start_date, "exercise_end": ex.end_date,

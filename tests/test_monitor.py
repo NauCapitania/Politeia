@@ -8,6 +8,7 @@ import pytest
 from connectors.news.connector import NewsConnector
 from engine.analysis.secret_ballot import posterior_marginals
 from engine.dossiers import DossierError, read_dossiers
+from engine.registry import pack_for
 from tests.conftest import make_client
 
 
@@ -54,10 +55,11 @@ RSS = """<?xml version="1.0" encoding="ISO-8859-1"?><rss><channel>
 </channel></rss>""".encode("latin-1")
 
 
-def test_news_rss_keeps_headline_link_excerpt_and_topics_only():
+@pytest.mark.parametrize("status", [404, 403])
+def test_news_rss_keeps_headline_link_excerpt_and_topics_only(status):
     def handler(req: httpx.Request):
         if req.url.host == "down.example":
-            return httpx.Response(404)
+            return httpx.Response(status)
         return httpx.Response(200, content=RSS, headers={"content-type": "application/rss+xml"})
 
     cfg = {"feeds": [{"id": "f1", "url": "https://feed.example/rss", "outlet": "Exemplo"},
@@ -70,6 +72,32 @@ def test_news_rss_keeps_headline_link_excerpt_and_topics_only():
     assert n.excerpt == "Texto curto sobre o Banco Master."
     assert {"caso_master", "stf", "pgr"} <= set(n.topics)
     assert any(i.code == "feed_unavailable" for i in b.issues) and not b.has_errors
+    assert [(i.severity, i.message) for i in b.issues] == [("warning", f"HTTP {status}")]
+
+
+def test_cartacapital_politics_uses_public_google_news_rss():
+    rss_source = next(s for s in pack_for("ins_br_senado")["sources"] if s["connector"] == "news-rss")
+    feed = next(f for f in rss_source["config"]["feeds"] if f["id"] == "cartacapital_politica")
+    payload = b"""<rss><channel><item>
+        <title>Noticia de politica - CartaCapital</title>
+        <link>https://news.google.com/rss/articles/abc</link>
+        <description>
+        &lt;a href="https://news.google.com/rss/articles/abc" target="_blank"&gt;Noticia de politica&lt;/a&gt;
+        &amp;nbsp;&amp;nbsp;&lt;font color="#6f6f6f"&gt;CartaCapital&lt;/font&gt;</description>
+        <source url="https://www.cartacapital.com.br">CartaCapital</source>
+    </item></channel></rss>"""
+
+    def handler(req: httpx.Request):
+        assert (req.url.host, req.url.path) == ("news.google.com", "/rss/search")
+        assert req.url.params["q"] == "site:cartacapital.com.br/politica/"
+        return httpx.Response(200, content=payload, headers={"content-type": "application/rss+xml"})
+
+    client = make_client(handler, hosts=tuple(rss_source["allowed_hosts"]))
+    batch = NewsConnector({"feeds": [feed]}, client).run("news")
+    assert not batch.issues
+    [news] = batch.news
+    assert (news.feed, news.outlet, news.title) == ("cartacapital_politica", "CartaCapital", "Noticia de politica")
+    assert news.excerpt is None
 
 
 def test_curated_dossiers_are_sourced_and_keep_messias_out_of_the_court():

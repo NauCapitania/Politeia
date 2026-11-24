@@ -36,7 +36,9 @@ MATERIA_URL = "https://www25.senado.leg.br/web/atividade/materias/-/materia/{}"
 RESULTS = {"A": "aprovado", "R": "rejeitado"}
 PHOTO_URL = "https://www.senado.leg.br/senadores/img/fotos-oficiais/senador{}.jpg"
 PROFILE_URL = "https://www25.senado.leg.br/web/senadores/senador/-/perfil/{}"
-IDENT_RE = re.compile(r"^(?P<sigla>[A-Z]+)\s+(?P<numero>[\dA-Z.-]+)/(?P<ano>\d{4})$")
+IDENT_RE = re.compile(
+    r"^(?P<sigla>[A-Z]+)\s+(?P<numero>[\dA-Z.-]+)/(?P<ano>\d{4})(?:\s+(?P<suffix>\([^\s()][^()\r\n]*\)))?$"
+)
 
 AUTHOR_KINDS = {
     "SENADOR": "member",
@@ -496,7 +498,7 @@ class SenateConnector(Connector):
                     continue
                 prop = ProposalRecord(
                     source_id=str(item["id"]), type_code=m["sigla"], type_name=item.get("tipoDocumento") or m["sigla"],
-                    number=m["numero"], year=int(m["ano"]), ref=Ref(idx, f"$[{i}]"),
+                    number=m["numero"], year=int(m["ano"]), ref=Ref(idx, f"$[{i}]"), identifier_suffix=m["suffix"],
                     ementa=item.get("ementa"), introduced_on=parse_date(item.get("dataApresentacao")),
                     status=item.get("situacaoAtual"), status_date=parse_date(item.get("dataSituacaoAtual")),
                     in_progress={"Sim": True, "Não": False}.get(item.get("tramitando")),

@@ -37,14 +37,114 @@ const DATA: Record<string, unknown> = {
   },
 }
 
-function mockFetch() {
-  vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(DATA[url.split('?')[0]] ?? []), { status: 200 })))
+function mockFetch(overrides: Record<string, unknown> = {}) {
+  vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(({ ...DATA, ...overrides })[url.split('?')[0]] ?? []), { status: 200 })))
 }
 const renderApp = () => render(<QueryClientProvider client={new QueryClient()}><App /></QueryClientProvider>)
 
 beforeEach(() => {
-  useStore.setState({ institutionId: null, view: 'senado', selectedId: null, partyFilter: null, search: '' })
+  localStorage.clear()
+  useStore.setState({ institutionId: null, view: 'senado', senadoTab: 'composicao', sidebarCollapsed: false, selectedId: null, partyFilter: null, search: '' })
   mockFetch()
+})
+
+describe('Espaço de trabalho', () => {
+  it('alterna entre temas e preserva a escolha ao reabrir o aplicativo', async () => {
+    const first = renderApp()
+    expect(localStorage.getItem('politeia-theme')).toBeNull()
+    await userEvent.click(screen.getByRole('button', { name: 'Alternar para modo claro' }))
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light')
+    expect(document.documentElement).not.toHaveClass('bp6-dark')
+    expect(localStorage.getItem('politeia-theme')).toBe('light')
+    first.unmount()
+    renderApp()
+    expect(screen.getByRole('button', { name: 'Alternar para modo escuro' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Alternar para modo escuro' }))
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark')
+    expect(document.documentElement).toHaveClass('bp6-dark')
+  })
+
+  it('executa consultas locais, mantém histórico e navega pelo terminal', async () => {
+    useStore.setState({ view: 'inicio' })
+    renderApp()
+    await userEvent.click(screen.getByRole('button', { name: 'Abrir terminal local' }))
+    const input = screen.getByRole('textbox', { name: 'Comando do terminal' })
+    await userEvent.type(input, 'abrir __proto__{Enter}')
+    expect(await screen.findByText('Pasta não encontrada. Digite ajuda para ver os destinos disponíveis.')).toBeInTheDocument()
+    expect(useStore.getState().view).toBe('inicio')
+    await userEvent.type(input, 'resumo{Enter}')
+    expect(await screen.findByText('81 cadeiras observadas; 2 partidos identificados.')).toBeInTheDocument()
+    await userEvent.type(input, '{ArrowUp}')
+    expect(input).toHaveValue('resumo')
+    await userEvent.clear(input)
+    await userEvent.type(input, 'limpar{Enter}')
+    expect(screen.queryByText('81 cadeiras observadas; 2 partidos identificados.')).not.toBeInTheDocument()
+    await userEvent.type(input, 'abrir notícias{Enter}')
+    await waitFor(() => expect(screen.queryByRole('textbox', { name: 'Comando do terminal' })).not.toBeInTheDocument())
+    expect(useStore.getState().view).toBe('noticias')
+    await userEvent.click(screen.getByRole('button', { name: 'Abrir terminal local' }))
+    const reopened = screen.getByRole('textbox', { name: 'Comando do terminal' })
+    await userEvent.type(reopened, '{ArrowUp}')
+    expect(reopened).toHaveValue('abrir notícias')
+  })
+
+  it('recolhe pastas sem alterar o espaço de trabalho atual', async () => {
+    renderApp()
+    const folder = screen.getByRole('button', { name: 'Instituições' })
+    expect(folder).toHaveAttribute('aria-expanded', 'true')
+    await userEvent.click(folder)
+    expect(folder).toHaveAttribute('aria-expanded', 'false')
+    expect(useStore.getState().view).toBe('senado')
+    await userEvent.click(folder)
+    expect(folder).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('não transforma filiação desconhecida em um partido adicional', async () => {
+    useStore.setState({ view: 'inicio' })
+    mockFetch({ '/v1/senado/composicao': { date: '2026-11-24', observed: 3, seats: [seat(0), seat(1), { ...seat(2), party: null }] } })
+    renderApp()
+    await waitFor(() => expect(screen.getByRole('button', { name: /Distribuição de poder/ })).toHaveTextContent('2 partidos'))
+    expect(screen.getByRole('img', { name: /Filiação não informada: 1 cadeiras/ })).toBeInTheDocument()
+  })
+
+  it('abre a central com dados da base e navega pelo mapa de poder', async () => {
+    useStore.setState({ view: 'inicio' })
+    renderApp()
+    expect(await screen.findByRole('heading', { name: 'A política em perspectiva.' })).toBeInTheDocument()
+    expect(screen.queryByLabelText('Painel de evidências')).not.toBeInTheDocument()
+    await waitFor(() => expect(screen.getByRole('button', { name: /Distribuição de poder/ })).toHaveTextContent('2 partidos'))
+    expect(screen.getByRole('img', { name: /PT: 41 cadeiras; PL: 40 cadeiras/ })).toBeInTheDocument()
+    screen.getByRole('main').scrollTop = 124
+    await userEvent.click(screen.getByRole('button', { name: /Explorar composição/ }))
+    expect(screen.getByRole('main').scrollTop).toBe(0)
+    await waitFor(() => expect(screen.getAllByTestId('seat')).toHaveLength(81))
+  })
+
+  it('busca um senador e abre e fecha suas evidências', async () => {
+    useStore.setState({ view: 'inicio' })
+    mockFetch({ '/v1/senado/composicao': { date: '2026-11-24', observed: 1, seats: [{ ...seat(1), full_name: 'Senador Um' }] } })
+    renderApp()
+    await screen.findByRole('heading', { name: 'A política em perspectiva.' })
+    await userEvent.keyboard('{Control>}k{/Control}')
+    const input = await screen.findByRole('combobox')
+    await userEvent.type(input, 'Senador Um')
+    await userEvent.click(await screen.findByText('Senador 1', { exact: true }))
+    expect(await screen.findByText('Senador Um')).toBeInTheDocument()
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByLabelText('Painel de evidências')).not.toBeInTheDocument())
+  })
+
+  it('navega por teclado e encaminha buscas à base de proposições', async () => {
+    renderApp()
+    await screen.findByRole('tab', { name: 'Composição' })
+    await userEvent.click(screen.getByRole('button', { name: /Buscar ou navegar/ }))
+    const input = await screen.findByRole('combobox')
+    await userEvent.type(input, 'sucessao inexistente')
+    await userEvent.keyboard('{ArrowDown}{ArrowUp}{Enter}')
+    expect(useStore.getState()).toMatchObject({ view: 'senado', senadoTab: 'proposicoes', search: 'sucessao inexistente' })
+    await waitFor(() => expect(screen.queryByRole('combobox', { name: 'Buscar espaços, senadores ou proposições' })).not.toBeInTheDocument())
+  })
 })
 
 describe('Snapshot estático', () => {
@@ -54,8 +154,9 @@ describe('Snapshot estático', () => {
     const snapshot: Record<string, unknown> = {
       '/data/meta.json': { generated_at: '2026-11-24T01:30:00Z', composition_dates: ['2023-02-01', date] },
       '/data/institutions.json': [inst],
+      '/data/noticias.json': [],
       '/data/senado/mudancas.json': [],
-      [`/data/senado/composicao/${date}.json`]: { date, observed: 1, seats: [seat(1)] },
+      [`/data/senado/composicao/${date}.json`]: { date, observed: 1, seats: [{ ...seat(1), full_name: 'Nome Completo do Senador' }] },
       '/data/senado/composicao/2023-02-01.json': { date: '2023-02-01', observed: 1, seats: [seat(2)] },
       '/data/institutions/ins_br_senado/proposal-types.json': [
         { type_code: 'PL', type_name: 'Projeto de Lei', count: 51 },
@@ -90,7 +191,20 @@ describe('Snapshot estático', () => {
       expect(await screen.findByText('1 registros ingeridos')).toBeInTheDocument()
       expect(screen.getByText('PL 51/2026')).toBeInTheDocument()
       expect(screen.queryByText('PEC 1/2026')).not.toBeInTheDocument()
+
+      await user.click(screen.getByRole('button', { name: 'Politeia, início' }))
+      expect(await screen.findByText('Base consultada · 23/11/2026')).toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: 'Abrir terminal local' }))
+      await user.type(screen.getByRole('textbox', { name: 'Comando do terminal' }), 'resumo{Enter}')
+      expect(await screen.findByText(`Composição consultada: ${date}`)).toBeInTheDocument()
+      expect(screen.getByText('1 cadeiras observadas; 1 partidos identificados.')).toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: 'Fechar terminal' }))
+      await user.click(screen.getByRole('button', { name: 'Buscar ou navegar' }))
+      await user.type(screen.getByRole('combobox', { name: 'Buscar espaços, senadores ou proposições' }), 'Nome Completo do Senador')
+      expect(screen.getByRole('option', { name: /Senador 1/ })).toBeInTheDocument()
+      await user.keyboard('{Escape}')
       expect(fetchSnapshot.mock.calls.every(([url]) => url.startsWith('/data/'))).toBe(true)
+      expect(fetchSnapshot.mock.calls.filter(([url]) => /\/composicao\//.test(url)).every(([url]) => url.endsWith(`${date}.json`) || url.endsWith('2023-02-01.json'))).toBe(true)
       expect(fetchSnapshot.mock.calls.filter(([url]) => url.endsWith('/proposals.json'))).toHaveLength(1)
     } finally {
       vi.unstubAllEnvs()

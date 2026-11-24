@@ -7,6 +7,7 @@ import sys
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+import httpx
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, func, select
@@ -198,3 +199,30 @@ def test_filters_pagination_graph_and_errors(api):
     assert api.get("/v1/institutions/ins_br_senado/members", params={"limit": 9999}).status_code == 422
     status = api.get("/v1/ingestion/status", params={"institution": "ins_br_senado"}).json()
     assert status["runs"] and all(r["status"] in {"succeeded", "partial"} for r in status["runs"])
+
+
+def test_qualified_proposal_keeps_its_identifier_and_parent_type(factory, api):
+    substitute = {
+        "id": 9115907, "identificacao": "PL 5631/2026 (Substitutivo-CD)", "tipoDocumento": "Emenda",
+        "codigoMateria": 176019, "dataApresentacao": "2026-10-20",
+    }
+
+    def proposal_list(request):
+        return httpx.Response(200, json=[substitute] if request.url.params["sigla"] == "PL" else [])
+
+    handler, _ = official_sources({
+        r"/dadosabertos/processo$": proposal_list,
+        r"/dadosabertos/processo/9115907$": httpx.Response(200, json={}),
+    })
+    [run] = sync_source(factory, SOURCES["ins_br_senado"], ["proposals"], client=make_client(handler))
+    assert run["status"] == "succeeded" and run["stats"]["warnings"] == 0
+
+    base = "/v1/institutions/ins_br_senado"
+    [proposal] = api.get(f"{base}/proposals", params={"q": "(Substitutivo-CD)", "type_code": "PL"}).json()["items"]
+    assert proposal["identifier"] == substitute["identificacao"]
+    assert (proposal["type_code"], proposal["type_name"], proposal["number"], proposal["year"]) == (
+        "PL", "Emenda", "5631", 2026,
+    )
+    [pl] = [t for t in api.get(f"{base}/proposal-types").json() if t["type_code"] == "PL"]
+    page = api.get(f"{base}/proposals", params={"type_code": "PL"}).json()
+    assert pl["type_name"] == "Projeto de Lei Ordinária" and pl["count"] == page["total"] == 4
