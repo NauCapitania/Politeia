@@ -193,6 +193,10 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
                             ("nws_categoria", "brasil/ultima-hora", "Notícia de última hora", 20, []),
                             ("nws_brasil", "brasil/sao-paulo", "Notícia de São Paulo", 19, []),
                         ))
+        session.add(M.NewsItem(id="nws_master", source_system_id=source.id, feed="gnews_caso_master",
+                               outlet="Exemplo", url="https://news.google.com/rss/articles/abc",
+                               title="Justiça mantém prisão de Vorcaro",
+                               published_at=datetime(2026, 11, 18, tzinfo=UTC), topics=["caso_master"]))
         session.commit()
     now = datetime(2026, 11, 24, 1, 30, tzinfo=ZoneInfo("UTC"))
     export_snapshot(api, tmp_path, now)
@@ -201,8 +205,9 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
         return json.loads((tmp_path / f"{path}.json").read_text(encoding="utf-8"))
 
     assert [n["id"] for n in api.get("/v1/noticias", params={"limit": 1}).json()] == ["nws_senado"]
-    assert [n["id"] for n in read("noticias")] == ["nws_senado", "nws_secao", "nws_categoria"]
+    assert [n["id"] for n in read("noticias")] == ["nws_senado", "nws_secao", "nws_categoria", "nws_master"]
     assert [n["id"] for n in read("noticias/senado")] == ["nws_senado"]
+    assert [n["id"] for n in read("noticias/caso_master")] == ["nws_master"]
     with factory() as session:
         assert session.get(M.NewsItem, "nws_esporte") is not None
 

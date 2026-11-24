@@ -137,6 +137,21 @@ def test_metropoles_rss_uses_politics_section_and_ignores_unrelated_items():
     assert batch.news[-1].topics == ["politica"]
 
 
+def test_google_news_keeps_banco_master_investigation_with_no_other_political_signal():
+    rss_source = next(s for s in pack_for("ins_br_senado")["sources"] if s["connector"] == "news-rss")
+    feed = next(f for f in rss_source["config"]["feeds"] if f["id"] == "gnews_caso_master")
+    payload = """<rss><channel><item>
+        <title>Justiça mantém prisão de Vorcaro - Exemplo</title>
+        <link>https://news.google.com/rss/articles/abc</link>
+        <source>Exemplo</source>
+    </item></channel></rss>"""
+    with make_client(lambda _: httpx.Response(200, text=payload), hosts=("news.google.com",)) as client:
+        batch = NewsConnector({"feeds": [feed]}, client).run("news")
+    [news] = batch.news
+    assert news.title == "Justiça mantém prisão de Vorcaro"
+    assert news.topics == ["caso_master"]
+
+
 def test_curated_dossiers_are_sourced_and_keep_messias_out_of_the_court():
     dossiers = {d["dossier"]: d for d in read_dossiers()}
     assert {"stf-caso-master", "presidencia-2025", "presidencia-2027"} <= set(dossiers)

@@ -8,21 +8,11 @@ from defusedxml import ElementTree
 from defusedxml.common import DefusedXmlException
 
 from connectors.base.http import SourceAccessError
-from connectors.base.protocol import Batch, Connector, Issue, NewsRecord, RawResponse, Ref, normalize_name
-from connectors.news.politics import POLITICS_TOPIC, is_political_news
+from connectors.base.protocol import Batch, Connector, Issue, NewsRecord, RawResponse, Ref
+from connectors.news.politics import POLITICS_TOPIC, is_political_news, topics_for
 
 EXCERPT_CHARS = 320
 TAG_RE = re.compile(r"<[^>]+>")
-TOPICS = {
-    "impeachment_stf": ("impeachment", "impedimento de ministro", "crime de responsabilidade"),
-    "stf": ("stf", "supremo", "moraes", "toffoli", "mendonca", "nunes marques", "fachin", "gilmar", "zanin",
-            "dino", "fux", "carmen lucia", "cármen lúcia"),
-    "caso_master": ("banco master", "vorcaro", "caso master", "compliance zero", "brb"),
-    "presidencia_senado": ("presidencia do senado", "presidente do senado", "alcolumbre", "rogerio marinho",
-                           "tereza cristina"),
-    "pgr": ("pgr", "procuradoria-geral", "gonet"),
-    "senado": ("senado", "senador", "senadora"),
-}
 
 
 def _text(el, tag: str) -> str | None:
@@ -51,12 +41,6 @@ def clean_excerpt(value: str | None) -> str | None:
     if len(text) <= EXCERPT_CHARS:
         return text or None
     return text[:EXCERPT_CHARS].rsplit(" ", 1)[0] + "…"
-
-
-def topics_for(text: str) -> list[str]:
-    key = normalize_name(text)
-    return [t for t, words in TOPICS.items() if any(re.search(rf"\b{re.escape(normalize_name(w))}\b", key)
-                                                     for w in words)]
 
 
 class NewsConnector(Connector):
@@ -97,12 +81,12 @@ class NewsConnector(Connector):
                     title = re.sub(rf"\s+-\s+{re.escape(outlet)}$", "", title)
                 title = html.unescape(title)
                 excerpt = None if aggregated else clean_excerpt(_text(item, "description"))
+                topics = topics_for(f"{title} {excerpt or ''}")
                 categories = _categories(item)
-                if not is_political_news(link, title, excerpt, feed["id"], categories=categories):
+                if not is_political_news(link, title, excerpt, feed["id"], topics=topics, categories=categories):
                     continue
                 seen.add(link)
-                topics = topics_for(f"{title} {excerpt or ''}")
-                if not is_political_news(link, title, excerpt, feed["id"]):
+                if not is_political_news(link, title, excerpt, feed["id"], topics=topics):
                     topics.append(POLITICS_TOPIC)
                 published = None
                 if pub := _text(item, "pubDate"):
