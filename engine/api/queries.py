@@ -5,7 +5,7 @@ import uuid
 from collections import defaultdict
 from typing import Any
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, or_, select, union_all
 from sqlalchemy.orm import Session
 
 from engine.api import schemas as S
@@ -39,16 +39,22 @@ def entity_kind(entity_id: str) -> str | None:
 # ------------------------------------------------------------------------- provenance
 
 
-def _source_refs(s: Session, model, kind_col, id_col, kind: str, ids: list[str]) -> dict[str, list[S.SourceRef]]:
-    if not ids:
-        return {}
-    rows = s.execute(
-        select(id_col, model.json_path, RawRecord).join(RawRecord, RawRecord.id == model.raw_record_id)
+def _source_refs(s: Session, model, kind_col, id_col, kind: str,
+                 *id_groups: list[str]) -> dict[str, list[S.SourceRef]]:
+    columns = (RawRecord.id, RawRecord.source_system_id, RawRecord.record_kind, RawRecord.url,
+               RawRecord.retrieved_at, RawRecord.content_sha256)
+    queries = [
+        select(id_col, model.json_path, *columns).join(RawRecord, RawRecord.id == model.raw_record_id)
         .where(kind_col == kind, id_col.in_(ids))
-    ).all()
+        for ids in id_groups if ids
+    ]
+    if not queries:
+        return {}
+    query = queries[0] if len(queries) == 1 else union_all(*queries)
     out: dict[str, list[S.SourceRef]] = defaultdict(list)
-    for eid, path, raw in rows:
-        out[eid].append(_ref(raw, path))
+    for eid, path, raw_id, source, record_kind, url, retrieved_at, sha256 in s.execute(query):
+        out[eid].append(S.SourceRef(raw_record_id=str(raw_id), source_system_id=source, record_kind=record_kind,
+                                    url=url, retrieved_at=retrieved_at, json_path=path, content_sha256=sha256))
     return out
 
 
@@ -57,13 +63,13 @@ def _ref(raw: RawRecord, path: str | None = None) -> S.SourceRef:
                        url=raw.url, retrieved_at=raw.retrieved_at, json_path=path, content_sha256=raw.content_sha256)
 
 
-def entity_sources(s: Session, kind: str, ids: list[str]) -> dict[str, list[S.SourceRef]]:
-    return _source_refs(s, EntityEvidence, EntityEvidence.entity_kind, EntityEvidence.entity_id, kind, ids)
+def entity_sources(s: Session, kind: str, *id_groups: list[str]) -> dict[str, list[S.SourceRef]]:
+    return _source_refs(s, EntityEvidence, EntityEvidence.entity_kind, EntityEvidence.entity_id, kind, *id_groups)
 
 
-def relationship_sources(s: Session, kind: str, ids: list[str]) -> dict[str, list[S.SourceRef]]:
+def relationship_sources(s: Session, kind: str, *id_groups: list[str]) -> dict[str, list[S.SourceRef]]:
     return _source_refs(s, RelationshipEvidence, RelationshipEvidence.relationship_kind,
-                        RelationshipEvidence.relationship_id, kind, ids)
+                        RelationshipEvidence.relationship_id, kind, *id_groups)
 
 
 def identifiers(s: Session, kind: str, ids: list[str]) -> dict[str, list[S.Identifier]]:
@@ -169,24 +175,31 @@ def composition(s: Session, inst: Institution) -> S.Composition:
 # ------------------------------------------------------------------------- proposals
 
 
-def _authors(s: Session, prop_ids: list[str]) -> dict[str, list[S.Author]]:
-    out: dict[str, list[S.Author]] = defaultdict(list)
+def _proposal_authors(s: Session, prop_ids: list[str]) -> dict[str, list[ProposalAuthor]]:
+    out: dict[str, list[ProposalAuthor]] = defaultdict(list)
     if prop_ids:
         for a in s.scalars(select(ProposalAuthor).where(ProposalAuthor.proposal_id.in_(prop_ids))
                            .order_by(ProposalAuthor.ordinal)):
-            note = None
-            reason = (a.attributes or {}).get("unresolved_reason")
-            if reason == "person_not_ingested":
-                note = "Official identifier present, person not among ingested current members"
-            elif reason == "no_member_with_this_name":
-                note = "No current member with exactly this name"
-            elif a.resolution == "name_match":
-                note = "Linked by exact normalized-name match (source has no member identifier)"
-            out[a.proposal_id].append(S.Author(
-                ordinal=a.ordinal, name=a.author_name, kind=a.author_kind, person_id=a.person_id,
-                resolution=a.resolution, epistemic_status=a.epistemic_status,
-                party=(a.attributes or {}).get("party"), note=note))
+            out[a.proposal_id].append(a)
     return out
+
+
+def _author(a: ProposalAuthor) -> S.Author:
+    note = None
+    reason = (a.attributes or {}).get("unresolved_reason")
+    if reason == "person_not_ingested":
+        note = "Official identifier present, person not among ingested current members"
+    elif reason == "no_member_with_this_name":
+        note = "No current member with exactly this name"
+    elif a.resolution == "name_match":
+        note = "Linked by exact normalized-name match (source has no member identifier)"
+    return S.Author(ordinal=a.ordinal, name=a.author_name, kind=a.author_kind, person_id=a.person_id,
+                    resolution=a.resolution, epistemic_status=a.epistemic_status,
+                    party=(a.attributes or {}).get("party"), note=note)
+
+
+def _authors(s: Session, prop_ids: list[str]) -> dict[str, list[S.Author]]:
+    return {pid: [_author(a) for a in rows] for pid, rows in _proposal_authors(s, prop_ids).items()}
 
 
 def _proposal(p: Proposal, authors: list[S.Author]) -> S.ProposalSummary:
@@ -207,7 +220,7 @@ def proposals(s: Session, inst_id: str, *, q: str | None, type_code: str | None,
     if author:
         stmt = stmt.where(Proposal.id.in_(select(ProposalAuthor.proposal_id).where(ProposalAuthor.person_id == author)))
     total = s.scalar(select(func.count()).select_from(stmt.subquery())) or 0
-    rows = list(s.scalars(stmt.order_by(Proposal.introduced_on.desc().nulls_last(), Proposal.number.desc())
+    rows = list(s.scalars(stmt.order_by(Proposal.introduced_on.desc().nulls_last(), Proposal.number.desc(), Proposal.id)
                           .limit(limit).offset(offset)))
     authors = _authors(s, [p.id for p in rows])
     return S.Page(items=[_proposal(p, authors.get(p.id, [])) for p in rows], total=total, limit=limit, offset=offset)
@@ -221,6 +234,58 @@ def proposal_types(s: Session, inst_id: str) -> list[dict[str, Any]]:
 
 
 # ------------------------------------------------------------------------- entities & relationships
+
+
+def _proposal_events(s: Session, ids: list[str]) -> dict[str, list[LegislativeEvent]]:
+    out: dict[str, list[LegislativeEvent]] = defaultdict(list)
+    for event in s.scalars(select(LegislativeEvent).where(LegislativeEvent.proposal_id.in_(ids))
+                           .order_by(LegislativeEvent.event_date.desc().nulls_last(), LegislativeEvent.id)):
+        out[event.proposal_id].append(event)
+    return out
+
+
+def _proposal_entity(p: Proposal, authors: list[ProposalAuthor], events: list[LegislativeEvent],
+                     sources: list[S.SourceRef]) -> S.Entity:
+    summary = _proposal(p, [_author(a) for a in authors])
+    attrs = summary.model_dump(mode="json") | {"source_attributes": p.attributes, "events": [
+        S.Event(id=e.id, event_type=e.event_type, event_date=e.event_date, description=e.description,
+                body=e.body).model_dump(mode="json") for e in events]}
+    return S.Entity(id=p.id, kind="proposal", label=p.identifier, institution_id=p.institution_id,
+                    attributes=attrs, identifiers=[S.Identifier(scheme=f"{p.source_system_id}:id",
+                                                                value=p.source_id, quality="official")],
+                    sources=sources)
+
+
+def _proposal_relationships(p: Proposal, authors: list[ProposalAuthor],
+                            sources: dict[str, list[S.SourceRef]]) -> list[S.Relationship]:
+    rels = [
+        S.Relationship(id=a.id, kind="authored", source=a.person_id, target=p.id,
+                       label=a.author_name, explanation="Autor(a) da proposição",
+                       valid_from=p.introduced_on, epistemic_status=a.epistemic_status,
+                       sources=sources.get(a.id, [])[:3])
+        for a in authors if a.person_id
+    ]
+    rels.append(S.Relationship(id=f"{p.id}:inst", kind="submitted_to", source=p.id, target=p.institution_id,
+                               label="apresentada a",
+                               explanation="Proposição registrada no sistema de origem da instituição",
+                               epistemic_status="verified"))
+    return rels
+
+
+def proposal_details(s: Session, ids: list[str]) -> dict[str, S.ProposalDetail]:
+    proposals = s.scalars(select(Proposal).where(Proposal.id.in_(ids))).all()
+    authors = _proposal_authors(s, ids)
+    events = _proposal_events(s, ids)
+    evidence = entity_sources(s, "proposal", *([p.id] for p in proposals))
+    rel_evidence = relationship_sources(s, "proposal_author", *(
+        [a.id for a in rows if a.person_id] for rows in authors.values()))
+    details = {}
+    for p in proposals:
+        rels = _proposal_relationships(p, authors[p.id], rel_evidence)
+        details[p.id] = S.ProposalDetail(
+            entity=_proposal_entity(p, authors[p.id], events[p.id], evidence.get(p.id, [])),
+            relationships=rels, timeline=_timeline(p.id, rels, events[p.id]))
+    return details
 
 
 def entity(s: Session, entity_id: str) -> S.Entity | None:
@@ -266,16 +331,8 @@ def entity(s: Session, entity_id: str) -> S.Entity | None:
         p = s.get(Proposal, entity_id)
         if not p:
             return None
-        summary = _proposal(p, _authors(s, [p.id]).get(p.id, []))
-        events = s.scalars(select(LegislativeEvent).where(LegislativeEvent.proposal_id == p.id)
-                           .order_by(LegislativeEvent.event_date.desc().nulls_last()))
-        attrs = summary.model_dump(mode="json") | {"source_attributes": p.attributes, "events": [
-            S.Event(id=e.id, event_type=e.event_type, event_date=e.event_date, description=e.description,
-                    body=e.body).model_dump(mode="json") for e in events]}
-        return S.Entity(id=p.id, kind="proposal", label=p.identifier, institution_id=p.institution_id,
-                        attributes=attrs, identifiers=[S.Identifier(scheme=f"{p.source_system_id}:id",
-                                                                    value=p.source_id, quality="official")],
-                        sources=entity_sources(s, "proposal", [p.id]).get(p.id, []))
+        return _proposal_entity(p, _proposal_authors(s, [p.id])[p.id], _proposal_events(s, [p.id])[p.id],
+                                entity_sources(s, "proposal", [p.id]).get(p.id, []))
     return None
 
 
@@ -320,16 +377,11 @@ def relationships(s: Session, entity_id: str, limit: int = 200) -> list[S.Relati
                                        is_current=True, epistemic_status=pm.epistemic_status))
     elif kind == "proposal":
         prop = s.get(Proposal, entity_id)
-        for a in s.scalars(select(ProposalAuthor).where(ProposalAuthor.proposal_id == entity_id)):
-            if a.person_id:
-                rels.append(S.Relationship(id=a.id, kind="authored", source=a.person_id, target=entity_id,
-                                           label=a.author_name, explanation="Autor(a) da proposição",
-                                           valid_from=prop.introduced_on, epistemic_status=a.epistemic_status))
-        if prop:
-            rels.append(S.Relationship(id=f"{entity_id}:inst", kind="submitted_to", source=entity_id,
-                                       target=prop.institution_id, label="apresentada a",
-                                       explanation="Proposição registrada no sistema de origem da instituição",
-                                       epistemic_status="verified"))
+        if not prop:
+            return []
+        authors = _proposal_authors(s, [entity_id])[entity_id]
+        return _proposal_relationships(prop, authors, relationship_sources(
+            s, "proposal_author", [a.id for a in authors if a.person_id]))
     for kind_name in ("mandate", "party_membership", "proposal_author"):
         ids = [r.id for r in rels]
         refs = relationship_sources(s, kind_name, ids)
@@ -340,8 +392,14 @@ def relationships(s: Session, entity_id: str, limit: int = 200) -> list[S.Relati
 
 
 def timeline(s: Session, entity_id: str) -> list[S.TimelineItem]:
+    rels = relationships(s, entity_id)
+    events = _proposal_events(s, [entity_id])[entity_id] if entity_kind(entity_id) == "proposal" else []
+    return _timeline(entity_id, rels, events)
+
+
+def _timeline(entity_id: str, rels: list[S.Relationship], events: list[LegislativeEvent]) -> list[S.TimelineItem]:
     items: list[S.TimelineItem] = []
-    for r in relationships(s, entity_id):
+    for r in rels:
         if r.valid_from:
             verb = {"holds_mandate": "Início de mandato", "party_affiliation": "Filia-se a", "authored": "Apresenta",
                     "current_party": "Partido"}.get(r.kind, r.kind)
@@ -352,12 +410,11 @@ def timeline(s: Session, entity_id: str) -> list[S.TimelineItem]:
             items.append(S.TimelineItem(date=r.valid_to, kind="party_disaffiliation",
                                         label=f"Deixa o partido: {r.label}",
                                         related_id=r.target, epistemic_status=r.epistemic_status))
-    if entity_kind(entity_id) == "proposal":
-        for e in s.scalars(select(LegislativeEvent).where(LegislativeEvent.proposal_id == entity_id)):
-            if e.event_date:
-                items.append(S.TimelineItem(date=e.event_date, kind=e.event_type,
-                                            label=f"{e.body + ' · ' if e.body else ''}{e.description or ''}",
-                                            epistemic_status="verified"))
+    for e in events:
+        if e.event_date:
+            items.append(S.TimelineItem(date=e.event_date, kind=e.event_type,
+                                        label=f"{e.body + ' · ' if e.body else ''}{e.description or ''}",
+                                        epistemic_status="verified"))
     return sorted(items, key=lambda i: str(i.date), reverse=True)
 
 

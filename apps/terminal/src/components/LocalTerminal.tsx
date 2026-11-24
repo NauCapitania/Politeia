@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import { Dialog, Icon } from '@blueprintjs/core'
-import { useSeats, type SeatRow } from '../api/client'
+import type { SeatRow } from '../api/client'
+import { useCurrentSeats } from '../useCurrentSeats'
 import { useStore } from '../store'
 import { normalize } from '../format'
 
@@ -16,8 +17,7 @@ function TerminalSession({ onClose, entries, setEntries, history, setHistory }: 
   onClose: () => void; entries: Entry[]; setEntries: Dispatch<SetStateAction<Entry[]>>
   history: string[]; setHistory: Dispatch<SetStateAction<string[]>>
 }) {
-  const [date] = useState(() => new Date().toISOString().slice(0, 10))
-  const seats = useSeats(date)
+  const seats = useCurrentSeats()
   const [input, setInput] = useState('')
   const [cursor, setCursor] = useState(-1)
   const output = useRef<HTMLDivElement>(null)

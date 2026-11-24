@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Dialog, Icon, type IconName } from '@blueprintjs/core'
-import { useSeats } from '../api/client'
+import { useCurrentSeats } from '../useCurrentSeats'
 import { useStore, type View, type SenadoTab } from '../store'
 import { normalize } from '../format'
 
@@ -20,9 +20,8 @@ const DESTINATIONS: { label: string; detail: string; icon: IconName; view?: View
 export function CommandPalette({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState('')
   const [active, setActive] = useState(0)
-  const [date] = useState(() => new Date().toISOString().slice(0, 10))
   useEffect(() => { document.getElementById(`command-${active}`)?.scrollIntoView?.({ block: 'nearest' }) }, [active])
-  const seats = useSeats(date)
+  const seats = useCurrentSeats()
   const { setView, setSenadoTab, setSearch, select } = useStore()
   const term = normalize(query.trim())
   const actions = DESTINATIONS.filter((d) => !term || normalize(`${d.label} ${d.detail}`).includes(term)).map((d) => ({

@@ -147,6 +147,72 @@ describe('Espaço de trabalho', () => {
   })
 })
 
+describe('Snapshot estático', () => {
+  it('mostra a data em BRT, carrega as cadeiras e filtra proposições sem a API', async () => {
+    vi.stubEnv('VITE_DATA_MODE', 'static')
+    const date = '2026-11-23'
+    const snapshot: Record<string, unknown> = {
+      '/data/meta.json': { generated_at: '2026-11-24T01:30:00Z', composition_dates: ['2023-02-01', date] },
+      '/data/institutions.json': [inst],
+      '/data/noticias.json': [],
+      '/data/senado/mudancas.json': [],
+      [`/data/senado/composicao/${date}.json`]: { date, observed: 1, seats: [{ ...seat(1), full_name: 'Nome Completo do Senador' }] },
+      '/data/senado/composicao/2023-02-01.json': { date: '2023-02-01', observed: 1, seats: [seat(2)] },
+      '/data/institutions/ins_br_senado/proposal-types.json': [
+        { type_code: 'PL', type_name: 'Projeto de Lei', count: 51 },
+        { type_code: 'PEC', type_name: 'Proposta de Emenda', count: 1 },
+      ],
+      '/data/institutions/ins_br_senado/proposals.json': [
+        ...Array.from({ length: 50 }, (_, i) => ({ id: `prop_pl_${i}`, identifier: `PL ${i + 1}/2026`, type_code: 'PL', ementa: 'Crédito rural', authors: [] })),
+        { id: 'prop_pl_50', identifier: 'PL 51/2026', type_code: 'PL', ementa: 'Crédito urbano', authors: [] },
+        { id: 'prop_pec', identifier: 'PEC 1/2026', type_code: 'PEC', ementa: 'Crédito rural', authors: [] },
+      ],
+    }
+    const fetchSnapshot = vi.fn(async (url: string) => new Response(JSON.stringify(snapshot[url]), {
+      status: Object.hasOwn(snapshot, url) ? 200 : 404,
+      headers: { 'Content-Type': 'application/json' },
+    }))
+    vi.stubGlobal('fetch', fetchSnapshot)
+    try {
+      renderApp()
+      expect(await screen.findByText(/Último snapshot: 23\/11\/2026.*22:30 BRT/)).toBeInTheDocument()
+      await waitFor(() => expect(screen.getByTestId('seat')).toHaveTextContent('Senador 1'))
+      await userEvent.click(screen.getByText('1º/02/2023'))
+      await waitFor(() => expect(screen.getByTestId('seat')).toHaveTextContent('Senador 2'))
+
+      await userEvent.click(screen.getByRole('tab', { name: 'Proposições' }))
+      await userEvent.selectOptions(await screen.findByRole('combobox', { name: 'Tipo' }), 'PL')
+      await screen.findByText('1–50 de 51')
+      await userEvent.click(screen.getByRole('button', { name: 'Próxima' }))
+      expect(await screen.findByText('PL 51/2026')).toBeInTheDocument()
+      const user = userEvent.setup()
+      await user.click(screen.getByPlaceholderText('Ementa ou número…'))
+      await user.paste('CRÉDITO URBANO')
+      expect(await screen.findByText('1 registros ingeridos')).toBeInTheDocument()
+      expect(screen.getByText('PL 51/2026')).toBeInTheDocument()
+      expect(screen.queryByText('PEC 1/2026')).not.toBeInTheDocument()
+
+      await user.click(screen.getByRole('button', { name: 'Politeia, início' }))
+      expect(await screen.findByText('Base consultada · 23/11/2026')).toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: 'Abrir terminal local' }))
+      await user.type(screen.getByRole('textbox', { name: 'Comando do terminal' }), 'resumo{Enter}')
+      expect(await screen.findByText(`Composição consultada: ${date}`)).toBeInTheDocument()
+      expect(screen.getByText('1 cadeiras observadas; 1 partidos identificados.')).toBeInTheDocument()
+      await user.click(screen.getByRole('button', { name: 'Fechar terminal' }))
+      await user.click(screen.getByRole('button', { name: 'Buscar ou navegar' }))
+      await user.type(screen.getByRole('combobox', { name: 'Buscar espaços, senadores ou proposições' }), 'Nome Completo do Senador')
+      expect(screen.getByRole('option', { name: /Senador 1/ })).toBeInTheDocument()
+      await user.keyboard('{Escape}')
+      expect(fetchSnapshot.mock.calls.every(([url]) => url.startsWith('/data/'))).toBe(true)
+      expect(fetchSnapshot.mock.calls.filter(([url]) => /\/composicao\//.test(url)).every(([url]) => url.endsWith(`${date}.json`) || url.endsWith('2023-02-01.json'))).toBe(true)
+      expect(fetchSnapshot.mock.calls.filter(([url]) => url.endsWith('/proposals.json'))).toHaveLength(1)
+    } finally {
+      vi.unstubAllEnvs()
+      useStore.setState({ senadoTab: 'composicao' })
+    }
+  })
+})
+
 describe('hemicycleLayout', () => {
   it('places exactly one point per seat', () => {
     for (const n of [11, 49, 81, 513]) expect(hemicycleLayout(n, 600).points).toHaveLength(n)

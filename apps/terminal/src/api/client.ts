@@ -24,12 +24,80 @@ export class ApiError extends Error {
   }
 }
 
-export async function api<T>(path: string, params?: Record<string, string | number | undefined | null>): Promise<T> {
+type Params = Record<string, string | number | undefined | null>
+type SnapshotMeta = { generated_at: string; composition_dates: string[] }
+export const isStatic = () => import.meta.env.VITE_DATA_MODE === 'static'
+
+async function fetchJson<T>(url: string, staticFile = false): Promise<T> {
+  const res = await fetch(url)
+  if (!res.ok) throw new ApiError(res.status, `${res.status} ${res.statusText}`)
+  if (staticFile && !res.headers.get('content-type')?.includes('application/json')) {
+    throw new ApiError(404, 'Arquivo não encontrado no snapshot')
+  }
+  return res.json() as Promise<T>
+}
+
+const readSnapshot = <T,>(path: string) => fetchJson<T>(`${import.meta.env.BASE_URL}data${path}.json`, true)
+const collections = new Map<string, Promise<unknown>>()
+
+function readCollection<T>(path: string): Promise<T[]> {
+  let request = collections.get(path)
+  if (!request) {
+    request = readSnapshot<T[]>(path).catch((error: unknown) => {
+      collections.delete(path)
+      throw error
+    })
+    collections.set(path, request)
+  }
+  return request as Promise<T[]>
+}
+
+function searchMatches(query: Params[string], ...fields: (string | null | undefined)[]) {
+  if (!query) return true
+  const term = String(query).toLocaleLowerCase('pt-BR')
+  return fields.some((field) => field?.toLocaleLowerCase('pt-BR').includes(term))
+}
+
+export const useSnapshotMeta = () => useQuery({
+  queryKey: ['snapshot-meta'], queryFn: () => readSnapshot<SnapshotMeta>('/meta'), enabled: isStatic(), staleTime: Infinity,
+})
+
+type Vote = { description?: string | null; matter?: string | null; secret: boolean }
+
+async function snapshotApi(path: string, params: Params = {}): Promise<unknown> {
+  if (/^\/institutions\/[^/]+\/proposals$/.test(path)) {
+    const proposals = await readCollection<Proposal>(path)
+    const filtered = proposals.filter((p) =>
+      searchMatches(params.q, p.ementa, p.identifier) &&
+      (!params.type_code || p.type_code === params.type_code) &&
+      (!params.author || p.authors.some((a) => a.person_id === params.author)),
+    )
+    const limit = Number(params.limit ?? 50)
+    const offset = Number(params.offset ?? 0)
+    return { items: filtered.slice(offset, offset + limit), total: filtered.length, limit, offset }
+  }
+  if (path === '/votacoes') {
+    const votes = await readCollection<Vote>(path)
+    return votes.filter((v) => searchMatches(params.q, v.description, v.matter) &&
+      (!params.secreta || v.secret === (params.secreta === 'true'))).slice(0, Number(params.limit ?? 200))
+  }
+  if (path === '/senado/composicao') return readSnapshot(`${path}/${params.data}`)
+  if (path === '/noticias' && params.tema) return readSnapshot(`${path}/${params.tema}`)
+  if (path === '/ingestion/status') return readSnapshot(`/ingestion/${params.institution}`)
+  if (path.startsWith('/sources/')) {
+    const records = await readSnapshot<Record<string, SourceRecord>>(path)
+    const key = String(params.path ?? '')
+    if (!Object.hasOwn(records, key)) throw new ApiError(404, 'Fonte não incluída no snapshot')
+    return records[key]
+  }
+  return readSnapshot(path)
+}
+
+export async function api<T>(path: string, params?: Params): Promise<T> {
+  if (isStatic()) return snapshotApi(path, params) as Promise<T>
   const qs = new URLSearchParams()
   for (const [k, v] of Object.entries(params ?? {})) if (v !== undefined && v !== null && v !== '') qs.set(k, String(v))
-  const res = await fetch(`/v1${path}${qs.size ? `?${qs}` : ''}`)
-  if (!res.ok) throw new ApiError(res.status, `${res.status} ${res.statusText}`)
-  return res.json() as Promise<T>
+  return fetchJson<T>(`/v1${path}${qs.size ? `?${qs}` : ''}`)
 }
 
 export const useInstitutions = () => useQuery({ queryKey: ['institutions'], queryFn: () => api<Institution[]>('/institutions') })
@@ -100,9 +168,9 @@ export type SeatRow = {
   person_id: string; code?: string; name: string; full_name?: string | null; photo_url?: string; uf?: string; party?: string | null
   participation: string; exercise_start?: string; exercise_end?: string | null; mandate_end?: string | null
 }
-const get = <T,>(path: string, params?: Record<string, string | number | undefined | null>) => () => api<T>(path, params)
-export const useSeats = (data: string) =>
-  useQuery({ queryKey: ['seats', data], queryFn: get<{ date: string; observed: number; seats: SeatRow[]; note?: string }>('/senado/composicao', { data }), placeholderData: keepPreviousData })
+const get = <T,>(path: string, params?: Params) => () => api<T>(path, params)
+export const useSeats = (data?: string) =>
+  useQuery({ queryKey: ['seats', data], queryFn: get<{ date: string; observed: number; seats: SeatRow[]; note?: string }>('/senado/composicao', { data }), enabled: !!data, placeholderData: keepPreviousData })
 export const useChanges = () => useQuery({ queryKey: ['changes'], queryFn: get<any[]>('/senado/mudancas') })
 export const useSenator = (id?: string | null) =>
   useQuery({ queryKey: ['senator', id], queryFn: get<any>(`/senadores/${id}`), enabled: !!id })

@@ -1,12 +1,11 @@
 import { Button, Icon, Spinner } from '@blueprintjs/core'
-import { useState } from 'react'
-import { useChanges, useNews, useSeats, type Institution } from '../api/client'
+import { useChanges, useNews, type Institution } from '../api/client'
+import { useCurrentSeats } from '../useCurrentSeats'
 import { fmtDate, fmtDateTime, partyColor } from '../format'
 import { useStore } from '../store'
 
 export function Overview({ inst }: { inst: Institution }) {
-  const [date] = useState(() => new Date().toISOString().slice(0, 10))
-  const seats = useSeats(date)
+  const seats = useCurrentSeats()
   const news = useNews()
   const changes = useChanges()
   const { setView, setSenadoTab, select } = useStore()
@@ -42,7 +41,7 @@ export function Overview({ inst }: { inst: Institution }) {
           {parties.map(([p, n]) => <div key={p} style={{ width: `${n / rows.length * 100}%`, background: partyColor(p) }} title={`${p}: ${n}`} />)}
         </div>
         <div className="power-parties">{parties.slice(0, 6).map(([p, n]) => <span key={p}><i style={{ background: partyColor(p) }} />{p}<b>{n}</b></span>)}</div>
-        <div className="card-bottom"><span>Base consultada · {fmtDate(seats.data?.date ?? date)}</span><Button minimal endIcon="arrow-right" onClick={() => setSenadoTab('composicao')}>Explorar composição</Button></div>
+        <div className="card-bottom"><span>Base consultada · {fmtDate(seats.data?.date)}</span><Button minimal endIcon="arrow-right" onClick={() => setSenadoTab('composicao')}>Explorar composição</Button></div>
       </section>
 
       <section className="workspace-card radar-card">

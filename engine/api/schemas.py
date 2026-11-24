@@ -193,6 +193,12 @@ class TimelineItem(BaseModel):
     epistemic_status: str
 
 
+class ProposalDetail(BaseModel):
+    entity: Entity
+    relationships: list[Relationship]
+    timeline: list[TimelineItem]
+
+
 class GraphNode(BaseModel):
     id: str
     kind: str
