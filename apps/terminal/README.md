@@ -32,35 +32,27 @@ Com os secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit) e `CLOUDFLARE_ACCOUNT_ID` no 
 `politeia`. No primeiro deploy, vincule `politeia.pedropcventura.com` como domínio personalizado
 no Cloudflare Pages. A publicação está protegida pelo Cloudflare Access; confirme o deploy pela API do Pages quando não houver sessão autenticada no domínio.
 
-# React + TypeScript + Vite
+# Agente e desenvolvimento
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+`functions/api/agente.ts` atende `/api/agente` com Gemini e verifica a identidade do Cloudflare Access.
+No Pages, configure `GEMINI_API_KEY`, `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` e `ACCESS_ALLOWED_EMAILS`
+(lista separada por vírgulas), nos ambientes de produção e preview. Sem configuração válida, a função
+nega acesso; nenhum segredo deve usar o prefixo `VITE_`.
 
-Currently, two official plugins are available:
+Para testar localmente a Function depois do build estático, **neste diretório**:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```sh
+npx wrangler pages dev dist --port 8788 --binding AGENTE_DEV_SEM_ACCESS=1
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+A exceção de Access funciona somente com hostname `localhost`; nunca a configure na publicação.
+Forneça a chave Gemini apenas ao ambiente local do Wrangler. A UI em Vite, sozinha, não executa a Pages Function.
+
+Publique deste diretório para o Wrangler incluir `functions/`:
+
+```sh
+npx wrangler pages deploy dist --project-name politeia --branch main
+```
+
+Validação: `npm test`, `npm run lint`, `npm run build` (API) ou `npm run build:static` (snapshot).
+O roteiro completo de coleta, atualização e publicação está no [README principal](../../README.md).
