@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'motion/react'
 import { Slider, Spinner, Tag } from '@blueprintjs/core'
-import { useChanges, useSeats, useSeats2027, type SeatRow } from '../api/client'
+import { isStatic, useChanges, useSeats, useSeats2027, useSnapshotMeta, type SeatRow } from '../api/client'
 import { hemicycleLayout } from './Hemicycle'
 import { partyColor, fmtDate } from '../format'
 import { useStore } from '../store'
@@ -13,8 +13,13 @@ const KIND: Record<string, string> = { exercicio_inicio: 'Assume', exercicio_fim
 
 export function Senado() {
   const today = Math.floor(Date.now() / DAY) * DAY
-  const [day, setDay] = useState(Math.round((today - START) / DAY))
-  const date = iso(START + day * DAY)
+  const { data: snapshot, isPending: snapshotPending, isError: snapshotError } = useSnapshotMeta()
+  const dates = snapshot?.composition_dates
+  const staticMode = isStatic()
+  const last = staticMode ? (dates?.length ?? 1) - 1 : Math.round((today - START) / DAY)
+  const [selected, setDay] = useState<number>()
+  const day = selected ?? last
+  const date = staticMode ? dates?.[day] : iso(START + day * DAY)
   const [future, setFuture] = useState(false)
   const current = useSeats(date)
   const proj = useSeats2027(future)
@@ -30,33 +35,39 @@ export function Senado() {
     rows.forEach((r) => m.set(r.party ?? 's/ partido', (m.get(r.party ?? 's/ partido') ?? 0) + 1))
     return [...m.entries()].sort((a, b) => b[1] - a[1])
   }, [rows])
-  const near = (changes.data ?? []).filter((c) => Math.abs(Date.parse(c.date) - Date.parse(date)) <= 45 * DAY)
-  const marks = (changes.data ?? []).map((c) => Math.round((Date.parse(c.date) - START) / DAY))
+  const near = date ? (changes.data ?? []).filter((c) => Math.abs(Date.parse(c.date) - Date.parse(date)) <= 45 * DAY) : []
+  const marks = (changes.data ?? []).map((c) => staticMode ? dates?.indexOf(c.date) ?? -1 : Math.round((Date.parse(c.date) - START) / DAY))
+    .filter((m) => m >= 0 && m <= last)
+  const lastDate = staticMode ? dates?.at(-1) : iso(today)
+  const quickDates = [['1º/02/2023', '2023-02-01'], ['Eleição da Mesa 2025', '2025-02-01'],
+    [staticMode ? 'Data do snapshot' : 'Hoje', lastDate]]
   return (
     <div className="view">
       <div className="mode-switch">
-        <Tag interactive minimal={future} intent={future ? 'none' : 'primary'} onClick={() => setFuture(false)}>Histórico até hoje</Tag>
+        <Tag interactive minimal={future} intent={future ? 'none' : 'primary'} onClick={() => setFuture(false)}>{staticMode ? 'Histórico até o snapshot' : 'Histórico até hoje'}</Tag>
         <Tag interactive minimal={!future} intent={future ? 'primary' : 'none'} onClick={() => setFuture(true)}>Senado a partir de 1º/02/2027</Tag>
       </div>
-      {future ? <h1>Senado Federal a partir de 1º/02/2027</h1> : <h1>Senado Federal em {fmtDate(date)}</h1>}
+      {future ? <h1>Senado Federal a partir de 1º/02/2027</h1> : <h1>Senado Federal{date ? ` em ${fmtDate(date)}` : ''}</h1>}
       {future ? (
         <p className="lede">Em 2026 foram eleitos 54 senadores (2/3 das cadeiras) para mandatos até 2035. As outras 27 cadeiras seguem até 2031. Contorno tracejado = eleito em 2026; contorno sólido = reeleito.</p>
-      ) : <p className="lede">Quem ocupava cada uma das 81 cadeiras na data escolhida, reconstruído a partir dos exercícios de mandato e das filiações publicadas nos Dados Abertos do Senado. Arraste para ver trocas de partido, suplentes assumindo e retornos de titulares.</p>}
-      {!future && <div className="slider-wrap">
+      ) : <p className="lede">Quem ocupava cada uma das 81 cadeiras na data escolhida, reconstruído a partir dos exercícios de mandato e das filiações publicadas nos Dados Abertos do Senado. {staticMode ? 'O snapshot traz a composição em datas-chave.' : 'Arraste para ver trocas de partido, suplentes assumindo e retornos de titulares.'}</p>}
+      {!future && date && last > 0 && <div className={staticMode ? 'slider-wrap snapshot-slider' : 'slider-wrap'}>
         <div className="slider-marks" aria-hidden>
-          {marks.map((m, i) => <span key={i} style={{ left: `${(m / Math.round((today - START) / DAY)) * 100}%` }} />)}
+          {marks.map((m, i) => <span key={i} style={{ left: `${(m / last) * 100}%` }} />)}
         </div>
-        <Slider min={0} max={Math.round((today - START) / DAY)} stepSize={1} labelStepSize={365} value={day}
-          onChange={setDay} labelRenderer={(v) => new Date(START + v * DAY).getUTCFullYear().toString()} aria-label="Data" />
+        <Slider min={0} max={last} stepSize={1} labelStepSize={staticMode ? Math.max(1, Math.ceil(last / 4)) : 365} value={day}
+          onChange={setDay} labelRenderer={(v) => staticMode ? fmtDate(dates?.[v]) : new Date(START + v * DAY).getUTCFullYear().toString()} aria-label="Data" />
         <div className="slider-quick">
-          {[['1º/02/2023', '2023-02-01'], ['Eleição da Mesa 2025', '2025-02-01'], ['Hoje', iso(today)]].map(([l, d]) => (
-            <Tag key={d} interactive minimal onClick={() => setDay(Math.round((Date.parse(d) - START) / DAY))}>{l}</Tag>
-          ))}
+          {quickDates.map(([label, d]) => {
+            const index = d ? staticMode ? dates?.indexOf(d) ?? -1 : Math.round((Date.parse(d) - START) / DAY) : -1
+            return index < 0 ? null : <Tag key={label} interactive minimal onClick={() => setDay(index)}>{label}</Tag>
+          })}
         </div>
       </div>}
       <div className="split">
         <div>
-          {seats.isLoading ? <Spinner size={24} /> : (
+          {!future && staticMode && snapshotError ? <p className="warn-text">Histórico do snapshot indisponível.</p>
+            : seats.isLoading || (!future && staticMode && snapshotPending) ? <Spinner size={24} /> : (
             <svg viewBox={`0 0 ${width} ${height}`} width="100%" role="img" aria-label="Hemiciclo do Senado">
               {ordered.map((s: SeatRow, i) => points[i] && (
                 <motion.circle key={s.person_id ?? `${s.name}-${s.uf}`} data-testid="seat" className="seat" layout

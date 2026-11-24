@@ -207,7 +207,7 @@ def proposals(s: Session, inst_id: str, *, q: str | None, type_code: str | None,
     if author:
         stmt = stmt.where(Proposal.id.in_(select(ProposalAuthor.proposal_id).where(ProposalAuthor.person_id == author)))
     total = s.scalar(select(func.count()).select_from(stmt.subquery())) or 0
-    rows = list(s.scalars(stmt.order_by(Proposal.introduced_on.desc().nulls_last(), Proposal.number.desc())
+    rows = list(s.scalars(stmt.order_by(Proposal.introduced_on.desc().nulls_last(), Proposal.number.desc(), Proposal.id)
                           .limit(limit).offset(offset)))
     authors = _authors(s, [p.id for p in rows])
     return S.Page(items=[_proposal(p, authors.get(p.id, [])) for p in rows], total=total, limit=limit, offset=offset)

@@ -1,8 +1,11 @@
 """End-to-end: recorded official responses -> ingestion -> Postgres -> common v1 API."""
 
+import json
 import os
 import subprocess
 import sys
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import pytest
 from fastapi.testclient import TestClient
@@ -11,8 +14,10 @@ from sqlalchemy.orm import sessionmaker
 
 from engine.db import models as M
 from engine.db.session import get_session
+from engine.dossiers import load_dossiers
 from engine.ingestion.sync import sync_source
 from engine.registry import bootstrap
+from scripts.export_snapshot import export_snapshot
 from tests.conftest import TEST_DB, make_client, official_sources
 
 SOURCES = {"ins_br_senado": "src_br_senado_dadosabertos"}
@@ -121,6 +126,38 @@ def test_proposal_authors_link_to_people_only_with_evidence(api):
     props = api.get("/v1/institutions/ins_br_senado/proposals", params={"limit": 50}).json()["items"]
     authors = [a for p in props for a in p["authors"]]
     assert all(a["person_id"] is None for a in authors if a["kind"] != "member")
+
+
+def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory, tmp_path):
+    with factory() as session:
+        load_dossiers(session)
+        session.commit()
+    now = datetime(2026, 11, 24, 1, 30, tzinfo=ZoneInfo("UTC"))
+    export_snapshot(api, tmp_path, now)
+
+    def read(path):
+        return json.loads((tmp_path / f"{path}.json").read_text(encoding="utf-8"))
+
+    meta = read("meta")
+    assert meta["generated_at"] == now.isoformat()
+    assert meta["composition_dates"][-1] == "2026-11-23"
+    for day in (*meta["composition_dates"], "2027"):
+        assert "seats" in read(f"senado/composicao/{day}")
+
+    proposals = read("institutions/ins_br_senado/proposals")
+    assert proposals == api.get("/v1/institutions/ins_br_senado/proposals").json()["items"]
+    proposal = read(f"entities/{proposals[0]['id']}")
+    assert proposal["sources"]
+    for source in proposal["sources"]:
+        path = source["json_path"] or ""
+        record = read(f"sources/{source['raw_record_id']}")[path]
+        public_record = api.get(f"/v1/sources/{source['raw_record_id']}", params={"path": path}).json()
+        assert record["excerpt"] == public_record["excerpt"]
+        assert record["response_headers"] == {}
+    runs = read("ingestion/ins_br_senado")["runs"]
+    assert any(run["status"] == "partial" for run in runs)
+    assert all(run["error"] is None and all("example" not in issue for issue in run["issues"]) for run in runs)
+    assert read("dossies/stf-caso-master")["dossier"] == "stf-caso-master"
 
 
 def test_filters_pagination_graph_and_errors(api):
