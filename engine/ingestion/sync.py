@@ -169,8 +169,10 @@ class Persistor:
         self._count("mandates", len(seen_mandates))
 
         if batch.complete_member_list:
+            listed = (Mandate.status != "not_observed" if batch.complete_term_history
+                      else Mandate.status == "in_exercise")
             stale = self.s.execute(update(Mandate).where(
-                Mandate.source_system_id == self.source.id, Mandate.status == "in_exercise",
+                Mandate.source_system_id == self.source.id, listed,
                 Mandate.id.not_in(seen_mandates)).values(status="not_observed"))
             self._count("mandates_no_longer_listed", stale.rowcount or 0)
 

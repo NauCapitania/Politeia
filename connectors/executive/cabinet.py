@@ -160,7 +160,7 @@ class CabinetConnector(Connector):
     def fetch(self, scope: str) -> Batch:
         if scope != "members":
             raise ValueError(f"unknown scope {scope}")
-        batch = Batch(scope=scope, complete_member_list=True)
+        batch = Batch(scope=scope, complete_member_list=True, complete_term_history=True)
         page = self.config.get("page", DEFAULT_PAGE)
         resp = self.client.get(self.config.get("api_url", API), params={
             "action": "parse", "page": page, "prop": "wikitext|revid", "format": "json", "formatversion": "2"})

@@ -199,8 +199,13 @@ def test_resync_keeps_removed_bodies_and_terms_as_history(factory, api):
         frederico = s.scalar(select(M.Mandate).where(M.Mandate.represented_unit == "Comunicações",
                                                      M.Mandate.end_date.is_(None)))
         assert frederico.status == "not_observed"
+        ended = s.scalars(select(M.Mandate).where(M.Mandate.represented_unit == "Comunicações")).all()
+        assert ended and all(m.status == "not_observed" for m in ended)
     d = api.get("/v1/executivo").json()
     assert "264359" not in {b["code"] for b in d["bodies"]}
+    names = {t["name"] for b in d["bodies"] for t in b["terms"]}
+    names |= {t["name"] for u in d["unmatched"] for t in u["terms"]}
+    assert "Juscelino Filho" not in names and "Carlos Fávaro" in names
 
 
 INLINE = "\n".join([

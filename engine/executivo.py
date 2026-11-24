@@ -91,7 +91,8 @@ def executive_overview(s: Session) -> dict:
         select(Person.id, Person.name).join(Mandate, Mandate.person_id == Person.id)
         .where(Mandate.institution_id == SENATE).distinct())}
     terms = s.execute(select(Mandate, Person).join(Person, Person.id == Mandate.person_id).where(
-        Mandate.institution_id == INSTITUTION, Mandate.role_type == "minister_of_state")
+        Mandate.institution_id == INSTITUTION, Mandate.role_type == "minister_of_state",
+        Mandate.status != "not_observed")
         .order_by(Mandate.start_date)).all()
     by_body: dict[str, list[dict]] = {}
     unmatched: dict[str, dict] = {}

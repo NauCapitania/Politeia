@@ -278,6 +278,7 @@ class Batch:
     executive_bodies: list[ExecutiveBodyRecord] = field(default_factory=list)
     issues: list[Issue] = field(default_factory=list)
     complete_member_list: bool = False
+    complete_term_history: bool = False  # listing also has every past term: unlisted ones are superseded
 
     def add_raw(self, raw: RawResponse) -> int:
         self.raw.append(raw)
