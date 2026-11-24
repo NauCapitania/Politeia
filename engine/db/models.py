@@ -269,18 +269,23 @@ class PartyMembership(Base):
 
 class Committee(Base):
     __tablename__ = "committees"
-    __table_args__ = {"schema": "core"}
+    __table_args__ = (UniqueConstraint("institution_id", "source_code"), {"schema": "core"})
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     institution_id: Mapped[str] = mapped_column(ForeignKey("registry.institutions.id"), index=True)
     name: Mapped[str] = mapped_column(Text)
     abbreviation: Mapped[str | None] = mapped_column(Text)
     committee_type: Mapped[str | None] = mapped_column(Text)
+    source_code: Mapped[str | None] = mapped_column(Text)
+    attributes: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
+    raw_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.raw_records.id"))
+    first_observed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_observed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class CommitteeMembership(Base):
     __tablename__ = "committee_memberships"
-    __table_args__ = {"schema": "core"}
+    __table_args__ = (UniqueConstraint("committee_id", "person_id", "seat_kind"), {"schema": "core"})
 
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     committee_id: Mapped[str] = mapped_column(ForeignKey("core.committees.id"), index=True)
@@ -289,6 +294,13 @@ class CommitteeMembership(Base):
     role: Mapped[str | None] = mapped_column(Text)
     valid_from: Mapped[date | None] = mapped_column(Date)
     valid_to: Mapped[date | None] = mapped_column(Date)
+    seat_kind: Mapped[str] = mapped_column(Text, default="titular", server_default="titular")  # titular | suplente
+    party_abbreviation: Mapped[str | None] = mapped_column(Text)
+    represented_unit: Mapped[str | None] = mapped_column(Text)
+    bloc: Mapped[str | None] = mapped_column(Text)
+    is_current: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    last_observed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    raw_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.raw_records.id"))
 
 
 # --------------------------------------------------------------------------- legislative

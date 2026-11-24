@@ -4,12 +4,11 @@ import { useStore } from '../store'
 import { fmtDateTime } from '../format'
 
 const VIEW_LABEL: Record<string, string> = {
-  senado: 'Senado', votacoes: 'Votações', presidencia2025: 'Presidência 2025', presidencia2027: 'Presidência 2027',
-  stf: 'STF e caso Master', noticias: 'Notícias', proposals: 'Proposições', sources: 'Fontes e cobertura',
+  senado: 'Senado Federal', stf: 'STF e caso Master', noticias: 'Notícias', sources: 'Fontes e cobertura',
 }
 
 export function TopBar({ current }: { current?: Institution }) {
-  const { search, setSearch, setView, view } = useStore()
+  const { search, setSearch, setSenadoTab, view, senadoTab } = useStore()
   return (
     <header className="topbar">
       <div className="brand"><span className="brand-mark" />Politeia</div>
@@ -20,7 +19,7 @@ export function TopBar({ current }: { current?: Institution }) {
         value={search}
         onValueChange={(v) => {
           setSearch(v)
-          if (v && view !== 'proposals') setView('proposals')
+          if (v && !(view === 'senado' && senadoTab === 'proposicoes')) setSenadoTab('proposicoes')
         }}
         style={{ width: 320 }}
         small

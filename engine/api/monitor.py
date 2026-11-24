@@ -10,6 +10,8 @@ from sqlalchemy.orm import Session
 from engine.analysis.presidencia import _claim, analysis_2025, analysis_2027
 from engine.db.models import (
     Claim,
+    Committee,
+    CommitteeMembership,
     DossierItem,
     IndividualVote,
     Mandate,
@@ -23,7 +25,7 @@ from engine.db.models import (
     VoteEvent,
 )
 from engine.db.session import get_session
-from engine.senado import INSTITUTION, change_events, person_codes, seats_on
+from engine.senado import INSTITUTION, change_events, person_codes, seats_2027, seats_on
 
 router = APIRouter(prefix="/v1")
 DB = Annotated[Session, Depends(get_session)]
@@ -40,6 +42,11 @@ def composicao(s: DB, data: date | None = None):
     seats = seats_on(s, on)
     return {"date": on, "seat_count": 81, "observed": len(seats), "seats": seats,
             "note": None if len(seats) == 81 else "A reconstrução por exercícios não fechou 81 cadeiras nesta data."}
+
+
+@router.get("/senado/composicao/2027")
+def composicao_2027(s: DB):
+    return seats_2027(s)
 
 
 @router.get("/senado/mudancas")
@@ -73,6 +80,10 @@ def senador(person_id: str, s: DB):
         NewsMention.entity_kind == "person", NewsMention.entity_id == person_id)
         .order_by(NewsItem.published_at.desc().nulls_last()).limit(30)).all()
     claims = s.scalars(select(Claim).where(Claim.subject_id == person_id)).all()
+    committees = s.execute(select(Committee, CommitteeMembership).join(
+        CommitteeMembership, CommitteeMembership.committee_id == Committee.id).where(
+        CommitteeMembership.person_id == person_id, CommitteeMembership.is_current.is_(True))
+        .order_by(Committee.abbreviation)).all()
     return {
         "id": p.id, "code": code, "name": p.name, "full_name": p.full_name, "gender": p.gender,
         "photo_url": p.photo_url, "profile_url": p.profile_url,
@@ -93,6 +104,8 @@ def senador(person_id: str, s: DB):
         "speeches": [{"id": x.id, "date": x.delivered_on, "kind": x.kind, "summary": x.summary, "url": x.url}
                      for x in speeches],
         "news": _news(news), "claims": [_claim(c) for c in claims],
+        "committees": [{"id": c.id, "abbreviation": c.abbreviation, "name": c.name, "seat_kind": m.seat_kind,
+                        "role": m.role} for c, m in committees],
     }
 
 
@@ -159,3 +172,37 @@ def presidencia_2025(s: DB):
 @router.get("/presidencia/2027")
 def presidencia_2027(s: DB):
     return analysis_2027(s)
+
+
+@router.get("/comissoes")
+def comissoes(s: DB):
+    counts = {(cid, kind): n for cid, kind, n in s.execute(
+        select(CommitteeMembership.committee_id, CommitteeMembership.seat_kind, func.count())
+        .where(CommitteeMembership.is_current.is_(True))
+        .group_by(CommitteeMembership.committee_id, CommitteeMembership.seat_kind)).all()}
+    chairs = dict(s.execute(select(CommitteeMembership.committee_id, Person.name)
+                            .join(Person, Person.id == CommitteeMembership.person_id)
+                            .where(CommitteeMembership.is_current.is_(True),
+                                   CommitteeMembership.role == "PRESIDENTE")).all())
+    rows = s.scalars(select(Committee).where(Committee.institution_id == INSTITUTION)
+                     .order_by(Committee.committee_type, Committee.abbreviation)).all()
+    return [{"id": c.id, "abbreviation": c.abbreviation, "name": c.name, "type": c.committee_type,
+             "subtitle": (c.attributes or {}).get("subtitle"), "chair": chairs.get(c.id),
+             "titulares": counts.get((c.id, "titular"), 0), "suplentes": counts.get((c.id, "suplente"), 0),
+             "last_observed_at": c.last_observed_at} for c in rows]
+
+
+@router.get("/comissoes/{committee_id}")
+def comissao(committee_id: str, s: DB):
+    c = s.get(Committee, committee_id)
+    if c is None or c.institution_id != INSTITUTION:
+        raise HTTPException(404, "comissão não encontrada")
+    rows = s.execute(select(CommitteeMembership, Person).join(Person, Person.id == CommitteeMembership.person_id)
+                     .where(CommitteeMembership.committee_id == committee_id,
+                            CommitteeMembership.is_current.is_(True)).order_by(Person.name)).all()
+    return {"id": c.id, "abbreviation": c.abbreviation, "name": c.name, "type": c.committee_type,
+            "attributes": c.attributes, "last_observed_at": c.last_observed_at,
+            "raw_record_id": str(c.raw_record_id) if c.raw_record_id else None,
+            "members": [{"person_id": p.id, "name": p.name, "photo_url": p.photo_url, "seat_kind": m.seat_kind,
+                         "role": m.role, "party": m.party_abbreviation, "uf": m.represented_unit, "bloc": m.bloc,
+                         "since": m.valid_from} for m, p in rows]}

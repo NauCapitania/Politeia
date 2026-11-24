@@ -64,7 +64,7 @@ describe('Monitor do Senado', () => {
 
   it('mostra o voto secreto de 2025 como inferência com justificativa', async () => {
     renderApp()
-    await userEvent.click(await screen.findByRole('button', { name: /Presidência 2025/ }))
+    await userEvent.click(await screen.findByRole('tab', { name: /Presidência 2025/ }))
     expect(await screen.findByText(/O voto foi secreto/)).toBeInTheDocument()
     await waitFor(() => expect(screen.getAllByTestId('seat')).toHaveLength(81))
     await userEvent.click(screen.getAllByTestId('seat')[0])

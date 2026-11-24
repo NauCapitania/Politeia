@@ -6,7 +6,16 @@ from datetime import date, timedelta
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
-from engine.db.models import ExternalIdentifier, Mandate, MandateExercise, Party, PartyMembership, Person
+from connectors.base.protocol import normalize_name
+from engine.db.models import (
+    DossierItem,
+    ExternalIdentifier,
+    Mandate,
+    MandateExercise,
+    Party,
+    PartyMembership,
+    Person,
+)
 
 INSTITUTION = "ins_br_senado"
 PERSON_SCHEME = "senado.parlamentar"
@@ -99,3 +108,36 @@ def change_events(s: Session, since: date) -> list[dict]:
                 events.append({"date": cur[0], "kind": "troca_partido", "person_id": pid, "name": names.get(pid),
                                "detail": f"{prev[2]} → {cur[2]}", "from": prev[2], "to": cur[2]})
     return sorted(events, key=lambda e: e["date"])
+
+
+def seats_2027(s: Session) -> dict:
+    """The Senate from 1 Feb 2027: the 27 seats whose mandates run to 2031 plus the 54 elected in October 2026.
+    Continuing seats show today's occupant and party; elected seats come from the sourced 2027 dossier."""
+    today = date.today()
+    continuing = [r | {"group": "continua"} for r in seats_on(s, today)
+                  if r["mandate_end"] and r["mandate_end"] >= date(2031, 1, 1)]
+    elected = s.scalars(select(DossierItem).where(DossierItem.dossier == "presidencia-2027",
+                                                  DossierItem.kind == "elected_2026")).all()
+    current = {normalize_name(r["name"]): r for r in seats_on(s, today)}
+    known = {normalize_name(n): (pid, photo) for pid, n, photo in s.execute(
+        select(Person.id, Person.name, Person.photo_url).join(Mandate, Mandate.person_id == Person.id)
+        .where(Mandate.institution_id == INSTITUTION)).all()}
+    out = list(continuing)
+    for item in elected:
+        p = item.payload
+        key = normalize_name(p["name"])
+        pid, photo = known.get(key, (None, None))
+        now = current.get(key)
+        out.append({"person_id": pid, "name": p["name"], "photo_url": photo, "uf": p.get("uf"),
+                    "party": p.get("party"), "group": "reeleito" if now else "eleito_2026",
+                    "note": p.get("note"), "sources": item.sources, "mandate_end": date(2035, 1, 31)})
+    parties: dict[str, int] = {}
+    for r in out:
+        parties[r["party"] or "S/Partido"] = parties.get(r["party"] or "S/Partido", 0) + 1
+    return {"date": date(2027, 2, 1), "seat_count": 81, "observed": len(out),
+            "continuing": len(continuing), "elected": len(elected),
+            "reelected": sum(1 for r in out if r["group"] == "reeleito"),
+            "parties": dict(sorted(parties.items(), key=lambda x: -x[1])),
+            "note": "Projeção: cadeiras que seguem até 2031 com o partido de hoje; eleitos de 2026 com o partido "
+                    "informado pelas fontes da eleição. Trocas de partido até a posse não estão refletidas.",
+            "seats": sorted(out, key=lambda r: (r["party"] or "~", r["name"]))}

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { motion } from 'motion/react'
 import { Slider, Spinner, Tag } from '@blueprintjs/core'
-import { useChanges, useSeats, type SeatRow } from '../api/client'
+import { useChanges, useSeats, useSeats2027, type SeatRow } from '../api/client'
 import { hemicycleLayout } from './Hemicycle'
 import { partyColor, fmtDate } from '../format'
 import { useStore } from '../store'
@@ -15,10 +15,13 @@ export function Senado() {
   const today = Math.floor(Date.now() / DAY) * DAY
   const [day, setDay] = useState(Math.round((today - START) / DAY))
   const date = iso(START + day * DAY)
-  const seats = useSeats(date)
+  const [future, setFuture] = useState(false)
+  const current = useSeats(date)
+  const proj = useSeats2027(future)
+  const seats = future ? proj : current
   const changes = useChanges()
   const { select, selectedId } = useStore()
-  const rows = seats.data?.seats ?? []
+  const rows: SeatRow[] = seats.data?.seats ?? []
   const width = 680
   const { points, seatR, height } = useMemo(() => hemicycleLayout(81, width), [])
   const ordered = useMemo(() => [...rows].sort((a, b) => (a.party ?? '~').localeCompare(b.party ?? '~')), [rows])
@@ -31,9 +34,15 @@ export function Senado() {
   const marks = (changes.data ?? []).map((c) => Math.round((Date.parse(c.date) - START) / DAY))
   return (
     <div className="view">
-      <h1>Senado Federal em {fmtDate(date)}</h1>
-      <p className="lede">Quem ocupava cada uma das 81 cadeiras na data escolhida, reconstruído a partir dos exercícios de mandato e das filiações publicadas nos Dados Abertos do Senado. Arraste para ver trocas de partido, suplentes assumindo e retornos de titulares.</p>
-      <div className="slider-wrap">
+      <div className="mode-switch">
+        <Tag interactive minimal={future} intent={future ? 'none' : 'primary'} onClick={() => setFuture(false)}>Histórico até hoje</Tag>
+        <Tag interactive minimal={!future} intent={future ? 'primary' : 'none'} onClick={() => setFuture(true)}>Senado a partir de 1º/02/2027</Tag>
+      </div>
+      {future ? <h1>Senado Federal a partir de 1º/02/2027</h1> : <h1>Senado Federal em {fmtDate(date)}</h1>}
+      {future ? (
+        <p className="lede">Em 2026 foram eleitos 54 senadores (2/3 das cadeiras) para mandatos até 2035. As outras 27 cadeiras seguem até 2031. Contorno tracejado = eleito em 2026; contorno sólido = reeleito.</p>
+      ) : <p className="lede">Quem ocupava cada uma das 81 cadeiras na data escolhida, reconstruído a partir dos exercícios de mandato e das filiações publicadas nos Dados Abertos do Senado. Arraste para ver trocas de partido, suplentes assumindo e retornos de titulares.</p>}
+      {!future && <div className="slider-wrap">
         <div className="slider-marks" aria-hidden>
           {marks.map((m, i) => <span key={i} style={{ left: `${(m / Math.round((today - START) / DAY)) * 100}%` }} />)}
         </div>
@@ -44,22 +53,23 @@ export function Senado() {
             <Tag key={d} interactive minimal onClick={() => setDay(Math.round((Date.parse(d) - START) / DAY))}>{l}</Tag>
           ))}
         </div>
-      </div>
+      </div>}
       <div className="split">
         <div>
           {seats.isLoading ? <Spinner size={24} /> : (
             <svg viewBox={`0 0 ${width} ${height}`} width="100%" role="img" aria-label="Hemiciclo do Senado">
               {ordered.map((s: SeatRow, i) => points[i] && (
-                <motion.circle key={s.person_id} data-testid="seat" className="seat" layout
+                <motion.circle key={s.person_id ?? `${s.name}-${s.uf}`} data-testid="seat" className="seat" layout
                   animate={{ cx: points[i].x, cy: points[i].y, r: s.person_id === selectedId ? seatR * 1.35 : seatR }}
                   transition={{ duration: 0.4 }} fill={partyColor(s.party)}
-                  stroke={s.participation === 'suplente' ? '#fff' : 'none'} strokeDasharray="2 1.5" strokeWidth={s.participation === 'suplente' ? 1.2 : 0}
-                  onClick={() => select(s.person_id)}>
-                  <title>{`${s.name} · ${s.party ?? 's/ partido'}-${s.uf ?? ''}${s.participation === 'suplente' ? ' · suplente em exercício' : ''}`}</title>
+                  stroke={outline(s) ? '#fff' : 'none'} strokeDasharray={outline(s) === 'dash' ? '2 1.5' : undefined}
+                  strokeWidth={outline(s) ? 1.2 : 0}
+                  onClick={() => s.person_id && select(s.person_id)}>
+                  <title>{`${s.name} · ${s.party ?? 's/ partido'}-${s.uf ?? ''}${label(s)}`}</title>
                 </motion.circle>
               ))}
               <text x={width / 2} y={height - 40} textAnchor="middle" fill="var(--fg-0)" fontSize={28} fontWeight={600}>{seats.data?.observed}</text>
-              <text x={width / 2} y={height - 20} textAnchor="middle" fill="var(--fg-2)" fontSize={11}>de 81 cadeiras · contorno = suplente</text>
+              <text x={width / 2} y={height - 20} textAnchor="middle" fill="var(--fg-2)" fontSize={11}>{future ? 'de 81 cadeiras · posse em 1º/02/2027' : 'de 81 cadeiras · contorno = suplente'}</text>
             </svg>
           )}
           {seats.data?.note && <p className="warn-text">{seats.data.note}</p>}
@@ -67,7 +77,7 @@ export function Senado() {
             {parties.map(([p, n]) => <span key={p}><i style={{ background: partyColor(p) }} />{p} {n}</span>)}
           </div>
         </div>
-        <div className="card">
+        {future ? <Future2027 data={seats.data} /> : <div className="card">
           <h3>Mudanças próximas a esta data</h3>
           {!near.length && <p className="muted">Nenhuma mudança registrada em 45 dias.</p>}
           <ul className="changes">
@@ -76,8 +86,36 @@ export function Senado() {
                 <a className="link" onClick={() => select(c.person_id)}>{c.name}</a>{c.uf ? ` (${c.uf})` : ''} — {c.detail}</li>
             ))}
           </ul>
-        </div>
+        </div>}
       </div>
+    </div>
+  )
+}
+
+const outline = (s: any) => s.group === 'eleito_2026' ? 'dash' : s.group === 'reeleito' ? 'solid' : s.participation === 'suplente' ? 'dash' : null
+const label = (s: any) => s.group === 'eleito_2026' ? ' · eleito em 2026' : s.group === 'reeleito' ? ' · reeleito em 2026'
+  : s.group === 'continua' ? ' · mandato até 2031' : s.participation === 'suplente' ? ' · suplente em exercício' : ''
+
+function Future2027({ data }: { data?: any }) {
+  const select = useStore((s) => s.select)
+  if (!data) return <Spinner size={20} />
+  const elected = data.seats.filter((s: any) => s.group !== 'continua').sort((a: any, b: any) => a.uf.localeCompare(b.uf))
+  return (
+    <div className="card">
+      <h3>Renovação de 2/3</h3>
+      <div className="facts">
+        <span><b>{data.continuing}</b> <span className="faint">seguem até 2031</span></span>
+        <span><b>{data.elected}</b> <span className="faint">eleitos em 2026</span></span>
+        <span><b>{data.reelected}</b> <span className="faint">reeleitos</span></span>
+      </div>
+      <p className="warn-text">{data.note}</p>
+      <ul className="changes">
+        {elected.map((s: any) => (
+          <li key={`${s.uf}-${s.name}`}><span className="mono">{s.uf}</span>{' '}
+            {s.person_id ? <a className="link" onClick={() => select(s.person_id)}>{s.name}</a> : <b>{s.name}</b>}
+            {' '}({s.party}){s.group === 'reeleito' ? ' — reeleito' : ''}</li>
+        ))}
+      </ul>
     </div>
   )
 }
