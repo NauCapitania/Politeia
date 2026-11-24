@@ -226,3 +226,52 @@ def test_qualified_proposal_keeps_its_identifier_and_parent_type(factory, api):
     [pl] = [t for t in api.get(f"{base}/proposal-types").json() if t["type_code"] == "PL"]
     page = api.get(f"{base}/proposals", params={"type_code": "PL"}).json()
     assert pl["type_name"] == "Projeto de Lei Ordinária" and pl["count"] == page["total"] == 4
+
+
+def test_official_proposal_author_is_linked_without_a_current_mandate(factory, api):
+    proposal_id = 9116010
+    proposal = {"id": proposal_id, "identificacao": "PL 5522/2026"}
+    detail = {"autoriaIniciativa": [
+        {"siglaTipo": "SENADOR", "codigoParlamentar": 6359, "autor": "Lourdinha Pereira"},
+        {"siglaTipo": "SENADOR", "autor": "Outro autor"},
+    ]}
+    handler, _ = official_sources({
+        r"/dadosabertos/processo$": lambda r: httpx.Response(
+            200, json=[proposal] if r.url.params["sigla"] == "PL" else []),
+        rf"/dadosabertos/processo/{proposal_id}$": httpx.Response(200, json=detail),
+    })
+    [run] = sync_source(factory, SOURCES["ins_br_senado"], ["proposals"], client=make_client(handler))
+    assert run["status"] == "succeeded" and run["stats"]["authors_linked"] == 1
+
+    base = "/v1/institutions/ins_br_senado"
+    [item] = api.get(f"{base}/proposals", params={"q": proposal["identificacao"]}).json()["items"]
+    official, unidentified = item["authors"]
+    assert official["resolution"] == "official_id"
+    assert unidentified["person_id"] is None and unidentified["resolution"] == "unresolved"
+    person_id = official["person_id"]
+    person = api.get(f"/v1/entities/{person_id}").json()
+    assert any(str(proposal_id) in source["url"] for source in person["sources"])
+    assert count(factory, M.Mandate, person_id=person_id) == 0
+
+
+def test_total_scope_outage_updates_coverage_before_next_scope(factory, api):
+    base = "/v1/institutions/ins_br_senado"
+    original, _ = official_sources()
+
+    def handler(request):
+        if request.url.path.endswith("/votacao"):
+            return httpx.Response(503)
+        if request.url.path.endswith("/senador/lista/atual"):
+            caps = {c["capability"]: c for c in api.get(f"{base}/capabilities").json()}
+            assert caps["votes"]["status"] == "ingestion_failed"
+            assert caps["votes"]["last_success_at"] is None
+        return original(request)
+
+    failed, members = sync_source(factory, SOURCES["ins_br_senado"], ["votes", "members"], client=make_client(handler))
+    assert failed["status"] == "failed"
+    assert failed["error"] == "no source responses; normalized data left unchanged"
+    assert members["status"] == "partial"
+    runs = api.get("/v1/ingestion/status", params={"institution": "ins_br_senado"}).json()["runs"]
+    run = next(r for r in runs if r["id"] == failed["run_id"])
+    assert run["stats"]["raw_records"] == 0 and run["stats"]["warnings"] > 0
+    assert run["issues"][0]["code"] == "votes_unavailable"
