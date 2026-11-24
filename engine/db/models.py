@@ -312,6 +312,36 @@ class CommitteeMembership(Base):
     raw_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.raw_records.id"))
 
 
+class ExecutiveBody(Base):
+    """Organ or entity of the federal Executive (SIORG); kept when it leaves the registry, flagged not current."""
+
+    __tablename__ = "executive_bodies"
+    __table_args__ = (UniqueConstraint("institution_id", "siorg_code"), {"schema": "core"})
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    institution_id: Mapped[str] = mapped_column(ForeignKey("registry.institutions.id"), index=True)
+    source_system_id: Mapped[str] = mapped_column(ForeignKey("registry.source_systems.id"))
+    siorg_code: Mapped[str] = mapped_column(Text)
+    parent_code: Mapped[str | None] = mapped_column(Text, index=True)
+    unit_type: Mapped[str] = mapped_column(String(32))
+    name: Mapped[str] = mapped_column(Text)
+    acronym: Mapped[str | None] = mapped_column(Text)
+    legal_nature: Mapped[str | None] = mapped_column(Text)
+    competence: Mapped[str | None] = mapped_column(Text)
+    purpose: Mapped[str | None] = mapped_column(Text)
+    mission: Mapped[str | None] = mapped_column(Text)
+    legal_basis: Mapped[str | None] = mapped_column(Text)
+    site: Mapped[str | None] = mapped_column(Text)
+    version: Mapped[str | None] = mapped_column(Text)
+    version_start: Mapped[date | None] = mapped_column(Date)
+    is_current: Mapped[bool] = mapped_column(Boolean, default=True, server_default="true")
+    attributes: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
+    raw_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.raw_records.id"))
+    first_observed_at: Mapped[datetime] = _now()
+    last_observed_at: Mapped[datetime] = _now()
+    last_seen_run_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.runs.id"))
+
+
 # --------------------------------------------------------------------------- legislative
 
 

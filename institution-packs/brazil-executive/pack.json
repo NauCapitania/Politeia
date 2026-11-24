@@ -1,0 +1,53 @@
+{
+  "pack_id": "brazil-executive",
+  "pack_version": "0.1.0",
+  "institution": {
+    "id": "ins_br_executivo",
+    "slug": "brazil-executive",
+    "official_name": "Poder Executivo Federal",
+    "short_name": "Executivo",
+    "institution_type": "executive",
+    "jurisdiction": "Federal — República Federativa do Brasil",
+    "geographic_scope": "Brasil",
+    "country": "BR",
+    "website": "https://www.gov.br/planalto/pt-br",
+    "seat_count": null,
+    "seat_count_status": "unknown",
+    "seat_count_source": "O número de ministérios é definido por lei (Lei nº 14.600/2023 e alterações), não pela Constituição.",
+    "terminology": {
+      "member": "Ministro(a) de Estado",
+      "members": "Ministros",
+      "represented_unit": "Ministério",
+      "chamber": "Gabinete",
+      "proposal": "Ato"
+    }
+  },
+  "sources": [
+    {
+      "id": "src_br_siorg",
+      "name": "SIORG — Estrutura organizacional do Poder Executivo federal (arquivos mensais em dados.gov.br)",
+      "base_url": "https://repositorio.dados.gov.br/seges/siorg/",
+      "documentation_url": "https://dados.gov.br/dados/conjuntos-dados/estrutura-organizacional-do-poder-executivo-federal",
+      "allowed_hosts": ["repositorio.dados.gov.br"],
+      "connector": "br-siorg",
+      "max_requests_per_second": 1,
+      "config": {}
+    },
+    {
+      "id": "src_ptwiki_gabinete",
+      "name": "Wikipédia (pt) — Lista de membros do gabinete de Lula (2023–presente)",
+      "base_url": "https://pt.wikipedia.org/w/api.php",
+      "documentation_url": "https://pt.wikipedia.org/wiki/Lista_de_membros_do_gabinete_de_Lula_(2023%E2%80%93presente)",
+      "allowed_hosts": ["pt.wikipedia.org"],
+      "connector": "ptwiki-cabinet",
+      "max_requests_per_second": 1,
+      "config": {"page": "Lista de membros do gabinete de Lula (2023–presente)"}
+    }
+  ],
+  "capabilities": {
+    "executive_structure": {"scope": "structure", "note": "Órgãos e entidades do Poder Executivo federal no SIORG, com competências e base legal oficiais."},
+    "members": {"scope": "members", "note": "Ministros em exercício segundo a lista colaborativa da Wikipédia, com as referências citadas; não é fonte oficial."},
+    "mandates": {"scope": "members"},
+    "composition_history": {"scope": "members"}
+  }
+}
