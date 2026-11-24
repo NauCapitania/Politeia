@@ -95,7 +95,8 @@ def capabilities(s: Session, inst_id: str) -> list[S.Capability]:
 def institution(s: Session, inst: Institution) -> S.Institution:
     count = s.scalar(select(func.count()).where(Mandate.institution_id == inst.id, Mandate.status == "in_exercise"))
     last = s.scalar(select(func.max(IngestionRun.finished_at)).where(
-        IngestionRun.institution_id == inst.id, IngestionRun.status.in_(("succeeded", "partial"))))
+        IngestionRun.institution_id == inst.id, IngestionRun.status.in_(("succeeded", "partial")),
+        IngestionRun.is_source_fetch()))
     sources = s.scalars(select(SourceSystem).where(SourceSystem.institution_id == inst.id))
     return S.Institution(
         id=inst.id, slug=inst.slug, official_name=inst.official_name, short_name=inst.short_name,

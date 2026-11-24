@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 
 from connectors.base.protocol import normalize_name, parse_date
 from engine.db.models import Claim, DossierItem, Mandate, Person
+from engine.party_dossier import validate_party_dossier
 
 DOSSIERS_DIR = Path(__file__).resolve().parent.parent / "dossiers"
 CLAIM_TYPES = {"official", "declaration", "press_report", "analysis"}
@@ -32,6 +33,11 @@ def read_dossiers(directory: Path = DOSSIERS_DIR) -> list[dict]:
         for c in doc.get("claims", []):
             if c["claim_type"] not in CLAIM_TYPES:
                 raise DossierError(f"{c['id']}: unknown claim_type {c['claim_type']}")
+        if doc["dossier"] == "partidos":
+            try:
+                validate_party_dossier(doc)
+            except (ValueError, KeyError, TypeError) as exc:
+                raise DossierError(f"partidos: {exc}") from exc
     return docs
 
 

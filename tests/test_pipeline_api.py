@@ -4,7 +4,9 @@ import json
 import os
 import subprocess
 import sys
-from datetime import datetime
+from dataclasses import replace
+from datetime import UTC, datetime
+from uuid import UUID
 from zoneinfo import ZoneInfo
 
 import httpx
@@ -13,11 +15,15 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, func, select
 from sqlalchemy.orm import sessionmaker
 
+from connectors.base.protocol import Batch
+from connectors.senate.connector import SenateConnector
+from engine.capabilities.compute import recompute_capabilities
 from engine.db import models as M
 from engine.db.session import get_session
 from engine.dossiers import load_dossiers
-from engine.ingestion.sync import sync_source
-from engine.registry import bootstrap
+from engine.ingestion.replay import replay_proposals
+from engine.ingestion.sync import Persistor, store_raw, sync_source
+from engine.registry import bootstrap, build_connector
 from scripts.export_snapshot import export_snapshot
 from tests.conftest import TEST_DB, make_client, official_sources
 
@@ -188,6 +194,9 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
     capabilities = read("institutions/ins_br_senado/capabilities")
     assert capabilities[0]["issues"] == [{"code": "last_run_failed"}, {"code": "missing_affiliation", "count": 2}]
     assert read("dossies/stf-caso-master")["dossier"] == "stf-caso-master"
+    parties = read("dossies/partidos")
+    assert parties == api.get("/v1/dossies/partidos").json()
+    assert {"party", "event", "funding", "comparison", "analysis", "site"} <= parties["items"].keys()
 
 
 def test_filters_pagination_graph_and_errors(api):
@@ -277,3 +286,125 @@ def test_total_scope_outage_updates_coverage_before_next_scope(factory, api):
     run = next(r for r in runs if r["id"] == failed["run_id"])
     assert run["stats"]["raw_records"] == 0 and run["stats"]["warnings"] > 0
     assert run["issues"][0]["code"] == "votes_unavailable"
+
+
+def test_replay_proposals_reuses_original_evidence_without_claiming_a_fresh_fetch(factory, api, monkeypatch):
+    source_id = SOURCES["ins_br_senado"]
+    seen = datetime(2026, 1, 5, 12, tzinfo=UTC)
+    finished = datetime.now(UTC)
+    proposals = [
+        {"id": 9111975, "identificacao": "PL 5522/2026"},
+        {"id": 9125400, "identificacao": "PL 3220/2019 (Substitutivo-CD)"},
+    ]
+    handler, _ = official_sources({
+        r"/dadosabertos/processo$": lambda req: httpx.Response(
+            200, json=proposals if req.url.params["sigla"] == "PL" else []),
+        r"/dadosabertos/processo/(9111975|9125400)$": httpx.Response(200, json={"autoriaIniciativa": [
+            {"siglaTipo": "SENADOR", "codigoParlamentar": 6459, "autor": "Autora fora do exercício"},
+        ]}),
+    })
+    with factory() as s:
+        source = s.get(M.SourceSystem, source_id)
+        connector = build_connector(source, make_client(handler))
+        batch = connector.fetch("proposals")
+        for raw in batch.raw:
+            raw.response = replace(raw.response, retrieved_at=seen)
+        run = M.IngestionRun(institution_id=source.institution_id, source_system_id=source.id, connector=connector.id,
+                             connector_version=connector.version, scope=["proposals"], status="partial",
+                             started_at=finished, finished_at=finished, stats={"raw_records": len(batch.raw)})
+        s.add(run)
+        s.flush()
+        raw_ids = store_raw(s, run, source, batch)
+        s.commit()
+        run_id = run.id
+        raws = s.scalars(select(M.RawRecord).where(M.RawRecord.id.in_(raw_ids))).all()
+        raw_history = {r.id: (r.first_run_id, r.last_run_id, r.retrieved_at, r.last_seen_at, r.content_sha256)
+                       for r in raws}
+        recompute_capabilities(s, source.institution_id)
+        s.commit()
+    before = api.get("/v1/institutions/ins_br_senado").json()["last_ingested_at"]
+
+    def forbidden(*args):
+        pytest.fail("offline replay contacted the source")
+
+    monkeypatch.setattr(SenateConnector, "fetch", forbidden)
+    targeted = replay_proposals(factory, proposal_ids=[9125400])
+    assert targeted["status"] == "succeeded" and targeted["stats"]["proposals"] == 1
+    assert count(factory, M.Proposal, source_id="9111975") == 0
+    replay = replay_proposals(factory, run_id=run_id)
+    assert replay["status"] == "succeeded"
+    assert replay["stats"]["mode"] == "replay"
+    assert replay["stats"]["source_run_id"] == str(run_id) and replay["stats"]["requests"] == 0
+    assert replay["stats"]["proposals"] == 2 and count(factory, M.Proposal, source_id="9125400") == 1
+
+    with factory() as s:
+        proposal = s.scalar(select(M.Proposal).where(M.Proposal.source_id == "9125400"))
+        assert proposal.first_observed_at == proposal.last_observed_at == seen
+        assert proposal.identifier == proposals[1]["identificacao"]
+        author = s.scalar(select(M.ProposalAuthor).where(M.ProposalAuthor.proposal_id == proposal.id))
+        assert author.resolution == "official_id"
+        person = s.get(M.Person, author.person_id)
+        assert person.first_observed_at == person.last_observed_at == seen
+        evidence = s.scalar(select(M.EntityEvidence).where(
+            M.EntityEvidence.entity_id == proposal.id, M.EntityEvidence.json_path == "$[1]"))
+        assert evidence.raw_record_id in raw_ids
+        raws = s.scalars(select(M.RawRecord).where(M.RawRecord.id.in_(raw_ids))).all()
+        assert {r.id: (r.first_run_id, r.last_run_id, r.retrieved_at, r.last_seen_at, r.content_sha256)
+                for r in raws} == raw_history
+        assert s.get(M.IngestionRun, UUID(replay["run_id"])).stats["mode"] == "replay"
+        assert s.get(M.CapabilityState, ("ins_br_senado", "proposals")).last_success_at == finished
+
+    status = api.get("/v1/ingestion/status", params={"institution": "ins_br_senado"}).json()
+    assert status["runs"][0]["stats"]["mode"] == "replay"
+    assert api.get("/v1/institutions/ins_br_senado").json()["last_ingested_at"] == before
+
+    with factory() as s:
+        proposal = s.scalar(select(M.Proposal).where(M.Proposal.source_id == "9125400"))
+        author = s.scalar(select(M.ProposalAuthor).where(M.ProposalAuthor.proposal_id == proposal.id))
+        person_id = author.person_id
+        prop_id, author_id = proposal.id, author.id
+        proposal.status = "Old normalization of the same observation"
+        proposal.last_observed_at = finished
+        s.commit()
+
+    same_run = replay_proposals(factory, run_id=run_id)
+    assert same_run["status"] == "succeeded"
+    assert same_run["stats"].get("proposals_replay_skipped_newer", 0) == 0
+    with factory() as s:
+        assert (s.get(M.Proposal, prop_id).status, s.get(M.Proposal, prop_id).last_observed_at) == (None, finished)
+
+    persist = Persistor.persist_proposals
+
+    def after_live_update(persistor, batch, evidence):
+        with factory() as s:
+            proposal = s.get(M.Proposal, prop_id)
+            older = batch.raw[batch.proposals[0].ref.raw]
+            changed = [item | {"situacaoAtual": "Newer live status"} for item in older.json()]
+            response = replace(older.response, retrieved_at=finished, content=json.dumps(changed).encode())
+            newer_batch = Batch(scope="proposals", raw=[replace(older, response=response, parsed=changed)])
+            source = s.get(M.SourceSystem, source_id)
+            newer_run = M.IngestionRun(institution_id=source.institution_id, source_system_id=source_id,
+                                       connector=source.connector, connector_version="test", scope=["proposals"],
+                                       status="succeeded", finished_at=finished)
+            s.add(newer_run)
+            s.flush()
+            [newer_id] = store_raw(s, newer_run, source, newer_batch)
+            s.add(M.EntityEvidence(entity_kind="proposal", entity_id=prop_id, raw_record_id=newer_id,
+                                   json_path="$[1]"))
+            proposal.status = "Newer live status"
+            proposal.last_observed_at = finished
+            author = s.get(M.ProposalAuthor, author_id)
+            author.person_id = None
+            author.resolution = "unresolved"
+            author.attributes = author.attributes | {"unresolved_reason": "person_not_ingested"}
+            s.commit()
+        persist(persistor, batch, evidence)
+
+    monkeypatch.setattr(Persistor, "persist_proposals", after_live_update)
+    retry = replay_proposals(factory, proposal_ids=[9125400])
+    assert retry["stats"]["proposals_replay_skipped_newer"] == retry["stats"]["authors_linked"] == 1
+    with factory() as s:
+        proposal = s.get(M.Proposal, prop_id)
+        author = s.get(M.ProposalAuthor, author_id)
+        assert (proposal.status, proposal.last_observed_at) == ("Newer live status", finished)
+        assert (author.person_id, author.resolution) == (person_id, "official_id")

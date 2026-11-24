@@ -1,0 +1,105 @@
+.partidos {
+  --partidos-fundacao: #3b9ac0;
+  --partidos-registro: var(--fg-2);
+  --partidos-fusao: var(--accent);
+  --partidos-incorporacao: var(--warn);
+  --partidos-renomeacao: var(--ok);
+  --partidos-extincao: var(--err);
+  --partidos-federacao: #c677a1;
+  --partidos-contexto: var(--fg-3);
+}
+
+[data-theme="light"] .partidos {
+  --partidos-fundacao: #196481;
+  --partidos-federacao: #9b3671;
+}
+
+.partidos-hero {
+  padding: 24px clamp(16px, 3vw, 36px);
+  background: linear-gradient(120deg, var(--accent-soft), transparent 70%), var(--bg-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.partidos-hero h1 { margin: 7px 0; font-size: clamp(26px, 4vw, 42px); letter-spacing: -.04em; }
+.partidos-hero p:not(.partidos-kicker) { color: var(--fg-1); max-width: 68ch; }
+.partidos-kicker { color: var(--accent); text-transform: uppercase; font: 11px var(--mono); letter-spacing: .12em; margin: 0 0 6px; }
+.partidos-hero-meta, .partidos-tabs, .partidos-selects, .partidos-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; }
+.partidos-hero-meta span { font: 11px var(--mono); padding: 5px 8px; border-radius: 4px; background: var(--bg-2); color: var(--fg-1); }
+.partidos-tabs { border-bottom: 1px solid var(--line); margin: 16px 0; }
+.partidos-tabs button, .partidos-text-button {
+  color: var(--fg-1); background: none; border: 1px solid transparent; padding: 8px 12px; cursor: pointer;
+}
+.partidos-tabs button[aria-pressed="true"] { color: var(--accent); border-bottom-color: var(--accent); background: var(--accent-soft); }
+.partidos-text-button { padding: 6px 0; color: var(--accent); text-decoration: underline; }
+.partidos-stack { display: grid; gap: 14px; min-width: 0; }
+.partidos-panel { min-width: 0; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; background: var(--bg-1); }
+.partidos-panel h2 { margin: 0 0 5px; font-size: 17px; }
+.partidos-panel h3 { margin: 0 0 7px; font-size: 14px; }
+.partidos-panel p { color: var(--fg-1); }
+.partidos-panel .partidos-kicker { color: var(--accent); }
+.partidos-heading { display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 8px; }
+.partidos-heading p { margin-bottom: 8px; }
+.partidos-selects label { display: flex; align-items: center; gap: 6px; color: var(--fg-2); }
+.partidos-selects select { max-width: 210px; border: 1px solid var(--line-strong); color: var(--fg-0); background: var(--bg-2); border-radius: 4px; padding: 5px; }
+.partidos-legend { gap: 7px 13px; margin: 6px 0 10px; font-size: 11px; color: var(--fg-2); }
+.partidos-legend span { display: flex; align-items: center; gap: 5px; }
+.partidos-legend i { background: var(--event-color); border-radius: 50%; height: 7px; width: 7px; }
+.partidos-kind-fundacao { --event-color: var(--partidos-fundacao); }
+.partidos-kind-registro { --event-color: var(--partidos-registro); }
+.partidos-kind-fusao { --event-color: var(--partidos-fusao); }
+.partidos-kind-incorporacao { --event-color: var(--partidos-incorporacao); }
+.partidos-kind-renomeacao { --event-color: var(--partidos-renomeacao); }
+.partidos-kind-extincao { --event-color: var(--partidos-extincao); }
+.partidos-kind-federacao { --event-color: var(--partidos-federacao); }
+.partidos-kind-contexto { --event-color: var(--partidos-contexto); }
+.partidos-graph { max-height: 395px; overflow: auto; background: var(--bg-0); border: 1px solid var(--line); border-radius: 5px; }
+.partidos-graph svg { display: block; font: 11px var(--mono); }
+.partidos-grid line { stroke: var(--line); stroke-dasharray: 2 4; }
+.partidos-grid text { fill: var(--fg-2); }
+.partidos-lane { stroke: var(--line-strong); stroke-width: 2; }
+.partidos-edge { stroke: var(--event-color); stroke-width: 1.7; }
+.partidos-kind-federacao.partidos-edge { stroke-dasharray: 3 2; }
+.partidos-svg-button { cursor: pointer; fill: var(--fg-1); }
+.partidos-svg-button:hover, .partidos-svg-button[aria-pressed="true"] { fill: var(--accent); }
+.partidos-point circle { fill: var(--event-color); stroke: var(--bg-0); stroke-width: 1.5; }
+.partidos-point[aria-pressed="true"] circle { stroke: var(--fg-0); stroke-width: 2; }
+.partidos-event-grid, .partidos-fund-grid { display: grid; grid-template-columns: minmax(240px, .9fr) minmax(300px, 1.1fr); gap: 18px; }
+.partidos-note, .partidos-panel p.partidos-note { color: var(--fg-2); font-size: 11px; margin: 9px 0 0; }
+.partidos-event-grid h2 small { color: var(--fg-2); font: 11px var(--mono); margin-left: 5px; }
+.partidos-event-list { max-height: 245px; overflow: auto; display: grid; gap: 4px; }
+.partidos-event-list button, .partidos-series button {
+  text-align: left; background: var(--bg-0); color: var(--fg-1); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; cursor: pointer;
+}
+.partidos-event-list button { border-left: 3px solid var(--event-color); display: grid; grid-template-columns: minmax(63px, 26%) 1fr; gap: 7px; }
+.partidos-event-list button[aria-pressed="true"], .partidos-series button[aria-pressed="true"] { background: var(--accent-soft); color: var(--fg-0); border-color: var(--accent); }
+.partidos-event-list time, .partidos-event-tag { font: 11px var(--mono); color: var(--event-color); }
+.partidos-event-detail h3 { font-size: 16px; margin: 5px 0 8px; }
+.partidos-event-detail p { margin: 0 0 7px; }
+.partidos-fund-grid { margin-top: 12px; }
+.partidos-series, .partidos-bar-list { display: grid; gap: 5px; }
+.partidos-series button, .partidos-bar-list li { display: grid; grid-template-columns: 45px minmax(0, 1fr) minmax(73px, auto); align-items: center; gap: 8px; }
+.partidos-series button b, .partidos-bar-list li b, .partidos-bar-list small { font: 11px var(--mono); text-align: right; white-space: nowrap; }
+.partidos-bar-list { margin: 9px 0 0; padding: 0; list-style: none; }
+.partidos-bar-list li { grid-template-columns: minmax(65px, 25%) minmax(0, 1fr) minmax(68px, auto) 48px; font-size: 11px; }
+.partidos-bar-list small { color: var(--fg-2); }
+.partidos-bar-track { display: block; height: 6px; border-radius: 5px; background: var(--bg-3); overflow: hidden; }
+.partidos-bar-track i { display: block; height: 100%; background: var(--accent); border-radius: inherit; }
+.partidos-bar-track.is-partial i { background: repeating-linear-gradient(120deg, var(--warn) 0 3px, transparent 3px 5px); }
+.partidos-comparison p:not(.partidos-kicker) { margin: 8px 0; }
+.partidos-compare-grid, .partidos-sites { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.partidos-compare-grid > div, .partidos-sites > article { padding: 10px; border-radius: 4px; border: 1px solid var(--line); background: var(--bg-0); }
+.partidos-compare-grid span { color: var(--fg-2); font-size: 11px; }
+.partidos-compare-grid strong { margin-top: 4px; display: block; color: var(--accent); font-size: 16px; }
+.partidos-compare-grid .partidos-bar-track { margin-top: 6px; }
+.partidos-compare-grid ul { padding-left: 17px; margin: 0; }
+.partidos .src-chip-page { white-space: normal; overflow-wrap: anywhere; }
+.partidos :focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+@media (max-width: 900px) {
+  .partidos-event-grid, .partidos-fund-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .partidos-compare-grid, .partidos-sites { grid-template-columns: minmax(0, 1fr); }
+}

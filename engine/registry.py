@@ -67,5 +67,7 @@ def build_connector(source: SourceSystem, client: SourceHttpClient | None = None
         max_requests_per_second=float(source.config.get("max_requests_per_second", 2)),
         timeout_s=settings.http_timeout_s,
         user_agent=settings.user_agent,
+        senado_proxy_url=settings.senado_proxy_url,
+        senado_proxy_secret=settings.senado_proxy_secret.get_secret_value() if settings.senado_proxy_secret else None,
     )
     return cls(config, client)

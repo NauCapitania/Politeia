@@ -68,6 +68,12 @@ cd apps/terminal && npm install && npm run dev     # http://localhost:5173 (prox
 
 Escopos isolados: `uv run python -m engine.cli sync --scope news` (notícias a cada execução) ou `--scope votes`.
 
+Para reprocessar proposições sem consultar o Senado, use
+`uv run python -m engine.cli replay-proposals --from-run UUID` com a última coleta utilizável (lote completo),
+ou `uv run python -m engine.cli replay-proposals --proposal-id ID --proposal-id ID` com IDs oficiais do Senado
+para selecionar os registros armazenados mais recentes de cada proposição. O run registra `stats.mode = replay`
+e reutiliza as evidências originais, sem atualizar a data da última coleta da fonte.
+
 Testes: `uv run pytest`, `uv run ruff check .`, `cd apps/terminal && npm test && npm run build`.
 Os testes de pipeline/API usam `POLITEIA_TEST_DATABASE_URL`
 (padrão `postgresql+psycopg://politeia:politeia@localhost:5432/politeia_test`).

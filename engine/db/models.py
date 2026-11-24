@@ -131,6 +131,10 @@ class IngestionRun(Base):
     stats: Mapped[dict] = mapped_column(JSONB, default=dict)
     error: Mapped[str | None] = mapped_column(Text)
 
+    @classmethod
+    def is_source_fetch(cls):
+        return cls.stats["mode"].as_string().is_distinct_from("replay")
+
 
 class RawRecord(Base):
     """Original evidence. Never deleted by normalization."""

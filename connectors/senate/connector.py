@@ -196,7 +196,7 @@ class SenateConnector(Connector):
 
     # ------------------------------------------------------------------ normalize
     def normalize(self, batch: Batch) -> Batch:
-        normalizers = {"members": self._normalize_members, "proposals": self._normalize_proposals,
+        normalizers = {"members": self._normalize_members, "proposals": self.normalize_proposals,
                        "composition": self._normalize_composition, "votes": self._normalize_votes,
                        "speeches": self._normalize_speeches, "committees": self._normalize_committees}
         normalizers[batch.scope](batch)
@@ -480,7 +480,7 @@ class SenateConnector(Connector):
                     url=d.get("UrlTexto"), text_url=d.get("UrlTextoBinario"),
                 ))
 
-    def _normalize_proposals(self, batch: Batch) -> None:
+    def normalize_proposals(self, batch: Batch, selection: dict[str, int] | None = None) -> Batch:
         details = {raw.source_record_key: (idx, raw.json()) for idx, raw in enumerate(batch.raw)
                    if raw.record_kind == "proposal_detail"}
         for idx, raw in enumerate(batch.raw):
@@ -491,6 +491,8 @@ class SenateConnector(Connector):
                 batch.issues.append(Issue("error", "schema_changed", "proposal list is not an array", raw=idx))
                 continue
             for i, item in enumerate(items):
+                if selection is not None and selection.get(str(item.get("id"))) != idx:
+                    continue
                 m = IDENT_RE.match((item.get("identificacao") or "").strip())
                 if not m or "id" not in item:
                     batch.issues.append(Issue("warning", "unparsed_identifier", "cannot parse identificacao",
@@ -516,6 +518,7 @@ class SenateConnector(Connector):
                 else:
                     prop.attributes["detail_missing"] = True
                 batch.proposals.append(prop)
+        return batch
 
     @staticmethod
     def _authors(prop: ProposalRecord, d: dict) -> None:
