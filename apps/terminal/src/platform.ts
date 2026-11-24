@@ -2,13 +2,13 @@ import type { IconName } from '@blueprintjs/core'
 import type { View } from './store'
 
 // Shared navigation contract. Institutions are independent of thematic analyses.
-export const SPACES: { view: View; label: string; icon: IconName; group: 'Instituições' | 'Biblioteca' | null }[] = [
+export const SPACES: { view: View; label: string; aliases?: string[]; icon: IconName; group: 'Instituições' | 'Biblioteca' | null }[] = [
   { view: 'inicio', label: 'Central de situação', icon: 'control', group: null },
   { view: 'analises', label: 'Análises', icon: 'projects', group: null },
   { view: 'congresso', label: 'Congresso Nacional', icon: 'office', group: 'Instituições' },
   { view: 'senado', label: 'Senado Federal', icon: 'layout-circle', group: 'Instituições' },
   { view: 'camara', label: 'Câmara dos Deputados', icon: 'people', group: 'Instituições' },
-  { view: 'stf', label: 'Supremo Tribunal Federal', icon: 'take-action', group: 'Instituições' },
+  { view: 'stf', label: 'Supremo Tribunal Federal', aliases: ['STF'], icon: 'take-action', group: 'Instituições' },
   { view: 'executivo', label: 'Poder Executivo', icon: 'briefcase', group: 'Instituições' },
   { view: 'partidos', label: 'Partidos e financiamento', icon: 'git-branch', group: 'Biblioteca' },
   { view: 'noticias', label: 'Notícias', icon: 'feed', group: 'Biblioteca' },

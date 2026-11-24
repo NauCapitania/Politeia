@@ -243,6 +243,15 @@ describe('Plataforma modular', () => {
     expect(useStore.getState().analysisId).toBeNull()
   })
 
+  it('encontra o Supremo pela sigla STF sem renomear a instituição', async () => {
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Buscar ou navegar' }))
+    await userEvent.type(screen.getByRole('combobox', { name: 'Buscar espaços, senadores ou proposições' }), 'STF')
+    expect(screen.getByRole('option', { name: /Supremo Tribunal Federal/ })).toBeInTheDocument()
+    await userEvent.keyboard('{Enter}')
+    expect(await screen.findByRole('heading', { name: 'Supremo Tribunal Federal' })).toBeInTheDocument()
+  })
+
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
     useStore.setState({ view: 'congresso' })
     renderApp()

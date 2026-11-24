@@ -5,8 +5,8 @@ import { useStore, type View, type SenadoTab } from '../store'
 import { normalize } from '../format'
 import { SPACES } from '../platform'
 
-const DESTINATIONS: { label: string; detail: string; icon: IconName; view?: View; tab?: SenadoTab }[] = [
-  ...SPACES.map((s) => ({ label: s.label, detail: 'Espaço da plataforma', icon: s.icon, view: s.view })),
+const DESTINATIONS: { label: string; aliases?: string[]; detail: string; icon: IconName; view?: View; tab?: SenadoTab }[] = [
+  ...SPACES.map((s) => ({ label: s.label, aliases: s.aliases, detail: 'Espaço da plataforma', icon: s.icon, view: s.view })),
   { label: 'Composição do Senado', detail: 'Cadeiras, partidos e histórico', icon: 'layout-circle', tab: 'composicao' },
   { label: 'Votações', detail: 'Como votam os senadores', icon: 'series-search', tab: 'votacoes' },
   { label: 'Presidência 2025', detail: 'Resultado e inferências do voto secreto', icon: 'history', tab: 'presidencia2025' },
@@ -22,7 +22,7 @@ export function CommandPalette({ onClose }: { onClose: () => void }) {
   const seats = useCurrentSeats()
   const { setView, setAnalysis, setSenadoTab, setSearch, select } = useStore()
   const term = normalize(query.trim())
-  const actions = DESTINATIONS.filter((d) => !term || normalize(`${d.label} ${d.detail}`).includes(term)).map((d) => ({
+  const actions = DESTINATIONS.filter((d) => !term || normalize(`${d.label} ${d.detail} ${d.aliases?.join(' ') ?? ''}`).includes(term)).map((d) => ({
     label: d.label, detail: d.detail, icon: d.icon, run: () => d.tab ? setSenadoTab(d.tab) : setView(d.view!),
   }))
   if (!term || normalize('caso Master atualizações').includes(term)) actions.push({ label: 'Caso Master', detail: 'Análise temática · linha do tempo e evidências', icon: 'timeline-events', run: () => setAnalysis('caso-master') })
