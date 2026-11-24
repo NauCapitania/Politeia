@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Button, Callout, HTMLSelect, InputGroup, NonIdealState, Spinner, Tab, Tabs } from '@blueprintjs/core'
-import { useCapabilities, useInstitutions } from '../api/client'
+import { useInstitutions } from '../api/client'
 import {
   CAMARA, useCamaraCommittee, useCamaraCommittees, useCamaraComposition, useCamaraSwitches, useCamaraVote, useCamaraVotes,
 } from '../api/camara'
@@ -16,13 +16,11 @@ const SYNC = (_scope: string) => 'Confira os filtros e a cobertura desta versão
 
 export function Camara() {
   const [tab, setTab] = useState<CamaraTab>('composicao')
-  const coverage = useCapabilities(CAMARA)
-  const incomplete = coverage.isSuccess && ['members', 'proposals', 'votes', 'committees'].some((scope) => !coverage.data?.some((c) => c.capability === scope && ['available', 'empty'].includes(c.status)))
   return (
     <div className="view">
       <InstitutionMasthead kind="camara" eyebrow="PODER LEGISLATIVO · REPRESENTAÇÃO DO POVO" title="Câmara dos Deputados" subtitle="Representação, debate e fiscalização. Acompanhe o caminho das propostas." />
       <p className="lede">513 deputados federais eleitos pelo sistema proporcional em cada UF, para mandatos de quatro anos. A Câmara inicia a maior parte dos projetos de lei, autoriza a abertura de processo contra o presidente da República e faz a tomada de contas do presidente quando elas não são apresentadas no prazo (CF, art. 51). Dados oficiais da API de Dados Abertos da Câmara.</p>
-      {incomplete && <Callout title="Cobertura em preparação" style={{ marginBottom: 20 }}>A cobertura da Câmara está incompleta nesta versão. Alguns painéis e perfis podem não conter todos os registros; isso não significa ausência de atividade. Os dados serão atualizados após a conclusão das coletas.</Callout>}
+      <Callout title="Recorte da base" style={{ marginBottom: 20 }}>A visualização usa apenas os registros já coletados. Os períodos e a abrangência variam entre os painéis; ausência de dados não significa ausência de atividade.</Callout>
       <Tabs className="camara-tabs" id="camara-tabs" selectedTabId={tab} onChange={(t) => setTab(t as CamaraTab)} renderActiveTabPanelOnly>
         <Tab id="composicao" title="Composição" panel={<Composicao />} />
         <Tab id="trocas" title="Trocas de partido" panel={<Trocas />} />
