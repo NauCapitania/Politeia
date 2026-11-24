@@ -549,7 +549,7 @@ kbd { font: 9px var(--mono); padding: 2px 4px; border: 1px solid var(--line-stro
 .agente-rede g.nos g { transition: opacity 0.2s; }
 .agente-rede g.nos g.off { opacity: 0.18; }
 .agente-rede circle { animation: rede-pulso 3s ease-in-out infinite; }
-.agente-rede text { fill: var(--fg-1); font: 8px var(--mono); text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: var(--bg-1); stroke-width: 2px; }
+.agente-rede text { fill: var(--fg-1); font: 10px var(--mono); text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: var(--bg-1); stroke-width: 2px; }
 @keyframes rede-fluxo { to { stroke-dashoffset: -16; } }
 @keyframes rede-pulso { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .agente-rede line.on, .agente-rede circle { animation: none; } }
