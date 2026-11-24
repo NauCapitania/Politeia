@@ -1,0 +1,4179 @@
+{
+  "dossier": "partidos",
+  "as_of": "2026-11-24",
+  "items": [
+    {
+      "id": "partidos-ai2",
+      "kind": "event",
+      "payload": {
+        "type": "extincao",
+        "date": "1965-10-27",
+        "from": [],
+        "to": [],
+        "title": "AI-2 extingue os partidos existentes",
+        "summary": "O art. 18 extinguiu os partidos políticos existentes e cancelou seus registros. O ato foi editado no governo Castelo Branco."
+      },
+      "sources": [
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/atoins/1960-1969/atoinstitucional-2-27-outubro-1965-363603-publicacaooriginal-1-pe.html",
+          "outlet": "Ato Institucional nº 2",
+          "date": "1965-10-27",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-arena",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1966",
+        "from": [],
+        "to": [
+          "arena"
+        ],
+        "title": "Surge a ARENA",
+        "summary": "Formada por parlamentares que apoiavam o governo militar, no sistema organizado sob o Ato Complementar nº 4."
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/122463-anos-60-e-70-ditadura-e-bipartidarismo/",
+          "outlet": "Agência Câmara",
+          "date": "2008-10-03",
+          "kind": "official"
+        },
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/atocom/1960-1969/atocomplementar-4-20-novembro-1965-351199-norma-pe.html",
+          "outlet": "Ato Complementar nº 4",
+          "date": "1965-11-20",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-mdb65",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1966",
+        "from": [],
+        "to": [
+          "mdb65"
+        ],
+        "title": "Surge o MDB do bipartidarismo",
+        "summary": "Organizou a oposição parlamentar permitida no regime militar."
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/122463-anos-60-e-70-ditadura-e-bipartidarismo/",
+          "outlet": "Agência Câmara",
+          "date": "2008-10-03",
+          "kind": "official"
+        },
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/atocom/1960-1969/atocomplementar-4-20-novembro-1965-351199-norma-pe.html",
+          "outlet": "Ato Complementar nº 4",
+          "date": "1965-11-20",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-reforma-1979",
+      "kind": "event",
+      "payload": {
+        "type": "extincao",
+        "date": "1979-12-20",
+        "from": [
+          "arena",
+          "mdb65"
+        ],
+        "to": [],
+        "title": "Reforma partidária de 1979",
+        "summary": "A Lei nº 6.767 reorganizou o sistema e abriu caminho para a volta do pluripartidarismo. Os vínculos com os novos partidos indicam origem política, não fusão."
+      },
+      "sources": [
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/lei/1970-1979/lei-6767-20-dezembro-1979-357280-norma-pl.html",
+          "outlet": "Lei nº 6.767",
+          "date": "1979-12-20",
+          "kind": "official"
+        },
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-pds",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1980",
+        "from": [
+          "arena"
+        ],
+        "to": [
+          "pds"
+        ],
+        "title": "Fundação do PDS",
+        "summary": "Herdeiro político da ARENA."
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        },
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-pmdb",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1980",
+        "from": [
+          "mdb65"
+        ],
+        "to": [
+          "pmdb"
+        ],
+        "title": "Fundação do PMDB",
+        "summary": "Herdeiro político do MDB do bipartidarismo. Ulysses Guimarães presidiu a legenda na transição democrática.",
+        "people": [
+          "Ulysses Guimarães"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        },
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-ppopular",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1980",
+        "from": [
+          "arena",
+          "mdb65"
+        ],
+        "to": [
+          "ppopular"
+        ],
+        "title": "Fundação do Partido Popular",
+        "summary": "Reuniu moderados do antigo MDB e dissidentes liberais da ARENA em uma alternativa de centro.",
+        "people": [
+          "Tancredo Neves"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        },
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-incorporacao-ppopular",
+      "kind": "event",
+      "payload": {
+        "type": "incorporacao",
+        "date": "1982-02",
+        "from": [
+          "ppopular"
+        ],
+        "to": [
+          "pmdb"
+        ],
+        "title": "PPOPULAR é incorporado a PMDB",
+        "summary": "A legenda incorporadora permanece. A incorporada deixa de existir como legenda independente."
+      },
+      "sources": [
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-pt",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1980",
+        "from": [],
+        "to": [
+          "pt"
+        ],
+        "title": "Fundação do PT",
+        "summary": "A abertura partidária permitiu a organização de um partido ligado ao novo sindicalismo do ABC paulista.",
+        "people": [
+          "Luís Inácio Lula da Silva"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-pdt",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1980",
+        "from": [],
+        "to": [
+          "pdt"
+        ],
+        "title": "Fundação do PDT",
+        "summary": "Organizado no campo trabalhista por Leonel Brizola após a disputa pela sigla PTB.",
+        "people": [
+          "Leonel Brizola"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        },
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-ptb",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1980",
+        "from": [],
+        "to": [
+          "ptb"
+        ],
+        "title": "Reorganização do PTB",
+        "summary": "Uma das duas correntes trabalhistas organizadas após a reforma; a sigla coube ao grupo de Ivete Vargas.",
+        "people": [
+          "Ivete Vargas"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        },
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-ptb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1981-11-03",
+        "from": [],
+        "to": [
+          "ptb"
+        ],
+        "title": "Registro de PTB",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-pfl",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1985",
+        "from": [
+          "pds"
+        ],
+        "to": [
+          "pfl"
+        ],
+        "title": "Fundação do PFL",
+        "summary": "Dissidentes do PDS, contrários à candidatura de Paulo Maluf, apoiaram a chapa de Tancredo Neves no Colégio Eleitoral.",
+        "people": [
+          "José Sarney"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-dem",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2007-03-28",
+        "from": [
+          "pfl"
+        ],
+        "to": [
+          "dem"
+        ],
+        "title": "PFL passa a se chamar Democratas",
+        "summary": "A convenção aprovou a mudança do nome e elegeu Rodrigo Maia presidente."
+      },
+      "sources": [
+        {
+          "url": "https://www12.senado.leg.br/noticias/materias/2007/03/28/com-novo-presidente-pfl-troca-de-nome-democratas",
+          "outlet": "Senado Notícias",
+          "date": "2007-03-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-psdb",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1988",
+        "from": [
+          "pmdb"
+        ],
+        "to": [
+          "psdb"
+        ],
+        "title": "Dissidência do PMDB funda o PSDB",
+        "summary": "Parlamentares deixaram o PMDB durante a Constituinte. O PMDB continuou existindo."
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fusao-ppr",
+      "kind": "event",
+      "payload": {
+        "type": "fusao",
+        "date": "1993",
+        "from": [
+          "pds",
+          "pdc"
+        ],
+        "to": [
+          "ppr"
+        ],
+        "title": "PDS e PDC formam o PPR",
+        "summary": "O Partido Progressista Reformador resultou da fusão entre PDS e PDC."
+      },
+      "sources": [
+        {
+          "url": "https://www.fgv.br/cpdoc/acervo/dicionarios/verbete-tematico/partido-progressista-reformador-ppr",
+          "outlet": "FGV CPDOC",
+          "date": null,
+          "kind": "analysis"
+        },
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fusao-ppb",
+      "kind": "event",
+      "payload": {
+        "type": "fusao",
+        "date": "1995",
+        "from": [
+          "ppr",
+          "pp93"
+        ],
+        "to": [
+          "ppb"
+        ],
+        "title": "PPR e PP formam o PPB",
+        "summary": "O PP que participou dessa fusão não era o Partido Popular de Tancredo Neves, nem o atual Progressistas."
+      },
+      "sources": [
+        {
+          "url": "https://www.fgv.br/cpdoc/acervo/dicionarios/verbete-tematico/partido-progressista-reformador-ppr",
+          "outlet": "FGV CPDOC",
+          "date": null,
+          "kind": "analysis"
+        },
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-pp03",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2003",
+        "from": [
+          "ppb"
+        ],
+        "to": [
+          "pp03"
+        ],
+        "title": "PPB passa a usar a sigla PP",
+        "summary": "A legenda passa a se chamar Partido Progressista."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/partido-progressista",
+          "outlet": "TSE · Progressistas",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-pp",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2017",
+        "from": [
+          "pp03"
+        ],
+        "to": [
+          "pp"
+        ],
+        "title": "PP adota o nome Progressistas",
+        "summary": "A legenda mantém a sigla PP."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/partido-progressista",
+          "outlet": "TSE · Progressistas",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-mdb",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2018-05",
+        "from": [
+          "pmdb"
+        ],
+        "to": [
+          "mdb"
+        ],
+        "title": "TSE aprova retorno da sigla MDB",
+        "summary": "O registro de 1981 é o do antigo PMDB, não do MDB criado no bipartidarismo."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2018/Maio/aprovada-mudanca-do-nome-do-partido-do-movimento-democratico-brasileiro-pmdb",
+          "outlet": "TSE",
+          "date": "2018-05",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fusao-pr",
+      "kind": "event",
+      "payload": {
+        "type": "fusao",
+        "date": "2006-12-19",
+        "from": [
+          "pl85",
+          "prona"
+        ],
+        "to": [
+          "pr"
+        ],
+        "title": "PL e PRONA formam o Partido da República",
+        "summary": "O atual PL descende do PR; não é o PL anterior à fusão."
+      },
+      "sources": [
+        {
+          "url": "https://agenciaje.tse.jus.br/noticias/2006/dezembro/plenario-do-tse-aprova-criacao-do-partido-da",
+          "outlet": "Agência de Notícias do TSE",
+          "date": "2006-12-19",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Maio/aprovada-alteracao-do-nome-do-partido-da-republica-pr-para-partido-liberal-pl",
+          "outlet": "TSE",
+          "date": "2019-05",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-pl",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2019-05",
+        "from": [
+          "pr"
+        ],
+        "to": [
+          "pl"
+        ],
+        "title": "PR volta a usar a sigla PL",
+        "summary": "O TSE aprovou a mudança de denominação para Partido Liberal."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Maio/aprovada-alteracao-do-nome-do-partido-da-republica-pr-para-partido-liberal-pl",
+          "outlet": "TSE",
+          "date": "2019-05",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fusao-uniao",
+      "kind": "event",
+      "payload": {
+        "type": "fusao",
+        "date": "2022-02-08",
+        "from": [
+          "dem",
+          "psl"
+        ],
+        "to": [
+          "uniao"
+        ],
+        "title": "DEM e PSL formam o União Brasil",
+        "summary": "A convenção conjunta aprovou a união em 06/10/2021; o TSE deferiu o registro e determinou o encerramento das contas dos partidos anteriores.",
+        "people": [
+          "ACM Neto (DEM)",
+          "Luciano Bivar (PSL)"
+        ],
+        "declared": "Luciano Bivar declarou que a nova legenda pretendia apresentar candidatura à Presidência.",
+        "analysis": "O somatório dos votos anteriores altera a base de cálculo do Fundo Partidário, mas não demonstra por si só o motivo da fusão."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Fevereiro/tse-aprova-registro-do-partido-uniao-brasil",
+          "outlet": "TSE",
+          "date": "2022-02-08",
+          "kind": "official"
+        },
+        {
+          "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2021-10/dem-e-psl-confirmam-fusao-e-criacao-do-uniao-brasil",
+          "outlet": "Agência Brasil",
+          "date": "2021-10-06",
+          "kind": "press_report"
+        },
+        {
+          "url": "https://www.cnnbrasil.com.br/politica/uniao-brasil-ira-apresentar-candidato-a-presidencia-diz-presidente-do-psl/",
+          "outlet": "CNN Brasil · fala de Luciano Bivar",
+          "date": "2021-10-07",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096compilado.htm",
+          "outlet": "Lei nº 9.096, arts. 11-A, 29 e 41-A",
+          "date": "1995-09-19",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-uniao",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2022-02-08",
+        "from": [],
+        "to": [
+          "uniao"
+        ],
+        "title": "Registro de União Brasil",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Fevereiro/tse-aprova-registro-do-partido-uniao-brasil",
+          "outlet": "TSE",
+          "date": "2022-02-08",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fusao-prd",
+      "kind": "event",
+      "payload": {
+        "type": "fusao",
+        "date": "2023-11-09",
+        "from": [
+          "ptb",
+          "patriota"
+        ],
+        "to": [
+          "prd"
+        ],
+        "title": "PTB e Patriota formam o PRD",
+        "summary": "O TSE informou que o PRD superou a cláusula de desempenho pela soma dos votos válidos de 2022 e passou a ter direito ao Fundo Partidário.",
+        "analysis": "O acesso ao Fundo Partidário foi uma consequência comprovada. Isso não basta para medir o peso desse incentivo na decisão das direções."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Novembro/tse-aprova-criacao-do-partido-renovacao-democratica-prd",
+          "outlet": "TSE",
+          "date": "2023-11-09",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc97.htm",
+          "outlet": "Emenda Constitucional nº 97",
+          "date": "2017-10-04",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-prd",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2023-11-09",
+        "from": [],
+        "to": [
+          "prd"
+        ],
+        "title": "Registro de PRD",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Novembro/tse-aprova-criacao-do-partido-renovacao-democratica-prd",
+          "outlet": "TSE",
+          "date": "2023-11-09",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-incorporacao-prp",
+      "kind": "event",
+      "payload": {
+        "type": "incorporacao",
+        "date": "2019-03-28",
+        "from": [
+          "prp"
+        ],
+        "to": [
+          "patriota"
+        ],
+        "title": "PRP é incorporado a Patriota",
+        "summary": "A legenda incorporadora permanece. A incorporada deixa de existir como legenda independente."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Marco/tse-aprova-incorporacao-do-prp-ao-patriota",
+          "outlet": "TSE",
+          "date": "2019-03-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-incorporacao-ppl",
+      "kind": "event",
+      "payload": {
+        "type": "incorporacao",
+        "date": "2019-05",
+        "from": [
+          "ppl"
+        ],
+        "to": [
+          "pcdob"
+        ],
+        "title": "PPL é incorporado a PCdoB",
+        "summary": "A legenda incorporadora permanece. A incorporada deixa de existir como legenda independente."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Maio/plenario-aprova-incorporacao-do-ppl-ao-pcdob",
+          "outlet": "TSE",
+          "date": "2019-05",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-incorporacao-phs",
+      "kind": "event",
+      "payload": {
+        "type": "incorporacao",
+        "date": "2019-09",
+        "from": [
+          "phs"
+        ],
+        "to": [
+          "pode"
+        ],
+        "title": "PHS é incorporado a Podemos",
+        "summary": "A legenda incorporadora permanece. A incorporada deixa de existir como legenda independente."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Setembro/plenario-aprova-incorporacao-do-phs-ao-podemos",
+          "outlet": "TSE",
+          "date": "2019-09",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-incorporacao-pros",
+      "kind": "event",
+      "payload": {
+        "type": "incorporacao",
+        "date": "2023-02",
+        "from": [
+          "pros"
+        ],
+        "to": [
+          "solidariedade"
+        ],
+        "title": "PROS é incorporado a Solidariedade",
+        "summary": "A legenda incorporadora permanece. A incorporada deixa de existir como legenda independente."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Fevereiro/partido-republicano-da-ordem-social-pros-e-incorporado-ao-solidariedade",
+          "outlet": "TSE",
+          "date": "2023-02",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-incorporacao-psc",
+      "kind": "event",
+      "payload": {
+        "type": "incorporacao",
+        "date": "2023-06",
+        "from": [
+          "psc"
+        ],
+        "to": [
+          "pode"
+        ],
+        "title": "PSC é incorporado a Podemos",
+        "summary": "A legenda incorporadora permanece. A incorporada deixa de existir como legenda independente."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Junho/tse-aprova-incorporacao-do-partido-social-cristao-pelo-podemos",
+          "outlet": "TSE",
+          "date": "2023-06",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-pode",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2017-05-16",
+        "from": [
+          "ptn"
+        ],
+        "to": [
+          "pode"
+        ],
+        "title": "PTN adota o nome Podemos",
+        "summary": "O TSE autorizou a alteração estatutária de nome."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2017/Maio/tse-autoriza-ptn-a-mudar-nome-para-201cpodemos201d",
+          "outlet": "TSE",
+          "date": "2017-05-16",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-patriota",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2018",
+        "from": [
+          "pen"
+        ],
+        "to": [
+          "patriota"
+        ],
+        "title": "PEN torna-se Patriota",
+        "summary": "A passagem de nome consta no histórico de alterações do TRE-GO."
+      },
+      "sources": [
+        {
+          "url": "https://www.tre-go.jus.br/partidos/partidos-politicos/mudancas-de-nomes-fusoes-incorporacoes-e-extincoes",
+          "outlet": "TRE-GO",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-republicanos",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2019",
+        "from": [
+          "prb"
+        ],
+        "to": [
+          "republicanos"
+        ],
+        "title": "PRB adota o nome Republicanos",
+        "summary": "A legenda mantém o número 10."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/republicanos",
+          "outlet": "TSE",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-cidadania",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2019-09-19",
+        "from": [
+          "pps"
+        ],
+        "to": [
+          "cidadania"
+        ],
+        "title": "PPS passa a se chamar Cidadania",
+        "summary": "O TSE aprovou a mudança de nome."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Setembro/plenario-aprova-mudanca-do-nome-do-pps-para-cidadania",
+          "outlet": "TSE",
+          "date": "2019-09-19",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-avante",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2017-09",
+        "from": [
+          "ptob"
+        ],
+        "to": [
+          "avante"
+        ],
+        "title": "PTdoB torna-se Avante",
+        "summary": "O TSE aprovou a mudança de nome."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2017/Setembro/tse-aprova-mudanca-do-nome-do-ptdob-para-201cavante201d",
+          "outlet": "TSE",
+          "date": "2017-09",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-dc",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2018",
+        "from": [
+          "psdc"
+        ],
+        "to": [
+          "dc"
+        ],
+        "title": "PSDC torna-se Democracia Cristã",
+        "summary": "A passagem de nome consta no histórico de alterações do TRE-GO."
+      },
+      "sources": [
+        {
+          "url": "https://www.tre-go.jus.br/partidos/partidos-politicos/mudancas-de-nomes-fusoes-incorporacoes-e-extincoes",
+          "outlet": "TRE-GO",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-mobiliza",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2023",
+        "from": [
+          "pmn"
+        ],
+        "to": [
+          "mobiliza"
+        ],
+        "title": "PMN torna-se Mobilização Nacional",
+        "summary": "A legenda mantém o número 33."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/partido-da-mobilizacao-nacional",
+          "outlet": "TSE",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-agir",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2022-03-31",
+        "from": [
+          "ptc"
+        ],
+        "to": [
+          "agir"
+        ],
+        "title": "PTC torna-se Agir",
+        "summary": "O TSE homologou a mudança de nome."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Marco/tse-aprova-alteracao-e-partido-trabalhista-cristao-passa-a-se-chamar-agir",
+          "outlet": "TSE",
+          "date": "2022-03-31",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-collor-prn",
+      "kind": "event",
+      "payload": {
+        "type": "contexto",
+        "date": "1989",
+        "from": [],
+        "to": [
+          "prn"
+        ],
+        "title": "Collor concorre à Presidência pelo PRN",
+        "summary": "O PRN lançou Fernando Collor de Mello à Presidência da República.",
+        "people": [
+          "Fernando Collor de Mello"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www18.fgv.br/cpdoc/acervo/dicionarios/verbete-tematico/partido-da-reconstrucao-nacional-prn",
+          "outlet": "FGV CPDOC",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-ptc",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2000",
+        "from": [
+          "prn"
+        ],
+        "to": [
+          "ptc"
+        ],
+        "title": "PRN passa a se chamar PTC",
+        "summary": "O antigo PRN é a legenda que passou a usar a sigla PTC."
+      },
+      "sources": [
+        {
+          "url": "https://www.congressonacional.leg.br/pt_BR/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/partido_trabalhista_cristao_ptc",
+          "outlet": "Congresso Nacional",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-nome-democrata",
+      "kind": "event",
+      "payload": {
+        "type": "renomeacao",
+        "date": "2025-12",
+        "from": [
+          "pmb"
+        ],
+        "to": [
+          "democrata"
+        ],
+        "title": "PMB muda o nome para Democrata",
+        "summary": "Democrata não é o DEM, que se fundiu com o PSL."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2025/Dezembro/partido-da-mulher-brasileira-pmb-passara-a-se-chamar-democrata",
+          "outlet": "TSE",
+          "date": "2025-12",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-abertura-1985",
+      "kind": "event",
+      "payload": {
+        "type": "contexto",
+        "date": "1985",
+        "from": [],
+        "to": [
+          "pcdob",
+          "psb"
+        ],
+        "title": "Abertura partidária de 1985",
+        "summary": "O PSB foi reorganizado em 1985; a abertura permitiu a atuação legal de legendas comunistas. Os deferimentos atuais do PSB e do PCdoB são de 1988."
+      },
+      "sources": [
+        {
+          "url": "https://pdba.georgetown.edu/Parties/Brazil/desc.html",
+          "outlet": "Georgetown University",
+          "date": null,
+          "kind": "analysis"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-psol",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "2004",
+        "from": [
+          "pt"
+        ],
+        "to": [
+          "psol"
+        ],
+        "title": "Fundação do PSOL",
+        "summary": "O partido foi formado por dissidentes do PT após a expulsão de parlamentares que se opuseram à reforma da Previdência.",
+        "people": [
+          "Heloísa Helena"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.estadao.com.br/politica/eleicoes/historia-do-psol-como-surgiu-o-partido-a-dissidencia-do-pt-e-o-que-ele-defende/",
+          "outlet": "Estadão",
+          "date": "2020-11-26",
+          "kind": "press_report"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-pps",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1992",
+        "from": [
+          "pcb"
+        ],
+        "to": [
+          "pps"
+        ],
+        "title": "Origem do PPS no PCB",
+        "summary": "Parte do PCB decidiu reorganizar-se como PPS; outro grupo manteve a sigla PCB.",
+        "people": [
+          "Roberto Freire"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.camara.leg.br/noticias/90157-pluripartidarismo-teve-inicio-nos-anos-80/",
+          "outlet": "Agência Câmara",
+          "date": "2006-10-01",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.almg.gov.br/acompanhe/noticias/arquivos/2017/10/05_release_homenagem_PPS.html",
+          "outlet": "Assembleia Legislativa de Minas Gerais",
+          "date": "2017-10-05",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-psl",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "1994",
+        "from": [],
+        "to": [
+          "psl"
+        ],
+        "title": "Origem do PSL",
+        "summary": "O partido foi fundado em 1994 e obteve registro definitivo em 1998.",
+        "people": [
+          "Luciano Bivar"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www1.folha.uol.com.br/poder/2019/02/conheca-a-trajetoria-do-psl-de-sigla-nanica-ate-bolsonaro-e-os-laranjas.shtml",
+          "outlet": "Folha de S.Paulo",
+          "date": "2019-02-14",
+          "kind": "press_report"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-psl",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1998-06-02",
+        "from": [],
+        "to": [
+          "psl"
+        ],
+        "title": "Registro de PSL",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.congressonacional.leg.br/pt_BR/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/partido_social_liberal_psl",
+          "outlet": "Congresso Nacional",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-rede",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "2013-02-16",
+        "from": [],
+        "to": [
+          "rede"
+        ],
+        "title": "Lançamento da Rede Sustentabilidade",
+        "summary": "Marina Silva lançou a iniciativa partidária em Brasília; o registro só seria deferido em 2015.",
+        "people": [
+          "Marina Silva"
+        ],
+        "declared": "Marina Silva afirmou que o partido não seria nem oposição nem situação."
+      },
+      "sources": [
+        {
+          "url": "https://memoria.ebc.com.br/agenciabrasil/noticia/2013-02-16/marina-silva-lanca-embriao-de-um-novo-partido-politico",
+          "outlet": "Agência Brasil",
+          "date": "2013-02-16",
+          "kind": "press_report"
+        },
+        {
+          "url": "https://www.estadao.com.br/politica/novo-partido-nao-sera-nem-oposicao-nem-situacao-diz-marina/",
+          "outlet": "Estadão · fala de Marina Silva",
+          "date": "2013-02-16",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fundacao-novo",
+      "kind": "event",
+      "payload": {
+        "type": "fundacao",
+        "date": "2011-02",
+        "from": [],
+        "to": [
+          "novo"
+        ],
+        "title": "Fundação do Novo",
+        "summary": "A legenda foi organizada por um grupo de 181 pessoas com participação de João Amoêdo, antes do registro de 2015.",
+        "people": [
+          "João Amoêdo"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://epoca.globo.com/tempo/noticia/2015/11/partido-novo-o-intruso-liberal-na-politica-brasileira.html",
+          "outlet": "Época",
+          "date": "2015-11",
+          "kind": "press_report"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pmdb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1981-06-30",
+        "from": [],
+        "to": [
+          "pmdb"
+        ],
+        "title": "Registro de PMDB",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pdt",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1981-11-10",
+        "from": [],
+        "to": [
+          "pdt"
+        ],
+        "title": "Registro de PDT",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pt",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1982-02-11",
+        "from": [],
+        "to": [
+          "pt"
+        ],
+        "title": "Registro de PT",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pcdob",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1988-06-23",
+        "from": [],
+        "to": [
+          "pcdob"
+        ],
+        "title": "Registro de PCdoB",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-psb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1988-07-01",
+        "from": [],
+        "to": [
+          "psb"
+        ],
+        "title": "Registro de PSB",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-psdb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1989-08-24",
+        "from": [],
+        "to": [
+          "psdb"
+        ],
+        "title": "Registro de PSDB",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-prn",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1990-02-22",
+        "from": [],
+        "to": [
+          "prn"
+        ],
+        "title": "Registro de PRN (hoje Agir)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pmn",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1990-10-25",
+        "from": [],
+        "to": [
+          "pmn"
+        ],
+        "title": "Registro de PMN (hoje Mobiliza)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pps",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1992-03-19",
+        "from": [],
+        "to": [
+          "pps"
+        ],
+        "title": "Registro de PPS (hoje Cidadania)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pv",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1993-09-30",
+        "from": [],
+        "to": [
+          "pv"
+        ],
+        "title": "Registro de PV",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-ptob",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1994-10-11",
+        "from": [],
+        "to": [
+          "ptob"
+        ],
+        "title": "Registro de PTdoB (hoje Avante)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-ppb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1995-11-16",
+        "from": [],
+        "to": [
+          "ppb"
+        ],
+        "title": "Registro de PPB (hoje Progressistas)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pstu",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1995-12-19",
+        "from": [],
+        "to": [
+          "pstu"
+        ],
+        "title": "Registro de PSTU",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pcb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1996-05-09",
+        "from": [],
+        "to": [
+          "pcb"
+        ],
+        "title": "Registro de PCB",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-prtb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1997-02-18",
+        "from": [],
+        "to": [
+          "prtb"
+        ],
+        "title": "Registro de PRTB",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-psdc",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1997-08-05",
+        "from": [],
+        "to": [
+          "psdc"
+        ],
+        "title": "Registro de PSDC (hoje DC)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pco",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1997-09-30",
+        "from": [],
+        "to": [
+          "pco"
+        ],
+        "title": "Registro de PCO",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-ptn",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "1997-10-02",
+        "from": [],
+        "to": [
+          "ptn"
+        ],
+        "title": "Registro de PTN (hoje Podemos)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-prb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2005-08-25",
+        "from": [],
+        "to": [
+          "prb"
+        ],
+        "title": "Registro de legenda hoje chamada Republicanos",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-psol",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2005-09-15",
+        "from": [],
+        "to": [
+          "psol"
+        ],
+        "title": "Registro de PSOL",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pr",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2006-12-19",
+        "from": [],
+        "to": [
+          "pr"
+        ],
+        "title": "Registro de PR (hoje PL)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-psd",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2011-09-27",
+        "from": [],
+        "to": [
+          "psd"
+        ],
+        "title": "Registro de PSD",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-solidariedade",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2013-09-24",
+        "from": [],
+        "to": [
+          "solidariedade"
+        ],
+        "title": "Registro de Solidariedade",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-novo",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2015-09-15",
+        "from": [],
+        "to": [
+          "novo"
+        ],
+        "title": "Registro de Novo",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-rede",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2015-09-22",
+        "from": [],
+        "to": [
+          "rede"
+        ],
+        "title": "Registro de Rede",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-pmb",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2015-09-29",
+        "from": [],
+        "to": [
+          "pmb"
+        ],
+        "title": "Registro de PMB (hoje Democrata)",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-up",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2019-12-10",
+        "from": [],
+        "to": [
+          "up"
+        ],
+        "title": "Registro de UP",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-registro-missao",
+      "kind": "event",
+      "payload": {
+        "type": "registro",
+        "date": "2025-11-04",
+        "from": [],
+        "to": [
+          "missao"
+        ],
+        "title": "Registro de Missão",
+        "summary": "Data de deferimento do registro no Tribunal Superior Eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-febrasil",
+      "kind": "event",
+      "payload": {
+        "type": "federacao",
+        "date": "2022-05-24",
+        "from": [
+          "pt",
+          "pcdob",
+          "pv"
+        ],
+        "to": [
+          "febrasil"
+        ],
+        "title": "Federação Brasil da Esperança",
+        "summary": "Registro deferido pelo TSE. Os partidos conservam suas identidades e atuam em conjunto nos termos da legislação."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/lei/2021/lei-14208-28-setembro-2021-791788-publicacaooriginal-163501-pl.html",
+          "outlet": "Lei nº 14.208",
+          "date": "2021-09-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fedpsdbcid",
+      "kind": "event",
+      "payload": {
+        "type": "federacao",
+        "date": "2022-05-26",
+        "from": [
+          "psdb",
+          "cidadania"
+        ],
+        "to": [
+          "fedpsdbcid"
+        ],
+        "title": "Federação PSDB Cidadania",
+        "summary": "Registro deferido pelo TSE. Os partidos conservam suas identidades e atuam em conjunto nos termos da legislação."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/lei/2021/lei-14208-28-setembro-2021-791788-publicacaooriginal-163501-pl.html",
+          "outlet": "Lei nº 14.208",
+          "date": "2021-09-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fedpsolrede",
+      "kind": "event",
+      "payload": {
+        "type": "federacao",
+        "date": "2022-05-26",
+        "from": [
+          "psol",
+          "rede"
+        ],
+        "to": [
+          "fedpsolrede"
+        ],
+        "title": "Federação PSOL Rede",
+        "summary": "Registro deferido pelo TSE. Os partidos conservam suas identidades e atuam em conjunto nos termos da legislação."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/lei/2021/lei-14208-28-setembro-2021-791788-publicacaooriginal-163501-pl.html",
+          "outlet": "Lei nº 14.208",
+          "date": "2021-09-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fedrs",
+      "kind": "event",
+      "payload": {
+        "type": "federacao",
+        "date": "2025-12-04",
+        "from": [
+          "prd",
+          "solidariedade"
+        ],
+        "to": [
+          "fedrs"
+        ],
+        "title": "Federação Renovação Solidária",
+        "summary": "Registro deferido pelo TSE. Os partidos conservam suas identidades e atuam em conjunto nos termos da legislação."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/lei/2021/lei-14208-28-setembro-2021-791788-publicacaooriginal-163501-pl.html",
+          "outlet": "Lei nº 14.208",
+          "date": "2021-09-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fedup",
+      "kind": "event",
+      "payload": {
+        "type": "federacao",
+        "date": "2026-03-26",
+        "from": [
+          "uniao",
+          "pp"
+        ],
+        "to": [
+          "fedup"
+        ],
+        "title": "Federação União Progressista",
+        "summary": "Registro deferido pelo TSE. Os partidos conservam suas identidades e atuam em conjunto nos termos da legislação.",
+        "people": [
+          "Antônio Eduardo de Rueda (presidente nacional informado pelo TSE)"
+        ]
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/lei/2021/lei-14208-28-setembro-2021-791788-publicacaooriginal-163501-pl.html",
+          "outlet": "Lei nº 14.208",
+          "date": "2021-09-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-psdb-pode",
+      "kind": "event",
+      "payload": {
+        "type": "contexto",
+        "date": "2025-06-13",
+        "from": [
+          "psdb",
+          "pode"
+        ],
+        "to": [],
+        "title": "PSDB e Podemos desistem de negociação",
+        "summary": "O anúncio de negociações não se concretizou em fusão. O Globo noticiou a desistência após impasse sobre o comando da nova legenda."
+      },
+      "sources": [
+        {
+          "url": "https://oglobo.globo.com/politica/noticia/2025/06/13/psdb-e-podemos-desistem-de-fusao-apos-falta-de-acordo-pelo-comando-do-novo-partido.ghtml",
+          "outlet": "O Globo",
+          "date": "2025-06-13",
+          "kind": "press_report"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-arena",
+      "kind": "party",
+      "payload": {
+        "partyId": "arena",
+        "abbreviation": "ARENA",
+        "name": "Aliança Renovadora Nacional"
+      },
+      "sources": [
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-mdb65",
+      "kind": "party",
+      "payload": {
+        "partyId": "mdb65",
+        "abbreviation": "MDB (1966)",
+        "name": "Movimento Democrático Brasileiro do bipartidarismo"
+      },
+      "sources": [
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pds",
+      "kind": "party",
+      "payload": {
+        "partyId": "pds",
+        "abbreviation": "PDS",
+        "name": "Partido Democrático Social"
+      },
+      "sources": [
+        {
+          "url": "https://www.fgv.br/cpdoc/acervo/dicionarios/verbete-tematico/partido-progressista-reformador-ppr",
+          "outlet": "FGV CPDOC",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pmdb",
+      "kind": "party",
+      "payload": {
+        "partyId": "pmdb",
+        "abbreviation": "PMDB",
+        "name": "Partido do Movimento Democrático Brasileiro"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-ppopular",
+      "kind": "party",
+      "payload": {
+        "partyId": "ppopular",
+        "abbreviation": "PP (1980)",
+        "name": "Partido Popular"
+      },
+      "sources": [
+        {
+          "url": "https://periodicos.uem.br/ojs/index.php/revhist29abril/article/download/85356/751375163399/751375349029",
+          "outlet": "Revista 29 de Abril",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-ptb",
+      "kind": "party",
+      "payload": {
+        "partyId": "ptb",
+        "abbreviation": "PTB",
+        "name": "Partido Trabalhista Brasileiro"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Novembro/tse-aprova-criacao-do-partido-renovacao-democratica-prd",
+          "outlet": "TSE",
+          "date": "2023-11-09",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pdt",
+      "kind": "party",
+      "payload": {
+        "partyId": "pdt",
+        "abbreviation": "PDT",
+        "name": "Partido Democrático Trabalhista"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pt",
+      "kind": "party",
+      "payload": {
+        "partyId": "pt",
+        "abbreviation": "PT",
+        "name": "Partido dos Trabalhadores"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pfl",
+      "kind": "party",
+      "payload": {
+        "partyId": "pfl",
+        "abbreviation": "PFL",
+        "name": "Partido da Frente Liberal"
+      },
+      "sources": [
+        {
+          "url": "https://www12.senado.leg.br/noticias/materias/2007/03/28/com-novo-presidente-pfl-troca-de-nome-democratas",
+          "outlet": "Senado Notícias",
+          "date": "2007-03-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-dem",
+      "kind": "party",
+      "payload": {
+        "partyId": "dem",
+        "abbreviation": "DEM",
+        "name": "Democratas"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Fevereiro/tse-aprova-registro-do-partido-uniao-brasil",
+          "outlet": "TSE",
+          "date": "2022-02-08",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-mdb",
+      "kind": "party",
+      "payload": {
+        "partyId": "mdb",
+        "abbreviation": "MDB",
+        "name": "Movimento Democrático Brasileiro"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2018/Maio/aprovada-mudanca-do-nome-do-partido-do-movimento-democratico-brasileiro-pmdb",
+          "outlet": "TSE",
+          "date": "2018-05",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-psdb",
+      "kind": "party",
+      "payload": {
+        "partyId": "psdb",
+        "abbreviation": "PSDB",
+        "name": "Partido da Social Democracia Brasileira"
+      },
+      "sources": [
+        {
+          "url": "https://oglobo.globo.com/politica/noticia/2025/06/13/psdb-e-podemos-desistem-de-fusao-apos-falta-de-acordo-pelo-comando-do-novo-partido.ghtml",
+          "outlet": "O Globo",
+          "date": "2025-06-13",
+          "kind": "press_report"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pdc",
+      "kind": "party",
+      "payload": {
+        "partyId": "pdc",
+        "abbreviation": "PDC",
+        "name": "Partido Democrata Cristão"
+      },
+      "sources": [
+        {
+          "url": "https://www.fgv.br/cpdoc/acervo/dicionarios/verbete-tematico/partido-progressista-reformador-ppr",
+          "outlet": "FGV CPDOC",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-ppr",
+      "kind": "party",
+      "payload": {
+        "partyId": "ppr",
+        "abbreviation": "PPR",
+        "name": "Partido Progressista Reformador"
+      },
+      "sources": [
+        {
+          "url": "https://www.fgv.br/cpdoc/acervo/dicionarios/verbete-tematico/partido-progressista-reformador-ppr",
+          "outlet": "FGV CPDOC",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pp93",
+      "kind": "party",
+      "payload": {
+        "partyId": "pp93",
+        "abbreviation": "PP (1993)",
+        "name": "Partido Progressista"
+      },
+      "sources": [
+        {
+          "url": "https://www.fgv.br/cpdoc/acervo/dicionarios/verbete-tematico/partido-progressista-reformador-ppr",
+          "outlet": "FGV CPDOC",
+          "date": null,
+          "kind": "analysis"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-ppb",
+      "kind": "party",
+      "payload": {
+        "partyId": "ppb",
+        "abbreviation": "PPB",
+        "name": "Partido Progressista Brasileiro"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pp03",
+      "kind": "party",
+      "payload": {
+        "partyId": "pp03",
+        "abbreviation": "PP (2003)",
+        "name": "Partido Progressista"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/partido-progressista",
+          "outlet": "TSE · Progressistas",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pp",
+      "kind": "party",
+      "payload": {
+        "partyId": "pp",
+        "abbreviation": "PP",
+        "name": "Progressistas"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-psl",
+      "kind": "party",
+      "payload": {
+        "partyId": "psl",
+        "abbreviation": "PSL",
+        "name": "Partido Social Liberal"
+      },
+      "sources": [
+        {
+          "url": "https://www.congressonacional.leg.br/pt_BR/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/partido_social_liberal_psl",
+          "outlet": "Congresso Nacional",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-uniao",
+      "kind": "party",
+      "payload": {
+        "partyId": "uniao",
+        "abbreviation": "UNIÃO",
+        "name": "União Brasil"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pl85",
+      "kind": "party",
+      "payload": {
+        "partyId": "pl85",
+        "abbreviation": "PL (1985)",
+        "name": "Partido Liberal anterior à fusão"
+      },
+      "sources": [
+        {
+          "url": "https://agenciaje.tse.jus.br/noticias/2006/dezembro/plenario-do-tse-aprova-criacao-do-partido-da",
+          "outlet": "Agência de Notícias do TSE",
+          "date": "2006-12-19",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-prona",
+      "kind": "party",
+      "payload": {
+        "partyId": "prona",
+        "abbreviation": "PRONA",
+        "name": "Partido de Reedificação da Ordem Nacional"
+      },
+      "sources": [
+        {
+          "url": "https://agenciaje.tse.jus.br/noticias/2006/dezembro/plenario-do-tse-aprova-criacao-do-partido-da",
+          "outlet": "Agência de Notícias do TSE",
+          "date": "2006-12-19",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pr",
+      "kind": "party",
+      "payload": {
+        "partyId": "pr",
+        "abbreviation": "PR",
+        "name": "Partido da República"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pl",
+      "kind": "party",
+      "payload": {
+        "partyId": "pl",
+        "abbreviation": "PL",
+        "name": "Partido Liberal"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Maio/aprovada-alteracao-do-nome-do-partido-da-republica-pr-para-partido-liberal-pl",
+          "outlet": "TSE",
+          "date": "2019-05",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pen",
+      "kind": "party",
+      "payload": {
+        "partyId": "pen",
+        "abbreviation": "PEN",
+        "name": "Partido Ecológico Nacional"
+      },
+      "sources": [
+        {
+          "url": "https://www.tre-go.jus.br/partidos/partidos-politicos/mudancas-de-nomes-fusoes-incorporacoes-e-extincoes",
+          "outlet": "TRE-GO",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-patriota",
+      "kind": "party",
+      "payload": {
+        "partyId": "patriota",
+        "abbreviation": "PATRIOTA",
+        "name": "Patriota"
+      },
+      "sources": [
+        {
+          "url": "https://www.tre-go.jus.br/partidos/partidos-politicos/mudancas-de-nomes-fusoes-incorporacoes-e-extincoes",
+          "outlet": "TRE-GO",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-prd",
+      "kind": "party",
+      "payload": {
+        "partyId": "prd",
+        "abbreviation": "PRD",
+        "name": "Partido Renovação Democrática"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pros",
+      "kind": "party",
+      "payload": {
+        "partyId": "pros",
+        "abbreviation": "PROS",
+        "name": "Partido Republicano da Ordem Social"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Fevereiro/partido-republicano-da-ordem-social-pros-e-incorporado-ao-solidariedade",
+          "outlet": "TSE",
+          "date": "2023-02",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-solidariedade",
+      "kind": "party",
+      "payload": {
+        "partyId": "solidariedade",
+        "abbreviation": "SOLIDARIEDADE",
+        "name": "Solidariedade"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-psc",
+      "kind": "party",
+      "payload": {
+        "partyId": "psc",
+        "abbreviation": "PSC",
+        "name": "Partido Social Cristão"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Junho/tse-aprova-incorporacao-do-partido-social-cristao-pelo-podemos",
+          "outlet": "TSE",
+          "date": "2023-06",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-ptn",
+      "kind": "party",
+      "payload": {
+        "partyId": "ptn",
+        "abbreviation": "PTN",
+        "name": "Partido Trabalhista Nacional"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pode",
+      "kind": "party",
+      "payload": {
+        "partyId": "pode",
+        "abbreviation": "PODE",
+        "name": "Podemos"
+      },
+      "sources": [
+        {
+          "url": "https://oglobo.globo.com/politica/noticia/2025/06/13/psdb-e-podemos-desistem-de-fusao-apos-falta-de-acordo-pelo-comando-do-novo-partido.ghtml",
+          "outlet": "O Globo",
+          "date": "2025-06-13",
+          "kind": "press_report"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-phs",
+      "kind": "party",
+      "payload": {
+        "partyId": "phs",
+        "abbreviation": "PHS",
+        "name": "Partido Humanista da Solidariedade"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Setembro/plenario-aprova-incorporacao-do-phs-ao-podemos",
+          "outlet": "TSE",
+          "date": "2019-09",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-prp",
+      "kind": "party",
+      "payload": {
+        "partyId": "prp",
+        "abbreviation": "PRP",
+        "name": "Partido Republicano Progressista"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Marco/tse-aprova-incorporacao-do-prp-ao-patriota",
+          "outlet": "TSE",
+          "date": "2019-03-28",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-ppl",
+      "kind": "party",
+      "payload": {
+        "partyId": "ppl",
+        "abbreviation": "PPL",
+        "name": "Partido Pátria Livre"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2019/Maio/plenario-aprova-incorporacao-do-ppl-ao-pcdob",
+          "outlet": "TSE",
+          "date": "2019-05",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pcdob",
+      "kind": "party",
+      "payload": {
+        "partyId": "pcdob",
+        "abbreviation": "PCdoB",
+        "name": "Partido Comunista do Brasil"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-psb",
+      "kind": "party",
+      "payload": {
+        "partyId": "psb",
+        "abbreviation": "PSB",
+        "name": "Partido Socialista Brasileiro"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-prb",
+      "kind": "party",
+      "payload": {
+        "partyId": "prb",
+        "abbreviation": "PRB",
+        "name": "Partido Republicano Brasileiro"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-republicanos",
+      "kind": "party",
+      "payload": {
+        "partyId": "republicanos",
+        "abbreviation": "REPUBLICANOS",
+        "name": "Republicanos"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/republicanos",
+          "outlet": "TSE",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pps",
+      "kind": "party",
+      "payload": {
+        "partyId": "pps",
+        "abbreviation": "PPS",
+        "name": "Partido Popular Socialista"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-cidadania",
+      "kind": "party",
+      "payload": {
+        "partyId": "cidadania",
+        "abbreviation": "CIDADANIA",
+        "name": "Cidadania"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pmn",
+      "kind": "party",
+      "payload": {
+        "partyId": "pmn",
+        "abbreviation": "PMN",
+        "name": "Partido da Mobilização Nacional"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-mobiliza",
+      "kind": "party",
+      "payload": {
+        "partyId": "mobiliza",
+        "abbreviation": "MOBILIZA",
+        "name": "Mobilização Nacional"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/partido-da-mobilizacao-nacional",
+          "outlet": "TSE",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-ptob",
+      "kind": "party",
+      "payload": {
+        "partyId": "ptob",
+        "abbreviation": "PTdoB",
+        "name": "Partido Trabalhista do Brasil"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-avante",
+      "kind": "party",
+      "payload": {
+        "partyId": "avante",
+        "abbreviation": "AVANTE",
+        "name": "Avante"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2017/Setembro/tse-aprova-mudanca-do-nome-do-ptdob-para-201cavante201d",
+          "outlet": "TSE",
+          "date": "2017-09",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-prn",
+      "kind": "party",
+      "payload": {
+        "partyId": "prn",
+        "abbreviation": "PRN",
+        "name": "Partido da Reconstrução Nacional"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-ptc",
+      "kind": "party",
+      "payload": {
+        "partyId": "ptc",
+        "abbreviation": "PTC",
+        "name": "Partido Trabalhista Cristão"
+      },
+      "sources": [
+        {
+          "url": "https://www.congressonacional.leg.br/pt_BR/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/partido_trabalhista_cristao_ptc",
+          "outlet": "Congresso Nacional",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-agir",
+      "kind": "party",
+      "payload": {
+        "partyId": "agir",
+        "abbreviation": "AGIR",
+        "name": "Agir"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Marco/tse-aprova-alteracao-e-partido-trabalhista-cristao-passa-a-se-chamar-agir",
+          "outlet": "TSE",
+          "date": "2022-03-31",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-psdc",
+      "kind": "party",
+      "payload": {
+        "partyId": "psdc",
+        "abbreviation": "PSDC",
+        "name": "Partido Social Democrata Cristão"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-dc",
+      "kind": "party",
+      "payload": {
+        "partyId": "dc",
+        "abbreviation": "DC",
+        "name": "Democracia Cristã"
+      },
+      "sources": [
+        {
+          "url": "https://www.tre-go.jus.br/partidos/partidos-politicos/mudancas-de-nomes-fusoes-incorporacoes-e-extincoes",
+          "outlet": "TRE-GO",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-psol",
+      "kind": "party",
+      "payload": {
+        "partyId": "psol",
+        "abbreviation": "PSOL",
+        "name": "Partido Socialismo e Liberdade"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-rede",
+      "kind": "party",
+      "payload": {
+        "partyId": "rede",
+        "abbreviation": "REDE",
+        "name": "Rede Sustentabilidade"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-novo",
+      "kind": "party",
+      "payload": {
+        "partyId": "novo",
+        "abbreviation": "NOVO",
+        "name": "Partido Novo"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pv",
+      "kind": "party",
+      "payload": {
+        "partyId": "pv",
+        "abbreviation": "PV",
+        "name": "Partido Verde"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-psd",
+      "kind": "party",
+      "payload": {
+        "partyId": "psd",
+        "abbreviation": "PSD",
+        "name": "Partido Social Democrático"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pcb",
+      "kind": "party",
+      "payload": {
+        "partyId": "pcb",
+        "abbreviation": "PCB",
+        "name": "Partido Comunista Brasileiro"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pco",
+      "kind": "party",
+      "payload": {
+        "partyId": "pco",
+        "abbreviation": "PCO",
+        "name": "Partido da Causa Operária"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-prtb",
+      "kind": "party",
+      "payload": {
+        "partyId": "prtb",
+        "abbreviation": "PRTB",
+        "name": "Partido Renovador Trabalhista Brasileiro"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pstu",
+      "kind": "party",
+      "payload": {
+        "partyId": "pstu",
+        "abbreviation": "PSTU",
+        "name": "Partido Socialista dos Trabalhadores Unificado"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-up",
+      "kind": "party",
+      "payload": {
+        "partyId": "up",
+        "abbreviation": "UP",
+        "name": "Unidade Popular"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-pmb",
+      "kind": "party",
+      "payload": {
+        "partyId": "pmb",
+        "abbreviation": "PMB",
+        "name": "Partido da Mulher Brasileira"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-democrata",
+      "kind": "party",
+      "payload": {
+        "partyId": "democrata",
+        "abbreviation": "DEMOCRATA",
+        "name": "Democrata"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2025/Dezembro/partido-da-mulher-brasileira-pmb-passara-a-se-chamar-democrata",
+          "outlet": "TSE",
+          "date": "2025-12",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-missao",
+      "kind": "party",
+      "payload": {
+        "partyId": "missao",
+        "abbreviation": "MISSÃO",
+        "name": "Partido Missão"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-febrasil",
+      "kind": "party",
+      "payload": {
+        "partyId": "febrasil",
+        "abbreviation": "FE BRASIL",
+        "name": "Federação Brasil da Esperança"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-fedpsdbcid",
+      "kind": "party",
+      "payload": {
+        "partyId": "fedpsdbcid",
+        "abbreviation": "PSDB CIDADANIA",
+        "name": "Federação PSDB Cidadania"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-fedpsolrede",
+      "kind": "party",
+      "payload": {
+        "partyId": "fedpsolrede",
+        "abbreviation": "PSOL REDE",
+        "name": "Federação PSOL Rede"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-fedrs",
+      "kind": "party",
+      "payload": {
+        "partyId": "fedrs",
+        "abbreviation": "RENOVAÇÃO SOLIDÁRIA",
+        "name": "Federação Renovação Solidária"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-sigla-fedup",
+      "kind": "party",
+      "payload": {
+        "partyId": "fedup",
+        "abbreviation": "UNIÃO PROGRESSISTA",
+        "name": "Federação União Progressista"
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-analise-fefc",
+      "kind": "analysis",
+      "payload": {
+        "title": "O que pesa no Fundo Eleitoral?",
+        "text": "O art. 16-D da Lei das Eleições prevê: 2% igualmente entre as legendas registradas; 35% entre as legendas com ao menos um deputado federal, na proporção dos votos para a Câmara; 48% na proporção das bancadas na Câmara; e 15% na proporção das bancadas no Senado. O cálculo segue os critérios legais de representação, inclusive regras para fusões e incorporações. Cota divulgada não é o mesmo que repasse efetivo ou gasto de campanha."
+      },
+      "sources": [
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504compilado.htm",
+          "outlet": "Lei nº 9.504, art. 16-D",
+          "date": "1997-09-30",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096compilado.htm",
+          "outlet": "Lei nº 9.096, arts. 11-A, 29 e 41-A",
+          "date": "1995-09-19",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-analise-desempenho",
+      "kind": "analysis",
+      "payload": {
+        "title": "Por que juntar forças pode mudar o acesso ao Fundo Partidário?",
+        "text": "A EC 97/2017 exige patamares progressivos de votos válidos para a Câmara ou de deputados eleitos, distribuídos nacionalmente, para acesso ao Fundo Partidário e à propaganda gratuita. Em 2026, a transição exige 2,5% dos votos válidos nacionais para deputado federal, com pelo menos 1,5% em um terço das unidades federativas, ou 13 deputados federais em um terço delas. O art. 41-A prevê 5% do Fundo Partidário em parcelas iguais entre as legendas habilitadas e 95% por votos para a Câmara. Uma fusão ou incorporação pode somar votos; uma federação pode superar a cláusula em conjunto sem extinguir as siglas. Isso cria um incentivo, mas não prova o motivo de nenhuma decisão."
+      },
+      "sources": [
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc97.htm",
+          "outlet": "Emenda Constitucional nº 97",
+          "date": "2017-10-04",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096compilado.htm",
+          "outlet": "Lei nº 9.096, arts. 11-A, 29 e 41-A",
+          "date": "1995-09-19",
+          "kind": "official"
+        },
+        {
+          "url": "https://www2.camara.leg.br/legin/fed/lei/2021/lei-14208-28-setembro-2021-791788-publicacaooriginal-163501-pl.html",
+          "outlet": "Lei nº 14.208",
+          "date": "2021-09-28",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Novembro/tse-aprova-criacao-do-partido-renovacao-democratica-prd",
+          "outlet": "TSE",
+          "date": "2023-11-09",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-analise-limites",
+      "kind": "analysis",
+      "payload": {
+        "title": "A fusão aumentou a fatia?",
+        "text": "Compare tanto o valor nominal quanto a participação no montante de cada eleição. Um aumento em reais pode refletir o crescimento do orçamento geral. Mudanças de bancadas, votos, regras e tipo de eleição impedem atribuir a variação à fusão sem um contrafactual."
+      },
+      "sources": [
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504compilado.htm",
+          "outlet": "Lei nº 9.504, art. 16-D",
+          "date": "1997-09-30",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096compilado.htm",
+          "outlet": "Lei nº 9.096, arts. 11-A, 29 e 41-A",
+          "date": "1995-09-19",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Fevereiro/tse-aprova-registro-do-partido-uniao-brasil",
+          "outlet": "TSE",
+          "date": "2022-02-08",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-pt",
+      "kind": "site",
+      "payload": {
+        "partyId": "pt",
+        "title": "PT",
+        "text": "O site oferece estrutura partidária, diretório nacional, contato e estatuto. É útil para cargos internos e posições oficiais; não confirma filiação individual nem substitui a bancada oficial."
+      },
+      "sources": [
+        {
+          "url": "https://pt.org.br/estrutura-partidaria/",
+          "outlet": "PT",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://pt.org.br/diretorio-nacional/",
+          "outlet": "PT",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://pt.org.br/contato/",
+          "outlet": "PT",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://pt.org.br/wp-content/uploads/2016/03/estatuto-pt.pdf",
+          "outlet": "PT",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-pl",
+      "kind": "site",
+      "payload": {
+        "partyId": "pl",
+        "title": "PL",
+        "text": "O partido publica listas de deputados e senadores na seção de filiados, além de estatuto. As listas são pistas sobre mandatários, não um cadastro completo de filiados."
+      },
+      "sources": [
+        {
+          "url": "https://partidoliberal.org.br/categorias_filiados/deputados-federais/",
+          "outlet": "PL",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://partidoliberal.org.br/categorias_filiados/senadores/",
+          "outlet": "PL",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://partidoliberal.org.br/wp-content/uploads/2023/06/estatuto-do-pl-21-06-23.pdf",
+          "outlet": "PL",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-mdb",
+      "kind": "site",
+      "payload": {
+        "partyId": "mdb",
+        "title": "MDB",
+        "text": "O acesso direto à capa pediu verificação. Páginas indexadas indicam diretórios, estatuto e documento programático. A consulta não confirma a presença de perfis atualizados."
+      },
+      "sources": [
+        {
+          "url": "https://www.mdb.org.br/",
+          "outlet": "MDB",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://www.mdb.org.br/diretorios-mdb/",
+          "outlet": "MDB",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://www.mdb.org.br/documento-caminhos-para-o-brasil/",
+          "outlet": "MDB",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://www.mdb.org.br/wp-content/uploads/2024/03/Estatuto-MDB-versao-aprovada-Convencao-Nacional-05-10-2023.pdf",
+          "outlet": "MDB",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-uniao",
+      "kind": "site",
+      "payload": {
+        "partyId": "uniao",
+        "title": "União Brasil",
+        "text": "A seção institucional, o estatuto e o contato ajudam a verificar o que o partido publica sobre si. A área de integridade não substitui a prestação de contas eleitoral."
+      },
+      "sources": [
+        {
+          "url": "https://uniaobrasil.org.br/o-uniao-brasil/",
+          "outlet": "União Brasil",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://uniaobrasil.org.br/contato/",
+          "outlet": "União Brasil",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://uniaobrasil.org.br/compliance/",
+          "outlet": "União Brasil",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://uniaobrasil.org.br/wp-content/uploads/2024/08/estatuto_registrado_cartorio.pdf",
+          "outlet": "União Brasil",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-psd",
+      "kind": "site",
+      "payload": {
+        "partyId": "psd",
+        "title": "PSD",
+        "text": "Listas separadas de deputados federais e senadores são úteis como ponto de partida para nomes; confira a situação de cada mandato na respectiva Casa."
+      },
+      "sources": [
+        {
+          "url": "https://psd.org.br/deputados-federais",
+          "outlet": "PSD",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://psd.org.br/senadores",
+          "outlet": "PSD",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://psd.org.br/wp-content/uploads/2024/09/psd-estatuto-do-partido-de-06-12-2023-aprovado-em-06-08.2024-1.pdf",
+          "outlet": "PSD",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-pp",
+      "kind": "site",
+      "payload": {
+        "partyId": "pp",
+        "title": "Progressistas",
+        "text": "A seção de parlamentares, o programa, o estatuto e o contato estão acessíveis pelo menu. A relação de parlamentares não representa todos os filiados."
+      },
+      "sources": [
+        {
+          "url": "https://progressistas.org.br/parlamentares/",
+          "outlet": "Progressistas",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://progressistas.org.br/programa-partidario",
+          "outlet": "Progressistas",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://progressistas.org.br/estatuto",
+          "outlet": "Progressistas",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://progressistas.org.br/fale-conosco",
+          "outlet": "Progressistas",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-republicanos",
+      "kind": "site",
+      "payload": {
+        "partyId": "republicanos",
+        "title": "Republicanos",
+        "text": "O site direciona ao estatuto e a uma área de transparência; a simples presença da área não confirma a completude das contas publicadas."
+      },
+      "sources": [
+        {
+          "url": "https://republicanos10.org.br/estatuto",
+          "outlet": "Republicanos",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://republicanos10.org.br/transparencia",
+          "outlet": "Republicanos",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-psdb",
+      "kind": "site",
+      "payload": {
+        "partyId": "psdb",
+        "title": "PSDB",
+        "text": "O site tem estatuto e notícias sobre a atuação da bancada; notícias não equivalem a uma lista atual de mandatários."
+      },
+      "sources": [
+        {
+          "url": "https://www.psdb.org.br/conheca/estatuto/",
+          "outlet": "PSDB",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://www.psdb.org.br/acompanhe/bancada-do-psdb-vai-discutir-estrategias-para-a-proxima-legislatura/",
+          "outlet": "PSDB",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-psol",
+      "kind": "site",
+      "payload": {
+        "partyId": "psol",
+        "title": "PSOL",
+        "text": "Há relação de parlamentares federais, estatuto e programa. Use a lista como referência inicial e confirme o exercício de mandato na Casa legislativa."
+      },
+      "sources": [
+        {
+          "url": "https://psol50.org.br/parlamentares/",
+          "outlet": "PSOL",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://psol50.org.br/estatuto/",
+          "outlet": "PSOL",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://psol50.org.br/programa/",
+          "outlet": "PSOL",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-site-novo",
+      "kind": "site",
+      "payload": {
+        "partyId": "novo",
+        "title": "Novo",
+        "text": "Há página de eleitos, estatuto e anúncio de portal de transparência. A lista de eleitos é uma fonte partidária, não um cadastro de filiação ou exercício atual."
+      },
+      "sources": [
+        {
+          "url": "https://novo.org.br/eleitos/",
+          "outlet": "Novo",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://novo.org.br/wp-content/uploads/2025/02/estatuto-do-NOVO.pdf",
+          "outlet": "Novo",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        },
+        {
+          "url": "https://novo.org.br/noticias/novo-lanca-portal-da-transparencia/",
+          "outlet": "Novo",
+          "date": "2026-11-24",
+          "kind": "declaration"
+        }
+      ]
+    },
+    {
+      "id": "partidos-veredito",
+      "kind": "analysis",
+      "payload": {
+        "section": "sites",
+        "title": "Quando usar os sites partidários?",
+        "text": "São fontes primárias para o que a legenda declara: programa, decisões internas, contatos e apresentação de quadros. Perfis são autodescrições, a cobertura é desigual e ausência na página não comprova ausência de filiação. Para estatuto registrado, use o cadastro do TSE; para composição e vigência de diretórios, o SGIP; para mandatos e exercício, a Câmara e o Senado. Para finanças, priorize o TSE."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse/informacoes-partidarias/modulo-consulta-sgip3",
+          "outlet": "TSE · SGIP",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.camara.leg.br/deputados/bancada-atual",
+          "outlet": "Câmara · Bancada atual",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www25.senado.leg.br/web/senadores/em-exercicio",
+          "outlet": "Senado · Em exercício",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fefc-2018",
+      "kind": "funding",
+      "payload": {
+        "fund": "fefc",
+        "year": 2018,
+        "totalCents": 171620943100,
+        "allocations": [],
+        "note": "Este recorte contém apenas o montante oficial, não as cotas por legenda."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/eleicoes/eleicoes-2018/prestacao-de-contas-1/fundo-especial-de-financiamento-de-campanha-fefc",
+          "outlet": "TSE · FEFC 2018",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fefc-2020",
+      "kind": "funding",
+      "payload": {
+        "fund": "fefc",
+        "year": 2020,
+        "totalCents": 203495482396,
+        "allocations": [
+          { "partyId": "avante", "cents": 2812126764 },
+          { "partyId": "dc", "cents": 402517190 },
+          { "partyId": "dem", "cents": 12081075908 },
+          { "partyId": "mdb", "cents": 14825339314 },
+          { "partyId": "novo", "cents": 3656418326 },
+          { "partyId": "patriota", "cents": 3513935552 },
+          { "partyId": "pcdob", "cents": 3094186030 },
+          { "partyId": "pcb", "cents": 123330595 },
+          { "partyId": "pco", "cents": 123330595 },
+          { "partyId": "pdt", "cents": 10331454411 },
+          { "partyId": "pmb", "cents": 123330595 },
+          { "partyId": "pmn", "cents": 587217376 },
+          { "partyId": "pode", "cents": 7796813080 },
+          { "partyId": "pp", "cents": 14066921502 },
+          { "partyId": "cidadania", "cents": 3582472442 },
+          { "partyId": "pl", "cents": 11762167045 },
+          { "partyId": "republicanos", "cents": 10063256134 },
+          { "partyId": "pros", "cents": 3718784696 },
+          { "partyId": "prtb", "cents": 123330595 },
+          { "partyId": "psb", "cents": 10954517816 },
+          { "partyId": "psc", "cents": 3323978622 },
+          { "partyId": "psd", "cents": 13887222352 },
+          { "partyId": "psdb", "cents": 13045206158 },
+          { "partyId": "psl", "cents": 19944241981 },
+          { "partyId": "psol", "cents": 4063451650 },
+          { "partyId": "pstu", "cents": 123330595 },
+          { "partyId": "pt", "cents": 20129751662 },
+          { "partyId": "ptb", "cents": 4665877707 },
+          { "partyId": "ptc", "cents": 949859658 },
+          { "partyId": "pv", "cents": 2049892201 },
+          { "partyId": "rede", "cents": 2843021466 },
+          { "partyId": "solidariedade", "cents": 4603791783 },
+          { "partyId": "up", "cents": 123330595 }
+        ],
+        "note": "Cotas do cálculo oficial do TSE; não representam gasto nem comprovam que o valor foi sacado."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/eleicoes/eleicoes-2020/prestacao-de-contas/arquivos/tse-fundo-especial-de-financiamento-de-campanha-fefc",
+          "outlet": "TSE · Planilha de cálculo",
+          "date": "2020-06-17",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fefc-2022",
+      "kind": "funding",
+      "payload": {
+        "fund": "fefc",
+        "year": 2022,
+        "totalCents": 496151977700,
+        "allocations": [
+          { "partyId": "agir", "cents": 3242793594 },
+          { "partyId": "avante", "cents": 6868250629 },
+          { "partyId": "cidadania", "cents": 8722563548 },
+          { "partyId": "dc", "cents": 1455538268 },
+          { "partyId": "mdb", "cents": 36034799812 },
+          { "partyId": "novo", "cents": 8927951078 },
+          { "partyId": "patriota", "cents": 9496635243 },
+          { "partyId": "pcb", "cents": 310094986 },
+          { "partyId": "pcdob", "cents": 8020008263 },
+          { "partyId": "pco", "cents": 310094986 },
+          { "partyId": "pdt", "cents": 25157981035 },
+          { "partyId": "pl", "cents": 26813771572 },
+          { "partyId": "pmb", "cents": 310094986 },
+          { "partyId": "pmn", "cents": 2834992542 },
+          { "partyId": "pode", "cents": 21266557265 },
+          { "partyId": "pp", "cents": 33314814182 },
+          { "partyId": "pros", "cents": 8603059255 },
+          { "partyId": "prtb", "cents": 310094986 },
+          { "partyId": "psb", "cents": 26701810245 },
+          { "partyId": "psc", "cents": 7558945711 },
+          { "partyId": "psd", "cents": 34259782947 },
+          { "partyId": "psdb", "cents": 31729188991 },
+          { "partyId": "psol", "cents": 9920406163 },
+          { "partyId": "pstu", "cents": 310094986 },
+          { "partyId": "pt", "cents": 49960029743 },
+          { "partyId": "ptb", "cents": 11352866508 },
+          { "partyId": "pv", "cents": 5009461862 },
+          { "partyId": "rede", "cents": 6883313420 },
+          { "partyId": "republicanos", "cents": 23598149109 },
+          { "partyId": "solidariedade", "cents": 10760714674 },
+          { "partyId": "uniao", "cents": 75797022127 },
+          { "partyId": "up", "cents": 310094986 }
+        ],
+        "note": "Cotas da planilha publicada na página do FEFC de 2022; os números podem divergir de notícias sobre cálculos anteriores."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/eleicoes/eleicoes-2022/prestacao-de-contas/arquivos/calculo-de-distribuicao-do-fefc",
+          "outlet": "TSE · Planilha de cálculo",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fefc-2024",
+      "kind": "funding",
+      "payload": {
+        "fund": "fefc",
+        "year": 2024,
+        "totalCents": 496151977700,
+        "allocations": [
+          { "partyId": "agir", "cents": 342173778 },
+          { "partyId": "avante", "cents": 7258529878 },
+          { "partyId": "cidadania", "cents": 6025786786 },
+          { "partyId": "dc", "cents": 342173778 },
+          { "partyId": "mdb", "cents": 40460326954 },
+          { "partyId": "mobiliza", "cents": 342173778 },
+          { "partyId": "novo", "cents": 3713369061 },
+          { "partyId": "pcdob", "cents": 5597294354 },
+          { "partyId": "pcb", "cents": 342173778 },
+          { "partyId": "pco", "cents": 342173778 },
+          { "partyId": "pdt", "cents": 17396250838 },
+          { "partyId": "pl", "cents": 88683948785 },
+          { "partyId": "pmb", "cents": 342173778 },
+          { "partyId": "pode", "cents": 23666090006 },
+          { "partyId": "pp", "cents": 41729169627 },
+          { "partyId": "prd", "cents": 7187709790 },
+          { "partyId": "prtb", "cents": 342173778 },
+          { "partyId": "psb", "cents": 14763768085 },
+          { "partyId": "psd", "cents": 42097157008 },
+          { "partyId": "psdb", "cents": 14795033267 },
+          { "partyId": "psol", "cents": 12689382969 },
+          { "partyId": "pstu", "cents": 342173778 },
+          { "partyId": "pt", "cents": 61985934870 },
+          { "partyId": "pv", "cents": 4528053899 },
+          { "partyId": "rede", "cents": 3590048505 },
+          { "partyId": "republicanos", "cents": 34390152134 },
+          { "partyId": "solidariedade", "cents": 8858672991 },
+          { "partyId": "uniao", "cents": 53655733893 },
+          { "partyId": "up", "cents": 342173778 }
+        ],
+        "note": "Cotas do cálculo oficial do TSE; não representam gasto nem comprovam que o valor foi sacado."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/eleicoes/eleicoes-2024-content/arquivos/calculo-fundo-especial-financiamento-de-campanha-2024",
+          "outlet": "TSE · Planilha de cálculo",
+          "date": "2024-06-14",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-fefc-2026",
+      "kind": "funding",
+      "payload": {
+        "fund": "fefc",
+        "year": 2026,
+        "totalCents": 496151977700,
+        "allocations": [
+          { "partyId": "agir", "cents": 330767985 },
+          { "partyId": "avante", "cents": 7251677718 },
+          { "partyId": "cidadania", "cents": 6017415711 },
+          { "partyId": "dc", "cents": 330767985 },
+          { "partyId": "democrata", "cents": 330767985 },
+          { "partyId": "mdb", "cents": 40000024000 },
+          { "partyId": "missao", "cents": 330767985 },
+          { "partyId": "mobiliza", "cents": 330767985 },
+          { "partyId": "novo", "cents": 3704420326 },
+          { "partyId": "pcdob", "cents": 6053191424 },
+          { "partyId": "pcb", "cents": 330767985 },
+          { "partyId": "pco", "cents": 330767985 },
+          { "partyId": "pdt", "cents": 16928564390 },
+          { "partyId": "pl", "cents": 88165747740 },
+          { "partyId": "pode", "cents": 24596976370 },
+          { "partyId": "pp", "cents": 41706773840 },
+          { "partyId": "prd", "cents": 7181922737 },
+          { "partyId": "prtb", "cents": 330767985 },
+          { "partyId": "psb", "cents": 15225295610 },
+          { "partyId": "psd", "cents": 42100840490 },
+          { "partyId": "psdb", "cents": 14789517240 },
+          { "partyId": "psol", "cents": 13150628440 },
+          { "partyId": "pstu", "cents": 330767985 },
+          { "partyId": "pt", "cents": 61536798020 },
+          { "partyId": "pv", "cents": 4518387326 },
+          { "partyId": "rede", "cents": 3580382103 },
+          { "partyId": "republicanos", "cents": 34858781580 },
+          { "partyId": "solidariedade", "cents": 8852666983 },
+          { "partyId": "uniao", "cents": 52624285810 },
+          { "partyId": "up", "cents": 330767985 }
+        ],
+        "note": "Cotas do cálculo oficial do TSE; não representam gasto nem comprovam que o valor foi sacado."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/eleicoes/eleicoes-2026-content/prestacao-de-contas/arquivos/tse-calculo-de-distribuicao-do-fefc-2026",
+          "outlet": "TSE · Planilha de cálculo",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-partidario-2023",
+      "kind": "funding",
+      "payload": {
+        "fund": "partidario",
+        "year": 2023,
+        "totalCents": 107836446274,
+        "budgetCents": 99304927592,
+        "finesCents": 8531518682,
+        "allocations": [],
+        "partial": false,
+        "note": "Total das duas planilhas de distribuição. Este recorte não desagrega as linhas de 2023 por legenda."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1",
+          "outlet": "TSE · Fundo Partidário",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1/arquivos/2023/duodecimo-2023-republicada-em-2024",
+          "outlet": "TSE · Dotação distribuída",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1/arquivos/2023/multa-2023-republicada-em-2024",
+          "outlet": "TSE · Multas distribuídas",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-partidario-2024",
+      "kind": "funding",
+      "payload": {
+        "fund": "partidario",
+        "year": 2024,
+        "totalCents": 119775160849,
+        "budgetCents": 109982037649,
+        "finesCents": 9793123200,
+        "allocations": [
+          { "partyId": "pl", "cents": 18608428754 },
+          { "partyId": "pt", "cents": 14629022928 },
+          { "partyId": "uniao", "cents": 11662226101 },
+          { "partyId": "pp", "cents": 9822213974 },
+          { "partyId": "republicanos", "cents": 8950209121 },
+          { "partyId": "psd", "cents": 8679876043 },
+          { "partyId": "mdb", "cents": 8652735435 },
+          { "partyId": "pode", "cents": 5569820246 },
+          { "partyId": "psb", "cents": 5126278757 },
+          { "partyId": "psol", "cents": 4920365709 },
+          { "partyId": "pdt", "cents": 4691593784 },
+          { "partyId": "prd", "cents": 3354808241 },
+          { "partyId": "solidariedade", "cents": 3186507016 },
+          { "partyId": "psdb", "cents": 2909096326 },
+          { "partyId": "avante", "cents": 2840472950 },
+          { "partyId": "pcdob", "cents": 1931009552 },
+          { "partyId": "cidadania", "cents": 1691141690 },
+          { "partyId": "rede", "cents": 1280648588 },
+          { "partyId": "pv", "cents": 1268705634 }
+        ],
+        "partial": false,
+        "note": "Soma dos valores distribuídos de dotação e multas nas planilhas do TSE, não do orçamento bruto."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1",
+          "outlet": "TSE · Fundo Partidário",
+          "date": "2025-01-30",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1/arquivos/duodecimo-dezembro-2024-1",
+          "outlet": "TSE · Dotação distribuída",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1/arquivos/multa-2024-anual-atualizado-30-01-2025",
+          "outlet": "TSE · Multas distribuídas",
+          "date": "2025-01-30",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-partidario-2025",
+      "kind": "funding",
+      "payload": {
+        "fund": "partidario",
+        "year": 2025,
+        "totalCents": 122929054069,
+        "budgetCents": 112607149613,
+        "finesCents": 10321904456,
+        "allocations": [
+          { "partyId": "pl", "cents": 20874903517 },
+          { "partyId": "pt", "cents": 15293115418 },
+          { "partyId": "uniao", "cents": 11696514090 },
+          { "partyId": "republicanos", "cents": 9524359853 },
+          { "partyId": "psd", "cents": 9139584538 },
+          { "partyId": "mdb", "cents": 8933686857 },
+          { "partyId": "pp", "cents": 7954338139 },
+          { "partyId": "pode", "cents": 5891175216 },
+          { "partyId": "psb", "cents": 5379123070 },
+          { "partyId": "psol", "cents": 5151343341 },
+          { "partyId": "pdt", "cents": 4454198592 },
+          { "partyId": "prd", "cents": 3416664209 },
+          { "partyId": "solidariedade", "cents": 3069466826 },
+          { "partyId": "psdb", "cents": 2953846044 },
+          { "partyId": "avante", "cents": 2945916534 },
+          { "partyId": "pcdob", "cents": 1984024735 },
+          { "partyId": "cidadania", "cents": 1660743170 },
+          { "partyId": "rede", "cents": 1317835734 },
+          { "partyId": "pv", "cents": 1288214186 }
+        ],
+        "partial": false,
+        "note": "Soma dos valores distribuídos de dotação e multas nas planilhas do TSE, não do orçamento bruto."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1",
+          "outlet": "TSE · Fundo Partidário",
+          "date": "2026-02-11",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1/arquivos/2025/duodecimo-dezembro-2025",
+          "outlet": "TSE · Dotação distribuída",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1/arquivos/multa-2025-atualizado",
+          "outlet": "TSE · Multas distribuídas",
+          "date": "2026-02-11",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-partidario-2026",
+      "kind": "funding",
+      "payload": {
+        "fund": "partidario",
+        "year": 2026,
+        "totalCents": 114308796728,
+        "budgetCents": 105477712329,
+        "finesCents": 8831084399,
+        "allocations": [
+          { "partyId": "pl", "cents": 18623971855 },
+          { "partyId": "pt", "cents": 13996916608 },
+          { "partyId": "uniao", "cents": 11050134883 },
+          { "partyId": "republicanos", "cents": 8678347736 },
+          { "partyId": "pp", "cents": 8644932975 },
+          { "partyId": "mdb", "cents": 8312371397 },
+          { "partyId": "psd", "cents": 8292786358 },
+          { "partyId": "pode", "cents": 5676421903 },
+          { "partyId": "psb", "cents": 4726728819 },
+          { "partyId": "psol", "cents": 4694691758 },
+          { "partyId": "pdt", "cents": 4349319166 },
+          { "partyId": "prd", "cents": 3240332164 },
+          { "partyId": "solidariedade", "cents": 3089530641 },
+          { "partyId": "avante", "cents": 2658889330 },
+          { "partyId": "psdb", "cents": 2611891379 },
+          { "partyId": "pcdob", "cents": 1790492534 },
+          { "partyId": "cidadania", "cents": 1504657577 },
+          { "partyId": "rede", "cents": 1208980929 },
+          { "partyId": "pv", "cents": 1157398718 }
+        ],
+        "partial": true,
+        "note": "Parcial: duodécimos de janeiro a outubro e multas de janeiro a setembro, conforme as planilhas disponíveis. Não equivale a um ano completo."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1",
+          "outlet": "TSE · Fundo Partidário",
+          "date": "2026-10-22",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1/arquivos/duodecimo-2026-agosto",
+          "outlet": "TSE · Dotação distribuída",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/contas-partidarias/fundo-partidario-1/arquivos/multa-2026-agosto",
+          "outlet": "TSE · Multas distribuídas",
+          "date": "2026-10-22",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-comparacao-uniao",
+      "kind": "comparison",
+      "payload": {
+        "title": "DEM + PSL → União Brasil",
+        "fund": "fefc",
+        "before": {
+          "year": 2020,
+          "partyIds": [
+            "dem",
+            "psl"
+          ]
+        },
+        "after": {
+          "year": 2022,
+          "partyIds": [
+            "uniao"
+          ]
+        },
+        "text": "Comparação descritiva: 2020 foi eleição municipal e 2022 foi eleição geral. As cotas seguem os cálculos publicados pelo TSE em cada pleito. Não é uma estimativa do efeito da fusão."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/eleicoes/eleicoes-2020/prestacao-de-contas/arquivos/tse-fundo-especial-de-financiamento-de-campanha-fefc",
+          "outlet": "TSE · Cálculo 2020",
+          "date": "2020-06-17",
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/eleicoes/eleicoes-2022/prestacao-de-contas/arquivos/calculo-de-distribuicao-do-fefc",
+          "outlet": "TSE · Cálculo 2022",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Fevereiro/tse-aprova-registro-do-partido-uniao-brasil",
+          "outlet": "TSE",
+          "date": "2022-02-08",
+          "kind": "official"
+        }
+      ]
+    },
+    {
+      "id": "partidos-cobertura",
+      "kind": "analysis",
+      "payload": {
+        "section": "coverage",
+        "title": "Limites da cobertura",
+        "text": "A árvore é um recorte histórico, não um cadastro exaustivo. Quando só o ano ou mês foi confirmado, mostramos apenas essa precisão. Registro, fundação, mudança de nome, fusão, incorporação e federação são eventos distintos. Não inferimos fundadores ou motivos não documentados, e mostramos as motivações declaradas separadas da análise."
+      },
+      "sources": [
+        {
+          "url": "https://www.tse.jus.br/partidos/partidos-registrados-no-tse",
+          "outlet": "TSE · Registro partidário",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tse.jus.br/partidos/federacoes-registradas-no-tse",
+          "outlet": "TSE · Registro de federações",
+          "date": null,
+          "kind": "official"
+        },
+        {
+          "url": "https://www.tre-go.jus.br/partidos/partidos-politicos/mudancas-de-nomes-fusoes-incorporacoes-e-extincoes",
+          "outlet": "TRE-GO",
+          "date": null,
+          "kind": "official"
+        }
+      ]
+    }
+  ]
+}

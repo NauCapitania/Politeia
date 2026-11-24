@@ -186,6 +186,9 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
     capabilities = read("institutions/ins_br_senado/capabilities")
     assert capabilities[0]["issues"] == [{"code": "last_run_failed"}, {"code": "missing_affiliation", "count": 2}]
     assert read("dossies/stf-caso-master")["dossier"] == "stf-caso-master"
+    parties = read("dossies/partidos")
+    assert parties == api.get("/v1/dossies/partidos").json()
+    assert {"party", "event", "funding", "comparison", "analysis", "site"} <= parties["items"].keys()
 
 
 def test_filters_pagination_graph_and_errors(api):
