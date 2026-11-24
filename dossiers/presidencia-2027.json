@@ -1,0 +1,1627 @@
+{
+ "dossier": "presidencia-2027",
+ "as_of": "2026-11-23",
+ "title": "Presidência do Senado 2027",
+ "items": [
+  {
+   "id": "pres2027_contest",
+   "kind": "contest",
+   "payload": {
+    "title": "Eleição para a Presidência do Senado (biênio 2027–2028)",
+    "date": "2027-02-01",
+    "voters": 81,
+    "majority": 41,
+    "note": "Disputa ainda não oficializada; candidaturas e contagens abaixo são de imprensa e declarações."
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/eleicao-senado-alcolumbre-marinho-tereza-peso-governo-tabu/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-11",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/blogs/bela-megale/post/2026/11/o-placar-da-disputa-pelo-senado-entre-alcolumbre-e-marinho-que-circula-entre-ministros-do-stf.ghtml",
+     "outlet": "O Globo (Bela Megale)",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2027_cand_alcolumbre",
+   "kind": "candidate",
+   "payload": {
+    "name": "Davi Alcolumbre",
+    "party": "UNIÃO",
+    "uf": "AP",
+    "status": "pré-candidato à reeleição (imprensa)",
+    "impeachment_stance": "sem_declaracao",
+    "impeachment_note": "Nenhuma declaração pública sobre dar andamento a pedidos de impeachment de ministros do STF nas fontes consultadas."
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/eleicao-senado-alcolumbre-marinho-tereza-peso-governo-tabu/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-11",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://noticias.r7.com/prisma/r7-planalto/os-votos-na-conta-de-alcolumbre-para-a-presidencia-do-senado-18112026/",
+     "outlet": "R7",
+     "date": "2026-11-18",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2027_cand_marinho",
+   "kind": "candidate",
+   "payload": {
+    "name": "Rogério Marinho",
+    "party": "PL",
+    "uf": "RN",
+    "status": "pré-candidato da oposição (imprensa)",
+    "impeachment_stance": "favoravel_andamento",
+    "impeachment_note": "Segundo O Globo, afirmou que daria andamento ao pedido de impeachment contra Alexandre de Moraes."
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/blogs/bela-megale/post/2026/11/o-placar-da-disputa-pelo-senado-entre-alcolumbre-e-marinho-que-circula-entre-ministros-do-stf.ghtml",
+     "outlet": "O Globo (Bela Megale)",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/eleicao-senado-alcolumbre-marinho-tereza-peso-governo-tabu/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-11",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2027_cand_tereza",
+   "kind": "candidate",
+   "payload": {
+    "name": "Tereza Cristina",
+    "party": "PP",
+    "uf": "MS",
+    "status": "citada como alternativa; possível candidatura única da oposição com Marinho (imprensa)",
+    "impeachment_stance": "sem_declaracao",
+    "impeachment_note": "Nenhuma declaração pública sobre o tema nas fontes consultadas."
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/eleicao-senado-alcolumbre-marinho-tereza-peso-governo-tabu/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-11",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2027_composition_agencia",
+   "kind": "party_composition",
+   "payload": {
+    "label": "Composição projetada para 2027 (Agência Senado)",
+    "parties": {
+     "PL": 29,
+     "PT": 10,
+     "MDB": 8,
+     "PP": 6,
+     "UNIÃO": 5,
+     "REPUBLICANOS": 5,
+     "PSD": 4,
+     "PSB": 4,
+     "NOVO": 3,
+     "PSDB": 2,
+     "PODEMOS": 2,
+     "REDE": 1,
+     "PDT": 1,
+     "S/PARTIDO": 1
+    },
+    "note": "Inclui a 2ª fase da eleição; pode mudar por trocas de partido, suplências e decisões judiciais."
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "pres2027_composition_g1",
+   "kind": "party_composition",
+   "payload": {
+    "label": "Composição projetada (g1, antes do 2º turno)",
+    "parties": {
+     "PL": 28
+    },
+    "note": "Fonte diverge da Agência Senado na bancada do PL (28 x 29)."
+   },
+   "sources": [
+    {
+     "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/10/08/composicao-senado-2027.ghtml",
+     "outlet": "g1",
+     "date": "2026-10-08",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2027_scenarios",
+   "kind": "scenarios",
+   "payload": {
+    "note": "Intervalos derivados de contagens divulgadas por aliados e pela imprensa; não são pesquisa nem previsão estatística.",
+    "scenarios": [
+     {
+      "name": "Alcolumbre x oposição unificada",
+      "candidates": [
+       {
+        "name": "Davi Alcolumbre",
+        "low": 26,
+        "high": 55,
+        "basis": "26 = núcleo fiel citado pela CNN (11/11); 55 = conta de aliados divulgada pelo R7 (18/11)."
+       },
+       {
+        "name": "Oposição unificada (Marinho ou Tereza)",
+        "low": 26,
+        "high": 50,
+        "basis": "26 = votos do PL que Marinho diz ter (O Globo, 23/11); 50 = PL + Novo (32, CNN) + todo o bloco de Tereza (até 18, CNN)."
+       }
+      ]
+     },
+     {
+      "name": "Oposição dividida",
+      "candidates": [
+       {
+        "name": "Davi Alcolumbre",
+        "low": 26,
+        "high": 55,
+        "basis": "Mesmas fontes."
+       },
+       {
+        "name": "Rogério Marinho",
+        "low": 26,
+        "high": 32,
+        "basis": "Votos do PL declarados (26) até PL + Novo (32)."
+       },
+       {
+        "name": "Tereza Cristina",
+        "low": 0,
+        "high": 18,
+        "basis": "Bloco atribuído a Tereza pela CNN (12 a 18)."
+       }
+      ]
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/eleicao-senado-alcolumbre-marinho-tereza-peso-governo-tabu/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-11",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/blogs/bela-megale/post/2026/11/o-placar-da-disputa-pelo-senado-entre-alcolumbre-e-marinho-que-circula-entre-ministros-do-stf.ghtml",
+     "outlet": "O Globo (Bela Megale)",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://noticias.r7.com/prisma/r7-planalto/os-votos-na-conta-de-alcolumbre-para-a-presidencia-do-senado-18112026/",
+     "outlet": "R7",
+     "date": "2026-11-18",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_AC_marcio_bittar",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Marcio Bittar",
+    "party": "PL",
+    "uf": "AC",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_AC_mara_rocha",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Mara Rocha",
+    "party": "REPUBLICANOS",
+    "uf": "AC",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_AL_arthur_lira",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Arthur Lira",
+    "party": "PP",
+    "uf": "AL",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_AL_marina_jhc",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Marina JHC",
+    "party": "PSDB",
+    "uf": "AL",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_AP_rayssa_furlan",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Rayssa Furlan",
+    "party": "PODEMOS",
+    "uf": "AP",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_AP_lucas_barreto",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Lucas Barreto",
+    "party": "PSD",
+    "uf": "AP",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_AM_eduardo_braga",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Eduardo Braga",
+    "party": "MDB",
+    "uf": "AM",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_AM_plínio_valério",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Plínio Valério",
+    "party": "PSDB",
+    "uf": "AM",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_BA_rui_costa",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Rui Costa",
+    "party": "PT",
+    "uf": "BA",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_BA_jaques_wagner",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Jaques Wagner",
+    "party": "PT",
+    "uf": "BA",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_CE_cid_gomes",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Cid Gomes",
+    "party": "PSB",
+    "uf": "CE",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_CE_luizianne_lins",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Luizianne Lins",
+    "party": "REDE",
+    "uf": "CE",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_DF_michelle_bolsonaro",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Michelle Bolsonaro",
+    "party": "PL",
+    "uf": "DF",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_DF_bia_kicis",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Bia Kicis",
+    "party": "PL",
+    "uf": "DF",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_ES_renato_casagrande",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Renato Casagrande",
+    "party": "PSB",
+    "uf": "ES",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_ES_evair_de_melo",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Evair de Melo",
+    "party": "REPUBLICANOS",
+    "uf": "ES",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_GO_gustavo_gayer",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Gustavo Gayer",
+    "party": "PL",
+    "uf": "GO",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_GO_gracinha_caiado",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Gracinha Caiado",
+    "party": "UNIÃO",
+    "uf": "GO",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_MA_andré_fufuca",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "André Fufuca",
+    "party": "PP",
+    "uf": "MA",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_MA_lahesio_bonfim",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Lahesio Bonfim",
+    "party": "NOVO",
+    "uf": "MA",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_MT_mauro_mendes",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Mauro Mendes",
+    "party": "UNIÃO",
+    "uf": "MT",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_MT_zé_medeiros",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Zé Medeiros",
+    "party": "PL",
+    "uf": "MT",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_MS_reinaldo_azambuja",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Reinaldo Azambuja",
+    "party": "PL",
+    "uf": "MS",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_MS_capitão_contar",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Capitão Contar",
+    "party": "PL",
+    "uf": "MS",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_MG_domingos_sávio",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Domingos Sávio",
+    "party": "PL",
+    "uf": "MG",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_MG_marília_campos",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Marília Campos",
+    "party": "PT",
+    "uf": "MG",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PA_helder_barbalho",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Helder Barbalho",
+    "party": "MDB",
+    "uf": "PA",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PA_chicão",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Chicão",
+    "party": "UNIÃO",
+    "uf": "PA",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PB_joão_azevêdo",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "João Azevêdo",
+    "party": "PSB",
+    "uf": "PB",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PB_veneziano_vital_do_rêgo",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Veneziano Vital do Rêgo",
+    "party": "MDB",
+    "uf": "PB",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PR_filipe_barros",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Filipe Barros",
+    "party": "PL",
+    "uf": "PR",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PR_deltan_dallagnol",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Deltan Dallagnol",
+    "party": "NOVO",
+    "uf": "PR",
+    "term": "2027–2035",
+    "note": "Situação sub judice segundo a imprensa."
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PE_humberto_costa",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Humberto Costa",
+    "party": "PT",
+    "uf": "PE",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PE_marília_arraes",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Marília Arraes",
+    "party": "PDT",
+    "uf": "PE",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PI_marcelo_castro",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Marcelo Castro",
+    "party": "MDB",
+    "uf": "PI",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_PI_júlio_césar",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Júlio César",
+    "party": "PSD",
+    "uf": "PI",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RJ_carlos_portinho",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Carlos Portinho",
+    "party": "PL",
+    "uf": "RJ",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RJ_carlos_jordy",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Carlos Jordy",
+    "party": "PL",
+    "uf": "RJ",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RN_styvenson_valentim",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Styvenson Valentim",
+    "party": "PODEMOS",
+    "uf": "RN",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RN_samanda_de_lula",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Samanda de Lula",
+    "party": "PT",
+    "uf": "RN",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RS_ubiratan_sanderson",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Ubiratan Sanderson",
+    "party": "PL",
+    "uf": "RS",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RS_marcel_van_hattem",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Marcel Van Hattem",
+    "party": "NOVO",
+    "uf": "RS",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RO_fernando_máximo",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Fernando Máximo",
+    "party": "PL",
+    "uf": "RO",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RO_bruno_scheid",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Bruno Scheid",
+    "party": "PL",
+    "uf": "RO",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RR_nicoletti",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Nicoletti",
+    "party": "PL",
+    "uf": "RR",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_RR_teresa_surita",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Teresa Surita",
+    "party": "MDB",
+    "uf": "RR",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_SC_carol_de_toni",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Carol de Toni",
+    "party": "PL",
+    "uf": "SC",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_SC_carlos_bolsonaro",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Carlos Bolsonaro",
+    "party": "PL",
+    "uf": "SC",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_SP_guilherme_derrite",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Guilherme Derrite",
+    "party": "PP",
+    "uf": "SP",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_SP_andré_do_prado",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "André do Prado",
+    "party": "PL",
+    "uf": "SP",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_SE_rogério_carvalho",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Rogério Carvalho",
+    "party": "PT",
+    "uf": "SE",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_SE_alessandro_vieira",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Alessandro Vieira",
+    "party": "MDB",
+    "uf": "SE",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_TO_eduardo_gomes",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Eduardo Gomes",
+    "party": "PL",
+    "uf": "TO",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "elected2026_TO_alexandre_guimarães",
+   "kind": "elected_2026",
+   "payload": {
+    "name": "Alexandre Guimarães",
+    "party": "MDB",
+    "uf": "TO",
+    "term": "2027–2035",
+    "note": null
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2026/10/25/fim-da-eleicao-define-composicao-do-senado-em-2027-com-13-partidos",
+     "outlet": "Agência Senado",
+     "date": "2026-10-25",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/leia-a-lista-completa-dos-81-senadores-eleitos-para-2027/",
+     "outlet": "Poder360",
+     "date": "2026-10-05",
+     "kind": "press_report"
+    }
+   ]
+  }
+ ],
+ "claims": [
+  {
+   "id": "cl2027_marinho_impeachment",
+   "topic": "impeachment_stf",
+   "subject_label": "Rogério Marinho",
+   "position": "favoravel_andamento",
+   "statement": "Disse que, se eleito, daria andamento ao pedido de impeachment contra Alexandre de Moraes.",
+   "claim_type": "press_report",
+   "confidence": "medium",
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/blogs/bela-megale/post/2026/11/o-placar-da-disputa-pelo-senado-entre-alcolumbre-e-marinho-que-circula-entre-ministros-do-stf.ghtml",
+     "outlet": "O Globo (Bela Megale)",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "cl2027_marinho_pl26",
+   "topic": "presidencia_2027_apoio",
+   "subject_label": "Rogério Marinho",
+   "position": "Rogério Marinho",
+   "statement": "Afirma contar com 26 dos 28 votos do PL.",
+   "claim_type": "declaration",
+   "confidence": "medium",
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/blogs/bela-megale/post/2026/11/o-placar-da-disputa-pelo-senado-entre-alcolumbre-e-marinho-que-circula-entre-ministros-do-stf.ghtml",
+     "outlet": "O Globo (Bela Megale)",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "cl2027_davi_55",
+   "topic": "presidencia_2027_apoio",
+   "subject_label": "Davi Alcolumbre",
+   "position": "Davi Alcolumbre",
+   "statement": "Aliados contabilizam cerca de 55 votos.",
+   "claim_type": "press_report",
+   "confidence": "low",
+   "sources": [
+    {
+     "url": "https://noticias.r7.com/prisma/r7-planalto/os-votos-na-conta-de-alcolumbre-para-a-presidencia-do-senado-18112026/",
+     "outlet": "R7",
+     "date": "2026-11-18",
+     "kind": "press_report"
+    }
+   ]
+  }
+ ]
+}

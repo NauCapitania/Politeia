@@ -1,4 +1,4 @@
-"""politeia CLI: `python -m engine.cli bootstrap | sync [--institution ID] [--scope members]`."""
+"""politeia CLI: `python -m engine.cli bootstrap | sync [--institution ID] [--scope members] | dossiers`."""
 
 import argparse
 import json
@@ -8,6 +8,7 @@ from sqlalchemy import select
 
 from engine.db.models import SourceSystem
 from engine.db.session import session_factory
+from engine.dossiers import load_dossiers
 from engine.ingestion.sync import sync_source
 from engine.registry import CONNECTORS, bootstrap
 
@@ -16,6 +17,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="politeia")
     sub = parser.add_subparsers(dest="cmd", required=True)
     sub.add_parser("bootstrap", help="register institution packs")
+    sub.add_parser("dossiers", help="load curated, source-cited dossiers and relink news mentions")
     sync = sub.add_parser("sync", help="ingest from official sources")
     sync.add_argument("--institution", action="append", help="institution id (default: all)")
     sync.add_argument("--scope", action="append", help="composition | members | votes | speeches | proposals | news")
@@ -26,6 +28,14 @@ def main() -> None:
     with factory() as s:
         bootstrap(s)
         if args.cmd == "bootstrap":
+            return
+        if args.cmd == "dossiers":
+            from engine.media import relink_all
+
+            stats = load_dossiers(s)
+            stats["news_mentions"] = relink_all(s)
+            s.commit()
+            print(json.dumps(stats, ensure_ascii=False))
             return
         q = select(SourceSystem.id).where(SourceSystem.connector.in_(list(CONNECTORS)))
         if args.institution:

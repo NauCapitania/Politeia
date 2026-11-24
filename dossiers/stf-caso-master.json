@@ -1,0 +1,1159 @@
+{
+ "dossier": "stf-caso-master",
+ "as_of": "2026-11-23",
+ "title": "STF e caso Banco Master",
+ "disclaimer": "Menção em relatório ou reportagem não é prova de ilícito. O Politeia distingue fato oficial, cobertura jornalística, alegação e análise.",
+ "items": [
+  {
+   "id": "min_gilmar",
+   "kind": "minister",
+   "payload": {
+    "name": "Gilmar Mendes",
+    "full_name": "Gilmar Ferreira Mendes",
+    "nominated_by": "Fernando Henrique Cardoso",
+    "seat": 1,
+    "took_office": "2002-06-20",
+    "took_office_note": null,
+    "role": "Ministro (decano)",
+    "aliases": [
+     "Gilmar Mendes",
+     "Gilmar"
+    ],
+    "master_report": {
+     "status": "archived",
+     "label": "Relatório da PF arquivado por Fachin (sem relevância penal, segundo a CNN)"
+    },
+    "plenary_2026_09_15": "reunião dos casos",
+    "notes": [
+     "Levantou a questão de ordem sobre julgamento conjunto dos casos Moraes e Mendonça na sessão de 15/09/2026."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_carmen",
+   "kind": "minister",
+   "payload": {
+    "name": "Cármen Lúcia",
+    "full_name": "Cármen Lúcia Antunes Rocha",
+    "nominated_by": "Luiz Inácio Lula da Silva",
+    "seat": 2,
+    "took_office": "2006-06-21",
+    "took_office_note": null,
+    "role": "Ministro(a)",
+    "aliases": [
+     "Cármen Lúcia",
+     "Carmen Lucia"
+    ],
+    "master_report": {
+     "status": "archived",
+     "label": "Relatório da PF arquivado por Fachin (sem relevância penal, segundo a CNN)"
+    },
+    "plenary_2026_09_15": "separação dos casos",
+    "notes": []
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_toffoli",
+   "kind": "minister",
+   "payload": {
+    "name": "Dias Toffoli",
+    "full_name": "José Antonio Dias Toffoli",
+    "nominated_by": "Luiz Inácio Lula da Silva",
+    "seat": 3,
+    "took_office": "2009-10-23",
+    "took_office_note": null,
+    "role": "Ministro(a)",
+    "aliases": [
+     "Dias Toffoli",
+     "Toffoli"
+    ],
+    "master_report": {
+     "status": "sent_to_pgr",
+     "label": "Relatório da PF encaminhado à PGR"
+    },
+    "plenary_2026_09_15": "impedido",
+    "notes": [
+     "Foi o primeiro relator do caso Master no STF (distribuição em 28/11/2025) e deixou a relatoria em fevereiro de 2026, após a PF apontar suspeição (Folha).",
+     "Reportagens relatam sociedade de empresa da família com o resort Tayayá, que teve participação vendida a fundo ligado a Fabiano Zettel, cunhado de Vorcaro; o ministro nega ter recebido recursos de Vorcaro (O Globo/Folha).",
+     "Declarou-se impedido na sessão de 15/09/2026."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_fux",
+   "kind": "minister",
+   "payload": {
+    "name": "Luiz Fux",
+    "full_name": "Luiz Fux",
+    "nominated_by": "Dilma Rousseff",
+    "seat": 4,
+    "took_office": "2011-03-03",
+    "took_office_note": null,
+    "role": "Ministro(a)",
+    "aliases": [
+     "Luiz Fux",
+     "Fux"
+    ],
+    "master_report": {
+     "status": "not_reported",
+     "label": "Nenhum relatório da PF sobre o ministro citado nas fontes consultadas"
+    },
+    "plenary_2026_09_15": "separação dos casos",
+    "notes": []
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_fachin",
+   "kind": "minister",
+   "payload": {
+    "name": "Edson Fachin",
+    "full_name": "Luiz Edson Fachin",
+    "nominated_by": "Dilma Rousseff",
+    "seat": 5,
+    "took_office": "2015-06-16",
+    "took_office_note": null,
+    "role": "Presidente do STF",
+    "aliases": [
+     "Edson Fachin",
+     "Fachin"
+    ],
+    "master_report": {
+     "status": "archived",
+     "label": "Relatório da PF sobre o próprio Fachin arquivado por ele (sem relevância penal, segundo a CNN)"
+    },
+    "plenary_2026_09_15": "separação dos casos",
+    "notes": [
+     "Como presidente, recebeu da PF 10 relatórios em 18/11/2026: arquivou 6 e enviou 4 à PGR (CNN/O Globo).",
+     "Convocou a sessão extraordinária de 15/09/2026 sobre o relatório da PF envolvendo Moraes (g1)."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/11/23/caso-master-pgr-recebe-relatorios-da-pf-com-mencoes-a-ministros-do-stf-em-dialogos-de-vorcaro.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2026/09/15/do-banco-master-ao-plenario-do-stf-entenda-o-historico-da-crise-e-o-que-esperar-do-julgamento-sobre-moraes.ghtml",
+     "outlet": "g1",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_moraes",
+   "kind": "minister",
+   "payload": {
+    "name": "Alexandre de Moraes",
+    "full_name": "Alexandre de Moraes",
+    "nominated_by": "Michel Temer",
+    "seat": 6,
+    "took_office": "2017-03-22",
+    "took_office_note": null,
+    "role": "Vice-presidente do STF",
+    "aliases": [
+     "Alexandre de Moraes",
+     "Moraes"
+    ],
+    "master_report": {
+     "status": "sent_to_pgr",
+     "label": "Relatório da PF encaminhado à PGR"
+    },
+    "plenary_2026_09_15": "reunião dos casos",
+    "notes": [
+     "Relatório da PF citado pelo g1 descreve 52 mensagens entre Vorcaro e um contato identificado como Moraes (dez/2023–nov/2025) e 8 encontros; o ministro contesta a origem e a divulgação do material.",
+     "Reportagem de O Globo (11/12/2025) relatou contrato de cerca de R$ 130 milhões entre o Master e o escritório de familiares do ministro.",
+     "Pediu investigação contra André Mendonça por divulgação seletiva (setembro/2026)."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2026/09/15/do-banco-master-ao-plenario-do-stf-entenda-o-historico-da-crise-e-o-que-esperar-do-julgamento-sobre-moraes.ghtml",
+     "outlet": "g1",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_nunes_marques",
+   "kind": "minister",
+   "payload": {
+    "name": "Nunes Marques",
+    "full_name": "Kassio Nunes Marques",
+    "nominated_by": "Jair Bolsonaro",
+    "seat": 7,
+    "took_office": "2020-11-05",
+    "took_office_note": null,
+    "role": "Ministro(a)",
+    "aliases": [
+     "Nunes Marques",
+     "Kassio Nunes Marques",
+     "Kassio"
+    ],
+    "master_report": {
+     "status": "sent_to_pgr",
+     "label": "Relatório da PF encaminhado à PGR"
+    },
+    "plenary_2026_09_15": "impedido",
+    "notes": [
+     "Declarou-se impedido na sessão de 15/09/2026."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_mendonca",
+   "kind": "minister",
+   "payload": {
+    "name": "André Mendonça",
+    "full_name": "André Luiz de Almeida Mendonça",
+    "nominated_by": "Jair Bolsonaro",
+    "seat": 8,
+    "took_office": "2021-12-16",
+    "took_office_note": null,
+    "role": "Ministro(a)",
+    "aliases": [
+     "André Mendonça",
+     "Andre Mendonca",
+     "Mendonça"
+    ],
+    "master_report": {
+     "status": "sent_to_pgr",
+     "label": "Relatório da PF encaminhado à PGR"
+    },
+    "plenary_2026_09_15": "separação dos casos",
+    "notes": [
+     "Relator do caso Master no STF após a saída de Toffoli; em setembro/2026 retirou o sigilo do relatório da PF que menciona contato entre Vorcaro e Moraes (Folha).",
+     "Moraes pediu investigação contra ele; o procedimento sobre sua conduta é tratado separadamente (questão de ordem de 15/09/2026)."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_zanin",
+   "kind": "minister",
+   "payload": {
+    "name": "Cristiano Zanin",
+    "full_name": "Cristiano Zanin Martins",
+    "nominated_by": "Luiz Inácio Lula da Silva",
+    "seat": 9,
+    "took_office": "2023-08-03",
+    "took_office_note": null,
+    "role": "Ministro(a)",
+    "aliases": [
+     "Cristiano Zanin",
+     "Zanin"
+    ],
+    "master_report": {
+     "status": "archived",
+     "label": "Relatório da PF arquivado por Fachin (sem relevância penal, segundo a CNN)"
+    },
+    "plenary_2026_09_15": "reunião dos casos",
+    "notes": []
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_dino",
+   "kind": "minister",
+   "payload": {
+    "name": "Flávio Dino",
+    "full_name": "Flávio Dino de Castro e Costa",
+    "nominated_by": "Luiz Inácio Lula da Silva",
+    "seat": 10,
+    "took_office": "2024-02-22",
+    "took_office_note": null,
+    "role": "Ministro(a)",
+    "aliases": [
+     "Flávio Dino",
+     "Flavio Dino"
+    ],
+    "master_report": {
+     "status": "archived",
+     "label": "Relatório da PF arquivado por Fachin (sem relevância penal, segundo a CNN)"
+    },
+    "plenary_2026_09_15": "pedido de vista",
+    "notes": [
+     "Pediu vista na questão de ordem de 15/09/2026; seu voto pode levar a 4 a 4 (DW)."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.dw.com/pt-br/stf-adia-decis%C3%A3o-sobre-caso-moraes-ap%C3%B3s-vista-de-dino/a-79279679",
+     "outlet": "DW",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "min_vaga_barroso",
+   "kind": "vacancy",
+   "payload": {
+    "name": "Vaga aberta",
+    "seat": 11,
+    "previous": "Luís Roberto Barroso (aposentado em outubro de 2025)",
+    "notes": [
+     "O Senado rejeitou a indicação de Jorge Messias por 42 a 34 — Messias não é ministro.",
+     "Lula discute com a cúpula do Congresso e ministros do STF um novo nome (g1, 23/11/2026)."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/em-meio-a-crise-historica-stf-completa-um-ano-com-10-ministros/",
+     "outlet": "CNN Brasil",
+     "date": "2026-10-18",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/blog/valdo-cruz/post/2026/11/23/lula-se-reune-com-cupula-do-congresso-e-ministros-do-stf-para-definir-substituto-de-barroso.ghtml",
+     "outlet": "g1",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/quem-sao-os-ministros-do-stf-veja-quem-foi-indicado-por-quem.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "status_pgr",
+   "kind": "current_status",
+   "payload": {
+    "title": "PGR analisa 4 relatórios da PF",
+    "received_on": "2026-11-23",
+    "deadline_days": 15,
+    "deadline_estimate": "2026-12-08",
+    "deadline_note": "Prazo administrativo de 15 dias (contagem em dias corridos é estimativa do Politeia); o descumprimento não gera sanção automática.",
+    "responsible": "Procurador-geral da República, Paulo Gonet, com a área criminal da PGR",
+    "possible_outcomes": [
+     {
+      "outcome": "Pedir arquivamento",
+      "then": "O pedido é dirigido ao STF; o arquivamento a pedido do titular da ação penal costuma ser acolhido pelo relator."
+     },
+     {
+      "outcome": "Pedir novas diligências",
+      "then": "O relator no STF decide se autoriza as diligências (oitivas, perícias, quebras de sigilo)."
+     },
+     {
+      "outcome": "Pedir abertura de inquérito",
+      "then": "Inquérito contra ministro tramita no próprio STF, sob supervisão de um relator."
+     }
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/11/23/caso-master-pgr-recebe-relatorios-da-pf-com-mencoes-a-ministros-do-stf-em-dialogos-de-vorcaro.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_00",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2025-03-28",
+    "text": "BRB anuncia a compra de 58% do Banco Master; o MPDFT abre inquérito civil.",
+    "status": "fact_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_01",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2025-04-15",
+    "text": "Master pede assistência financeira ao FGC.",
+    "status": "fact_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_02",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2025-09-03",
+    "text": "Banco Central rejeita a compra do Master pelo BRB.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_03",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2025-11-17",
+    "text": "PF prende Daniel Vorcaro em São Paulo (Operação Compliance Zero).",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_04",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2025-11-18",
+    "text": "Banco Central decreta a liquidação extrajudicial do Master.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_05",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2025-11-28",
+    "text": "Pedido de envio do caso ao STF é distribuído a Dias Toffoli; TRF-1 solta Vorcaro com tornozeleira.",
+    "status": "official_reported",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_06",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2025-12-11",
+    "text": "O Globo revela contrato do Master com escritório de familiares de Alexandre de Moraes.",
+    "status": "press_report",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_07",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-01",
+    "text": "Liquidação da Reag Trust e do Will Bank; reportagens ligam Fabiano Zettel a sócios da família de Toffoli no resort Tayayá.",
+    "status": "press_report",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_08",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-02-12",
+    "text": "PF aponta suspeição de Toffoli; Toffoli deixa a relatoria do caso.",
+    "status": "official_reported",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_09",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-02-18",
+    "text": "MP junto ao TCU recomenda apurar a presença de autoridades em festas em Trancoso.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_10",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-03-04",
+    "text": "Vorcaro é preso preventivamente em nova fase da Compliance Zero.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_11",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-04-16",
+    "text": "PF prende Paulo Henrique Costa, ex-presidente do BRB.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_12",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-05-13",
+    "text": "Reportagem relata pedido de Flávio Bolsonaro a Vorcaro para financiar filme.",
+    "status": "press_report",
+    "track": "senado"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_13",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-06-18",
+    "text": "Senador Jaques Wagner (PT-BA) é alvo de nova fase da operação.",
+    "status": "official_reported",
+    "track": "senado"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_14",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-06-25",
+    "text": "Propostas de delação de Vorcaro são rejeitadas; ele é transferido para a Papudinha.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_15",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-09",
+    "text": "André Mendonça retira o sigilo de relatório da PF que menciona contato entre Vorcaro e Moraes; Moraes pede investigação contra Mendonça.",
+    "status": "official_reported",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2026/09/15/do-banco-master-ao-plenario-do-stf-entenda-o-historico-da-crise-e-o-que-esperar-do-julgamento-sobre-moraes.ghtml",
+     "outlet": "g1",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_16",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-09-15",
+    "text": "Plenário do STF analisa questão de ordem: 4 a 3 pela separação dos casos Moraes e Mendonça; Dino pede vista; Toffoli e Nunes Marques impedidos. Mérito não julgado.",
+    "status": "official_reported",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.dw.com/pt-br/stf-adia-decis%C3%A3o-sobre-caso-moraes-ap%C3%B3s-vista-de-dino/a-79279679",
+     "outlet": "DW",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_17",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-10-28",
+    "text": "PF conclui o primeiro inquérito e indicia Vorcaro e outras 14 pessoas por crimes financeiros na venda de carteiras ao BRB.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
+     "outlet": "Folha de S.Paulo (C-Level)",
+     "date": "2026-11-17",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_18",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-18",
+    "text": "PF entrega 10 relatórios ao presidente do STF, Edson Fachin; 6 são arquivados e 4 enviados à PGR.",
+    "status": "official_reported",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/11/23/caso-master-pgr-recebe-relatorios-da-pf-com-mencoes-a-ministros-do-stf-em-dialogos-de-vorcaro.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_19",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-23",
+    "text": "PGR recebe os 4 relatórios (Moraes, Nunes Marques, Toffoli, Mendonça); prazo administrativo de 15 dias.",
+    "status": "official_reported",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/11/23/caso-master-pgr-recebe-relatorios-da-pf-com-mencoes-a-ministros-do-stf-em-dialogos-de-vorcaro.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "proc_pgr",
+   "kind": "procedure_actor",
+   "payload": {
+    "actor": "PGR",
+    "powers": "Titular da ação penal pública. Analisa relatórios e decide pedir arquivamento, diligências ou abertura de inquérito; oferece denúncia contra ministros do STF.",
+    "order": 0
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+     "outlet": "Planalto — Constituição Federal",
+     "date": null,
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "proc_presidente_stf",
+   "kind": "procedure_actor",
+   "payload": {
+    "actor": "Presidente do STF",
+    "powers": "Recebe e distribui petições, convoca sessões extraordinárias e define a pauta do Plenário. Neste caso, recebeu os relatórios da PF e decidiu arquivar 6 e enviar 4 à PGR.",
+    "order": 1
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-19",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "proc_relator",
+   "kind": "procedure_actor",
+   "payload": {
+    "actor": "Relator (decisão monocrática)",
+    "powers": "Conduz o procedimento: autoriza diligências, decide pedidos urgentes, homologa arquivamento pedido pela PGR e leva o caso ao colegiado. Decisões monocráticas podem ser revistas pelo Plenário.",
+    "order": 2
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+     "outlet": "Planalto — Constituição Federal",
+     "date": null,
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "proc_plenario",
+   "kind": "procedure_actor",
+   "payload": {
+    "actor": "Plenário do STF",
+    "powers": "Julga ministros do STF por crimes comuns (CF, art. 102, I, b): recebe ou rejeita a denúncia e julga a ação penal; também resolve questões de ordem, como a de 15/09/2026.",
+    "order": 3
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+     "outlet": "Planalto — Constituição Federal",
+     "date": null,
+     "kind": "official"
+    },
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/09/15/resultado-de-julgamento-no-stf-como-votou-cada-ministro-no-caso-sobre-moraes.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-09-15",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "proc_senado",
+   "kind": "procedure_actor",
+   "payload": {
+    "actor": "Senado Federal (impeachment)",
+    "powers": "Processa e julga ministros do STF por crime de responsabilidade (CF, art. 52, II; Lei nº 1.079/1950). É um processo político, independente da esfera criminal.",
+    "order": 4
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+     "outlet": "Planalto — Constituição Federal",
+     "date": null,
+     "kind": "official"
+    },
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm",
+     "outlet": "Planalto — Lei nº 1.079/1950",
+     "date": null,
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "imp_0",
+   "kind": "impeachment_step",
+   "payload": {
+    "step": "Denúncia",
+    "text": "Pedido de impeachment é protocolado no Senado. A Lei nº 1.079/1950 permite a qualquer cidadão; a liminar de Gilmar Mendes (ADPFs 1259 e 1260) que restringia essa iniciativa à PGR foi suspensa nessa parte em 10/12/2025, segundo o STF.",
+    "order": 0
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm",
+     "outlet": "Planalto — Lei nº 1.079/1950",
+     "date": null,
+     "kind": "official"
+    },
+    {
+     "url": "https://noticias.stf.jus.br/postsnoticias/stf-suspende-parcialmente-decisao-sobre-lei-do-impeachment/",
+     "outlet": "Portal de Notícias do STF",
+     "date": "2025-12-10",
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "imp_1",
+   "kind": "impeachment_step",
+   "payload": {
+    "step": "Admissibilidade pela Presidência do Senado",
+    "text": "O presidente do Senado decide se dá andamento ao pedido — na prática, um poder de bloqueio. Por isso a eleição de 2027 importa para o tema.",
+    "order": 1
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm",
+     "outlet": "Planalto — Lei nº 1.079/1950",
+     "date": null,
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "imp_2",
+   "kind": "impeachment_step",
+   "payload": {
+    "step": "Comissão especial e parecer",
+    "text": "Uma comissão analisa a denúncia e emite parecer sobre seu recebimento.",
+    "order": 2
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm",
+     "outlet": "Planalto — Lei nº 1.079/1950",
+     "date": null,
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "imp_3",
+   "kind": "impeachment_step",
+   "payload": {
+    "step": "Votação no Plenário do Senado",
+    "text": "O Plenário decide se recebe a denúncia e, depois, se há pronúncia. Pontos da liminar de Gilmar sobre o rito e o quórum seguem em vigor, segundo o STF; o texto da decisão deve ser conferido.",
+    "order": 3
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm",
+     "outlet": "Planalto — Lei nº 1.079/1950",
+     "date": null,
+     "kind": "official"
+    },
+    {
+     "url": "https://noticias.stf.jus.br/postsnoticias/stf-suspende-parcialmente-decisao-sobre-lei-do-impeachment/",
+     "outlet": "Portal de Notícias do STF",
+     "date": "2025-12-10",
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "imp_4",
+   "kind": "impeachment_step",
+   "payload": {
+    "step": "Julgamento",
+    "text": "Sessão de julgamento presidida pelo presidente do STF; a condenação exige 2/3 dos senadores (54 de 81) e implica perda do cargo e inabilitação.",
+    "order": 4
+   },
+   "sources": [
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+     "outlet": "Planalto — Constituição Federal",
+     "date": null,
+     "kind": "official"
+    },
+    {
+     "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm",
+     "outlet": "Planalto — Lei nº 1.079/1950",
+     "date": null,
+     "kind": "official"
+    }
+   ]
+  }
+ ]
+}

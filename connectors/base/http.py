@@ -3,6 +3,7 @@
 import hashlib
 import logging
 import random
+import re
 import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -40,7 +41,17 @@ class FetchedResponse:
 
     @property
     def text(self) -> str:
-        return self.content.decode("utf-8")
+        """Decode using the declared charset (HTTP header or XML prolog); UTF-8 by default."""
+        declared = re.search(r"charset=([\w-]+)", self.headers.get("content-type", ""), re.I)
+        prolog = re.match(rb"<\?xml[^>]*encoding=[\"']([\w-]+)", self.content.lstrip()[:200])
+        for enc in (declared and declared.group(1), prolog and prolog.group(1).decode(), "utf-8"):
+            if not enc:
+                continue
+            try:
+                return self.content.decode(enc)
+            except (LookupError, UnicodeDecodeError):
+                continue
+        return self.content.decode("utf-8", errors="replace")
 
 
 def _format_of(content_type: str) -> str:

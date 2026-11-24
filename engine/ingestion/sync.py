@@ -159,6 +159,7 @@ class Persistor:
                 self.s.add(Mandate(id=mid, first_observed_at=self.now, **values))
                 self.s.flush()
             else:
+                values["attributes"] = Mandate.attributes.op("||")(m.attributes)  # scopes enrich, never erase
                 self.s.execute(update(Mandate).where(Mandate.id == mid).values(**values))
             seen_mandates.append(mid)
             self.rel_evidence("mandate", mid, m.ref)
