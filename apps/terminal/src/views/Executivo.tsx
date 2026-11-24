@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Button, Callout, Spinner } from '@blueprintjs/core'
 import { fmtDate, fmtDateTime, partyColor } from '../format'
 import { SrcList } from '../components/SrcList'
+import { InstitutionMasthead } from '../components/InstitutionMasthead'
 import { CabinetTimeline } from './executivo/CabinetTimeline'
 import { KIND_LABEL, partyCounts, shortName, useExecutivo, useExecutivoGuide, type Body, type Kind } from './executivo/data'
 import './executivo/executivo.css'
@@ -85,7 +86,7 @@ export function Executivo() {
   for (const p of it.power ?? []) (powers[p.group] ??= []).push(p)
   return (
     <div className="view">
-      <h1>Poder Executivo</h1>
+      <InstitutionMasthead kind="executivo" eyebrow="GOVERNO FEDERAL · PRESIDÊNCIA E MINISTÉRIOS" title="Poder Executivo" subtitle="Da decisão à execução. Pessoas, estruturas e políticas públicas." />
       <p className="lede">{it.overview?.[0]?.text ?? 'Presidência da República, ministérios e entidades da administração federal, com quem ocupa cada pasta.'}</p>
       <div className="exe-kpis">
         <div className="exe-kpi"><b>{d.counts.ministries}</b><span>ministérios</span></div>

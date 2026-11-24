@@ -1,6 +1,7 @@
 import { Spinner } from '@blueprintjs/core'
 import { useDossier } from '../api/client'
 import { InstitutionGuide } from '../components/InstitutionGuide'
+import { InstitutionMasthead } from '../components/InstitutionMasthead'
 import { SrcList } from '../components/SrcList'
 import { fmtDate } from '../format'
 import { useStore } from '../store'
@@ -10,7 +11,7 @@ export function Stf() {
   const setAnalysis = useStore((s) => s.setAnalysis)
   const ministers = q.data?.items?.minister ?? []
   return <div className="view">
-    <div className="eyebrow">PODER JUDICIÁRIO · TRIBUNAL CONSTITUCIONAL</div><h1>Supremo Tribunal Federal</h1>
+    <InstitutionMasthead kind="stf" eyebrow="PODER JUDICIÁRIO · TRIBUNAL CONSTITUCIONAL" title="Supremo Tribunal Federal" subtitle="A Constituição como referência. A instituição além de cada caso." />
     <p className="lede">Conheça a instituição, suas competências e sua composição. Casos específicos ficam em espaços de análise próprios.</p>
     <InstitutionGuide kind="stf" expanded />
     <h2>Composição na base</h2><p className="muted">Cadastro curado com fontes por ministro; não é uma consulta em tempo real. A associação de uma pessoa a um caso não define sua atuação institucional.</p>

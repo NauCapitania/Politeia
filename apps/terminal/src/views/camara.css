@@ -1,3 +1,5 @@
+.camara-tabs .bp6-tab-list { max-width: 100%; overflow-x: auto; }
+.camara-tabs .bp6-tab-list > .bp6-tab { flex-shrink: 0; }
 .camara-bars { display: flex; flex-direction: column; gap: 4px; }
 .camara-bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 2px 0; }
 .camara-label { flex: none; width: 90px; }

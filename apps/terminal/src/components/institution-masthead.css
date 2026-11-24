@@ -1,0 +1,32 @@
+.institution-masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 24px;
+  min-height: 230px;
+  margin: 0 0 24px;
+  border-bottom: 1px solid var(--line);
+  background: radial-gradient(ellipse at 78% 65%, var(--accent-soft), transparent 60%);
+}
+.institution-masthead-copy { min-width: 0; padding: 24px 0; }
+.institution-masthead-copy h1 { margin: 14px 0; font-size: clamp(26px, 3vw, 38px); font-weight: 500; line-height: 1.18; letter-spacing: -.04em; }
+.institution-masthead-copy > p { max-width: 440px; margin: 0; color: var(--fg-2); font-size: 13px; line-height: 1.7; }
+.institution-masthead-art { height: 230px; min-width: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.institution-masthead-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.institution-masthead--stf .institution-masthead-art { height: 260px; }
+.institution-masthead--stf .institution-masthead-art img { width: auto; max-width: 100%; }
+.institution-masthead--senado .institution-masthead-art img { transform: scale(1.35); transform-origin: 23% 65%; }
+.institution-masthead--camara .institution-masthead-art img { transform: scale(1.35); transform-origin: 76% 65%; }
+@media (max-width: 760px) {
+  .institution-masthead { grid-template-columns: minmax(0, 1fr); gap: 0; min-height: 0; margin-bottom: 20px; }
+  .institution-masthead-art { grid-row: 1; height: 130px; }
+  .institution-masthead--stf .institution-masthead-art { height: 160px; }
+  .institution-masthead-copy { padding: 12px 0 20px; }
+  .institution-masthead-copy h1 { font-size: 28px; margin: 10px 0; }
+  .institution-masthead-copy > p { font-size: 12px; }
+}
+@media (max-height: 450px) and (max-width: 760px) {
+  .institution-masthead { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 12px; }
+  .institution-masthead-art, .institution-masthead--stf .institution-masthead-art { grid-column: 2; height: 150px; }
+  .institution-masthead-copy { grid-row: 1; grid-column: 1; }
+}

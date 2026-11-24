@@ -38,6 +38,8 @@ Princípios:
 As guias explicam poderes e comissões; não substituem dados coletados. **Ausência de cobertura não significa
 ausência de atividade.** A interface tem temas claro/escuro e navegação móvel; o Agente ocupa uma faixa própria
 no celular para não cobrir o texto.
+Os cabeçalhos institucionais usam imagens fornecidas pelo proprietário, otimizadas em WebP;
+são ilustrações decorativas, não evidências dos dados apresentados.
 
 ### Cadernos e agente
 

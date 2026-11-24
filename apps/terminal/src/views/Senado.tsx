@@ -5,6 +5,7 @@ import { isStatic, useChanges, useSeats, useSeats2027, useSnapshotMeta, type Sea
 import { hemicycleLayout } from './Hemicycle'
 import { partyColor, fmtDate } from '../format'
 import { useStore } from '../store'
+import { InstitutionMasthead } from '../components/InstitutionMasthead'
 
 const START = Date.UTC(2023, 1, 1)
 const DAY = 86400000
@@ -47,7 +48,7 @@ export function Senado() {
         <Tag interactive minimal={future} intent={future ? 'none' : 'primary'} onClick={() => setFuture(false)}>{staticMode ? 'Histórico até o snapshot' : 'Histórico até hoje'}</Tag>
         <Tag interactive minimal={!future} intent={future ? 'primary' : 'none'} onClick={() => setFuture(true)}>Senado a partir de 1º/02/2027</Tag>
       </div>
-      {future ? <h1>Senado Federal a partir de 1º/02/2027</h1> : <h1>Senado Federal{date ? ` em ${fmtDate(date)}` : ''}</h1>}
+      <InstitutionMasthead kind="senado" eyebrow="PODER LEGISLATIVO · ESTADOS E DISTRITO FEDERAL" title={future ? 'Senado Federal a partir de 1º/02/2027' : `Senado Federal${date ? ` em ${fmtDate(date)}` : ''}`} subtitle="Composição no tempo. As cadeiras, as pessoas e as decisões da Federação." />
       {future ? (
         <p className="lede">Em 2026 foram eleitos 54 senadores (2/3 das cadeiras) para mandatos até 2035. As outras 27 cadeiras seguem até 2031. Contorno tracejado = eleito em 2026; contorno sólido = reeleito.</p>
       ) : <p className="lede">Quem ocupava cada uma das 81 cadeiras na data escolhida, reconstruído a partir dos exercícios de mandato e das filiações publicadas nos Dados Abertos do Senado. {staticMode ? 'O snapshot traz a composição em datas-chave.' : 'Arraste para ver trocas de partido, suplentes assumindo e retornos de titulares.'}</p>}

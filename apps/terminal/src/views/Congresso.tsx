@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { InstitutionGuide, PowerMap } from '../components/InstitutionGuide'
+import { InstitutionMasthead } from '../components/InstitutionMasthead'
 import { useStore } from '../store'
 
 const STEPS = [
@@ -14,7 +15,8 @@ export function Congresso() {
   const [step, setStep] = useState(0)
   const setView = useStore((s) => s.setView)
   return <div className="view">
-    <div className="eyebrow">PODER LEGISLATIVO FEDERAL</div><h1>Congresso Nacional</h1><p className="lede">Duas casas, atribuições compartilhadas e competências próprias. Explore as instituições e o caminho das decisões.</p>
+    <InstitutionMasthead kind="congresso" eyebrow="PODER LEGISLATIVO FEDERAL" title="Congresso Nacional" subtitle="Duas casas. Um processo de construção das decisões públicas." />
+    <p className="lede">Duas casas, atribuições compartilhadas e competências próprias. Explore as instituições e o caminho das decisões.</p>
     <div className="congress-cards"><button className="workspace-card" onClick={() => setView('camara')}><span className="eyebrow">REPRESENTAÇÃO DO POVO</span><h2>Câmara dos Deputados →</h2><p>Iniciativa, deliberação e fiscalização.</p></button><button className="workspace-card" onClick={() => setView('senado')}><span className="eyebrow">ESTADOS E DISTRITO FEDERAL</span><h2>Senado Federal →</h2><p>Composição, votações, comissões e proposições.</p></button></div>
     <InstitutionGuide kind="congresso" expanded />
     <section className="legislative-process"><div className="eyebrow">DA PROPOSTA À NORMA</div><h2>Como um projeto avança</h2><p className="muted">Roteiro explicativo, não andamento de uma proposição específica. Urgência, tipo de matéria e regimentos podem alterar o percurso.</p>
