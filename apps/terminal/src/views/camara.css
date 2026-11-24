@@ -1,7 +1,10 @@
 .camara-bars { display: flex; flex-direction: column; gap: 4px; }
 .camara-bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 2px 0; }
-.camara-bar { height: 10px; border-radius: 2px; min-width: 2px; }
-.camara-stack { display: flex; height: 10px; border-radius: 2px; overflow: hidden; align-self: center; }
-.camara-stack i { display: block; min-width: 2px; }
+.camara-label { flex: none; width: 90px; }
+.camara-track { flex: 1; min-width: 0; display: flex; align-self: center; height: 10px; }
+.camara-bar { display: block; height: 10px; border-radius: 2px; min-width: 2px; }
+.camara-stack { display: flex; height: 10px; border-radius: 2px; overflow: hidden; }
+.camara-stack i { display: block; height: 10px; min-width: 2px; }
 .camara-diverge { position: relative; flex: 1; height: 10px; background: var(--bg-2); border-radius: 2px; }
 .camara-diverge i { position: absolute; top: 0; bottom: 0; border-radius: 2px; }
+.camara-bar-row > .mono:last-child, .list-row > .faint.mono:last-child { flex: none; min-width: 64px; text-align: right; }

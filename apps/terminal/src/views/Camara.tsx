@@ -59,8 +59,8 @@ function Composicao() {
           <div className="camara-bars">
             {comp.data.groups.map((g) => (
               <div key={g.party?.id ?? 'none'} className="camara-bar-row">
-                <span className="mono" style={{ width: 90 }}>{g.party?.abbreviation ?? 's/ partido'}</span>
-                <span className="camara-bar" style={{ width: `${(g.count / comp.data!.groups[0].count) * 100}%`, background: partyColor(g.party?.abbreviation) }} />
+                <span className="mono camara-label">{g.party?.abbreviation ?? 's/ partido'}</span>
+                <span className="camara-track"><span className="camara-bar" style={{ width: `${(g.count / comp.data!.groups[0].count) * 100}%`, background: partyColor(g.party?.abbreviation) }} /></span>
                 <span className="mono faint">{g.count} · {((g.count / total) * 100).toFixed(1)}%</span>
               </div>
             ))}
@@ -73,11 +73,13 @@ function Composicao() {
             const n = [...row.values()].reduce((a, b) => a + b, 0)
             return (
               <button key={u} className={`list-row ${uf === u ? 'active' : ''}`} onClick={() => setUf(uf === u ? '' : u)}>
-                <b className="mono" style={{ width: 28 }}>{u}</b>
-                <span className="grow camara-stack" style={{ maxWidth: `${(n / maxUf) * 100}%` }}>
-                  {[...row.entries()].sort((a, b) => b[1] - a[1]).map(([p, c]) => (
-                    <i key={p} title={`${p}: ${c}`} style={{ flex: c, background: partyColor(p) }} />
-                  ))}
+                <b className="mono camara-label" style={{ width: 28 }}>{u}</b>
+                <span className="camara-track">
+                  <span className="camara-stack" style={{ width: `${(n / maxUf) * 100}%` }}>
+                    {[...row.entries()].sort((a, b) => b[1] - a[1]).map(([p, c]) => (
+                      <i key={p} title={`${p}: ${c}`} style={{ flex: c, background: partyColor(p) }} />
+                    ))}
+                  </span>
                 </span>
                 <span className="faint mono">{n}</span>
               </button>
@@ -124,7 +126,7 @@ function Trocas() {
           <h3>Saldo por partido</h3>
           {balance.map(([p, n]) => (
             <div key={p} className="camara-bar-row">
-              <span className="mono" style={{ width: 90 }}>{p}</span>
+              <span className="mono camara-label">{p}</span>
               <span className="camara-diverge">
                 <i style={{ width: `${(Math.abs(n) / maxAbs) * 50}%`, background: partyColor(p), [n < 0 ? 'right' : 'left']: '50%' }} />
               </span>
@@ -206,9 +208,11 @@ function Votacoes() {
                 const n = Object.values(row).reduce((a, b) => a + b, 0)
                 return (
                   <div key={p} className="camara-bar-row">
-                    <span className="mono" style={{ width: 90 }}>{p}</span>
-                    <span className="grow camara-stack">
-                      {Object.entries(row).map(([k, c]) => <i key={k} title={`${k}: ${c}`} style={{ flex: c, background: COLOR[k] ?? 'var(--line-strong)' }} />)}
+                    <span className="mono camara-label">{p}</span>
+                    <span className="camara-track">
+                      <span className="camara-stack" style={{ width: '100%' }}>
+                        {Object.entries(row).map(([k, c]) => <i key={k} title={`${k}: ${c}`} style={{ flex: c, background: COLOR[k] ?? 'var(--line-strong)' }} />)}
+                      </span>
                     </span>
                     <span className="faint mono">{n}</span>
                   </div>
