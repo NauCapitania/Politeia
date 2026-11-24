@@ -74,7 +74,13 @@ def export_snapshot(api: TestClient, output: Path, now: datetime) -> None:
     for inst in institutions:
         institution_id = inst["id"]
         base = f"institutions/{institution_id}"
-        save(f"{base}/capabilities")
+        capabilities = get(f"{base}/capabilities")
+        for capability in capabilities:
+            capability["issues"] = [
+                {key: issue[key] for key in ("code", "count") if key in issue}
+                for issue in capability["issues"]
+            ]
+        write(f"{base}/capabilities", capabilities)
         save(f"{base}/proposal-types")
         runs = get("ingestion/status", institution=institution_id)
         for run in runs["runs"]:

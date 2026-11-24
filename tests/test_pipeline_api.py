@@ -128,7 +128,20 @@ def test_proposal_authors_link_to_people_only_with_evidence(api):
     assert all(a["person_id"] is None for a in authors if a["kind"] != "member")
 
 
-def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory, tmp_path):
+def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory, tmp_path, monkeypatch):
+    from engine.api import queries
+
+    get_capabilities = queries.capabilities
+
+    def capabilities_with_private_diagnostics(session, institution_id):
+        capabilities = get_capabilities(session, institution_id)
+        capabilities[0].issues = [
+            {"code": "last_run_failed", "message": "internal connection details"},
+            {"code": "missing_affiliation", "count": 2},
+        ]
+        return capabilities
+
+    monkeypatch.setattr(queries, "capabilities", capabilities_with_private_diagnostics)
     with factory() as session:
         load_dossiers(session)
         session.commit()
@@ -157,6 +170,8 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
     runs = read("ingestion/ins_br_senado")["runs"]
     assert any(run["status"] == "partial" for run in runs)
     assert all(run["error"] is None and all("example" not in issue for issue in run["issues"]) for run in runs)
+    capabilities = read("institutions/ins_br_senado/capabilities")
+    assert capabilities[0]["issues"] == [{"code": "last_run_failed"}, {"code": "missing_affiliation", "count": 2}]
     assert read("dossies/stf-caso-master")["dossier"] == "stf-caso-master"
 
 
