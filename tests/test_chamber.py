@@ -152,6 +152,7 @@ def test_chamber_api_routes(api):
     detail = api.get(f"/v1/camara/votacoes/{nominal['id']}").json()
     assert {v["label"] for v in detail["votes"]} == {"Sim", "Não"}
     assert api.get("/v1/camara/votacoes", params={"nominal": "true"}).json() == [nominal]
+    assert all(not v["secret"] for v in api.get("/v1/camara/votacoes", params={"nominal": "false"}).json())
     committees = api.get("/v1/camara/comissoes").json()
     assert committees[0]["abbreviation"] == "CCJC" and committees[0]["chair"] == "Leur Lomanto Júnior"
     assert api.get(f"/v1/camara/comissoes/{committees[0]['id']}").json()["members"]

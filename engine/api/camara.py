@@ -18,7 +18,8 @@ DB = Annotated[Session, Depends(get_session)]
 
 @router.get("/votacoes")
 def votacoes(s: DB, limit: Annotated[int, Query(le=2000)] = 200, q: str | None = None, nominal: bool | None = None):
-    return list_votes(s, INSTITUTION, limit=limit, q=q, nominal=nominal)
+    # "Simbólicas" excludes secret ballots, which also have no individual votes.
+    return list_votes(s, INSTITUTION, limit=limit, q=q, nominal=nominal, secreta=False if nominal is False else None)
 
 
 @router.get("/votacoes/{vote_id}")
