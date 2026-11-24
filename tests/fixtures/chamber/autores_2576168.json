@@ -1,0 +1,34 @@
+{
+ "dados": [
+  {
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/220714",
+   "nome": "Adail Filho",
+   "codTipo": 10000,
+   "tipo": "Deputado(a)",
+   "ordemAssinatura": 162,
+   "proponente": 0
+  },
+  {
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/221328",
+   "nome": "Adilson Barroso",
+   "codTipo": 10000,
+   "tipo": "Deputado(a)",
+   "ordemAssinatura": 69,
+   "proponente": 0
+  },
+  {
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204560",
+   "nome": "Adolfo Viana",
+   "codTipo": 10000,
+   "tipo": "Deputado(a)",
+   "ordemAssinatura": 102,
+   "proponente": 0
+  }
+ ],
+ "links": [
+  {
+   "rel": "self",
+   "href": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2576168/autores"
+  }
+ ]
+}

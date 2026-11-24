@@ -92,7 +92,7 @@ def test_raw_evidence_preserved_with_hash(factory):
 
 def test_registered_institutions(api):
     insts = api.get("/v1/institutions").json()
-    assert {i["id"] for i in insts} == set(SOURCES) | {"ins_br_executivo"}
+    assert {i["id"] for i in insts} == set(SOURCES) | {"ins_br_executivo", "ins_br_camara"}
     m = api.get("/v1/institutions/ins_br_senado/members").json()
     p = api.get("/v1/institutions/ins_br_senado/proposals").json()
     assert m["total"] > 0 and p["total"] > 0

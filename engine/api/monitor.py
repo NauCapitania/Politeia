@@ -112,25 +112,38 @@ def senador(person_id: str, s: DB):
 @router.get("/votacoes")
 def votacoes(s: DB, limit: Annotated[int, Query(le=2000)] = 50, secreta: bool | None = None,
              q: str | None = None):
-    stmt = select(VoteEvent).where(VoteEvent.institution_id == INSTITUTION)
+    return list_votes(s, INSTITUTION, limit=limit, secreta=secreta, q=q)
+
+
+def list_votes(s: Session, institution: str, *, limit: int, secreta: bool | None = None, q: str | None = None,
+               nominal: bool | None = None) -> list[dict]:
+    stmt = select(VoteEvent).where(VoteEvent.institution_id == institution)
+    if nominal is not None:
+        stmt = stmt.where(VoteEvent.attributes["nominal"].as_boolean().is_(nominal))
     if secreta is not None:
         stmt = stmt.where(VoteEvent.secret.is_(secreta))
     if q:
         stmt = stmt.where(VoteEvent.description.ilike(f"%{q}%") | VoteEvent.matter.ilike(f"%{q}%"))
     rows = s.scalars(stmt.order_by(VoteEvent.held_on.desc(), VoteEvent.source_id.desc()).limit(limit)).all()
     return [{"id": e.id, "date": e.held_on, "description": e.description, "matter": e.matter, "secret": e.secret,
-             "result": e.result, "totals": e.totals} for e in rows]
+             "result": e.result, "totals": e.totals, "proposal_id": e.proposal_id,
+             "nominal": (e.attributes or {}).get("nominal")} for e in rows]
 
 
 @router.get("/votacoes/{vote_id}")
 def votacao(vote_id: str, s: DB):
+    return vote_detail(s, vote_id, INSTITUTION)
+
+
+def vote_detail(s: Session, vote_id: str, institution: str) -> dict:
     e = s.get(VoteEvent, vote_id)
-    if e is None:
+    if e is None or e.institution_id != institution:
         raise HTTPException(404, "votação não encontrada")
     votes = s.execute(select(IndividualVote, Person.name).join(Person, Person.id == IndividualVote.person_id)
                       .where(IndividualVote.vote_event_id == vote_id).order_by(Person.name)).all()
     return {"id": e.id, "date": e.held_on, "description": e.description, "matter": e.matter, "secret": e.secret,
-            "result": e.result, "totals": e.totals, "raw_record_id": str(e.raw_record_id) if e.raw_record_id else None,
+            "result": e.result, "totals": e.totals, "proposal_id": e.proposal_id,
+            "raw_record_id": str(e.raw_record_id) if e.raw_record_id else None,
             "votes": [{"person_id": v.person_id, "name": n, "party": v.party_abbreviation, "uf": v.represented_unit,
                        "vote": v.vote_code, "label": v.vote_label} for v, n in votes]}
 
@@ -176,6 +189,10 @@ def presidencia_2027(s: DB):
 
 @router.get("/comissoes")
 def comissoes(s: DB):
+    return list_committees(s, INSTITUTION)
+
+
+def list_committees(s: Session, institution: str) -> list[dict]:
     counts = {(cid, kind): n for cid, kind, n in s.execute(
         select(CommitteeMembership.committee_id, CommitteeMembership.seat_kind, func.count())
         .where(CommitteeMembership.is_current.is_(True))
@@ -184,7 +201,7 @@ def comissoes(s: DB):
                             .join(Person, Person.id == CommitteeMembership.person_id)
                             .where(CommitteeMembership.is_current.is_(True),
                                    CommitteeMembership.role == "PRESIDENTE")).all())
-    rows = s.scalars(select(Committee).where(Committee.institution_id == INSTITUTION,
+    rows = s.scalars(select(Committee).where(Committee.institution_id == institution,
                                              Committee.attributes["active"].astext.is_distinct_from("false"))
                      .order_by(Committee.committee_type, Committee.abbreviation)).all()
     return [{"id": c.id, "abbreviation": c.abbreviation, "name": c.name, "type": c.committee_type,
@@ -195,8 +212,12 @@ def comissoes(s: DB):
 
 @router.get("/comissoes/{committee_id}")
 def comissao(committee_id: str, s: DB):
+    return committee_detail(s, committee_id, INSTITUTION)
+
+
+def committee_detail(s: Session, committee_id: str, institution: str) -> dict:
     c = s.get(Committee, committee_id)
-    if c is None or c.institution_id != INSTITUTION:
+    if c is None or c.institution_id != institution:
         raise HTTPException(404, "comissão não encontrada")
     rows = s.execute(select(CommitteeMembership, Person).join(Person, Person.id == CommitteeMembership.person_id)
                      .where(CommitteeMembership.committee_id == committee_id,

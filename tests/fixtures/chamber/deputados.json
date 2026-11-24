@@ -1,0 +1,32 @@
+{
+ "dados": [
+  {
+   "id": 204379,
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204379",
+   "nome": "Acácio Favacho",
+   "siglaPartido": "MDB",
+   "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36899",
+   "siglaUf": "AP",
+   "idLegislatura": 57,
+   "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204379.jpg",
+   "email": "dep.acaciofavacho@camara.leg.br"
+  },
+  {
+   "id": 74398,
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74398",
+   "nome": "Maria do Rosário",
+   "siglaPartido": "PT",
+   "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36844",
+   "siglaUf": "RS",
+   "idLegislatura": 57,
+   "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74398.jpg",
+   "email": "dep.mariadorosario@camara.leg.br"
+  }
+ ],
+ "links": [
+  {
+   "rel": "self",
+   "href": "https://dadosabertos.camara.leg.br/api/v2/deputados?ordem=ASC&ordenarPor=nome&itens=1000"
+  }
+ ]
+}

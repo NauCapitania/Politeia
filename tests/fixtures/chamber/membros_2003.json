@@ -1,0 +1,50 @@
+{
+ "dados": [
+  {
+   "id": 92102,
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/92102",
+   "nome": "Leur Lomanto Júnior",
+   "siglaPartido": "UNIÃO",
+   "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/76868",
+   "siglaUf": "BA",
+   "idLegislatura": 57,
+   "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/92102.jpg",
+   "email": "dep.leurlomantojunior@camara.leg.br",
+   "titulo": "Presidente",
+   "codTitulo": 1,
+   "dataInicio": "2026-02-10",
+   "dataFim": null
+  },
+  {
+   "id": 141531,
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/141531",
+   "nome": "Rodrigo de Castro",
+   "siglaPartido": "UNIÃO",
+   "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/76868",
+   "siglaUf": "MG",
+   "idLegislatura": 57,
+   "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/141531.jpg",
+   "email": "dep.rodrigodecastro@camara.leg.br",
+   "titulo": "1º Vice-Presidente",
+   "codTitulo": 2,
+   "dataInicio": "2026-03-17",
+   "dataFim": null
+  },
+  {
+   "id": 141485,
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/141485",
+   "nome": "Luiz Carlos Busato",
+   "siglaPartido": "UNIÃO",
+   "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/76868",
+   "siglaUf": "RS",
+   "idLegislatura": 57,
+   "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/141485.jpg",
+   "email": "dep.luizcarlosbusato@camara.leg.br",
+   "titulo": "Suplente",
+   "codTitulo": 102,
+   "dataInicio": "2026-02-09",
+   "dataFim": null
+  }
+ ],
+ "links": []
+}

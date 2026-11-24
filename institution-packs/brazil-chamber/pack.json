@@ -1,0 +1,64 @@
+{
+  "pack_id": "brazil-chamber",
+  "pack_version": "0.1.0",
+  "institution": {
+    "id": "ins_br_camara",
+    "slug": "brazil-chamber",
+    "official_name": "Câmara dos Deputados",
+    "short_name": "Câmara",
+    "institution_type": "lower_chamber",
+    "jurisdiction": "Federal — República Federativa do Brasil",
+    "geographic_scope": "Brasil",
+    "country": "BR",
+    "website": "https://www.camara.leg.br/",
+    "seat_count": 513,
+    "seat_count_status": "verified",
+    "seat_count_source": "Lei Complementar nº 78/1993 e Constituição Federal, art. 45 (513 deputados, eleitos pelo sistema proporcional): https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp78.htm",
+    "terminology": {
+      "member": "Deputado(a)",
+      "members": "Deputados",
+      "represented_unit": "UF",
+      "chamber": "Plenário",
+      "proposal": "Proposição"
+    }
+  },
+  "sources": [
+    {
+      "id": "src_br_camara_dadosabertos",
+      "name": "Dados Abertos da Câmara dos Deputados",
+      "base_url": "https://dadosabertos.camara.leg.br/api/v2",
+      "documentation_url": "https://dadosabertos.camara.leg.br/swagger/api.html",
+      "allowed_hosts": [
+        "dadosabertos.camara.leg.br"
+      ],
+      "connector": "brazil-chamber",
+      "max_requests_per_second": 5,
+      "config": {
+        "proposal_types": ["PEC", "PLP", "MPV", "PL", "PDL"],
+        "proposal_window_days": 30,
+        "max_proposal_details": 300,
+        "votes_since": "2025-02-01",
+        "votes_window_days": 120,
+        "max_vote_details": 600,
+        "committee_types": [2, 4]
+      }
+    }
+  ],
+  "capabilities": {
+    "members": {"scope": "members"},
+    "mandates": {"scope": "members"},
+    "party_composition": {"scope": "members"},
+    "party_history": {
+      "scope": "members",
+      "note": "Partido registrado pela Câmara em cada evento do histórico do deputado (posse, troca de partido, licença); não é a filiação oficial do TSE."
+    },
+    "proposals": {"scope": "proposals"},
+    "proposal_authors": {"scope": "proposals"},
+    "proposal_events": {"scope": "proposals"},
+    "votes": {"scope": "votes", "note": "Votações do Plenário; votos individuais só existem nas votações nominais."},
+    "committees": {
+      "scope": "committees",
+      "note": "Comissões permanentes e CPIs (/orgaos) com membros atuais (/orgaos/{id}/membros)."
+    }
+  }
+}

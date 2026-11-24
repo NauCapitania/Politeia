@@ -1,0 +1,15 @@
+{
+ "dados": [
+  {
+   "id": 2576168,
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2576168",
+   "siglaTipo": "PEC",
+   "codTipo": 136,
+   "numero": 38,
+   "ano": 2025,
+   "ementa": "Altera normas sobre a Administração Pública brasileira para aperfeiçoar a governança e a gestão pública, promover a transformação digital, impulsionar a profissionalização e extinguir privilégios no serviço público.",
+   "dataApresentacao": "2025-10-24T18:12"
+  }
+ ],
+ "links": []
+}

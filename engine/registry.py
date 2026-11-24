@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from connectors.base.http import SourceHttpClient
 from connectors.base.protocol import Connector
+from connectors.chamber.connector import ChamberConnector
 from connectors.executive.cabinet import CabinetConnector
 from connectors.executive.siorg import SiorgConnector
 from connectors.news.connector import NewsConnector
@@ -18,7 +19,7 @@ from engine.settings import get_settings
 
 PACKS_DIR = Path(__file__).resolve().parent.parent / "institution-packs"
 CONNECTORS: dict[str, type[Connector]] = {
-    c.id: c for c in (SenateConnector, NewsConnector, SiorgConnector, CabinetConnector)
+    c.id: c for c in (SenateConnector, ChamberConnector, NewsConnector, SiorgConnector, CabinetConnector)
 }
 
 

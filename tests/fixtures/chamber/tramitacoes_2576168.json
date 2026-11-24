@@ -1,0 +1,58 @@
+{
+ "dados": [
+  {
+   "dataHora": "2026-02-04T13:15",
+   "sequencia": 44,
+   "siglaOrgao": "PLEN",
+   "uriOrgao": "https://dadosabertos.camara.leg.br/api/v2/orgaos/180",
+   "uriUltimoRelator": null,
+   "regime": ".",
+   "descricaoTramitacao": "Apresentação de Requerimento",
+   "codTipoTramitacao": "194",
+   "descricaoSituacao": "Aguardando Despacho do Presidente da Câmara dos Deputados (Chancela)",
+   "codSituacao": 1201,
+   "despacho": "Apresentação do REQ n. 191/2026 (Requerimento de Inclusão ou Retirada de Assinatura em Proposição de Iniciativa Coletiva Obrigatória), pelo Deputado Ismael (PSD/SC), que \"Requer a retirada de assinatura da PEC 38/2025, que “Altera normas sobre a Administração Pública brasileira para aperfeiçoar a governança e a gestão pública, promover a transformação digital, impulsionar a profissionalização e extinguir privilégios no serviço público”\".",
+   "url": "https://www.camara.leg.br/proposicoesWeb/prop_mostrarintegra?codteor=3078476",
+   "ambito": "Regimental",
+   "apreciacao": "Indefinida"
+  },
+  {
+   "dataHora": "2026-07-03T11:02",
+   "sequencia": 45,
+   "siglaOrgao": "MESA",
+   "uriOrgao": "https://dadosabertos.camara.leg.br/api/v2/orgaos/4",
+   "uriUltimoRelator": null,
+   "regime": ".",
+   "descricaoTramitacao": "Apresentação de Requerimento",
+   "codTipoTramitacao": "194",
+   "descricaoSituacao": "Aguardando Despacho do Presidente da Câmara dos Deputados (Chancela)",
+   "codSituacao": 1201,
+   "despacho": "Apresentação do REQ n. 3698/2026 (Requerimento de Inclusão ou Retirada de Assinatura em Proposição de Iniciativa Coletiva Obrigatória), pelo Deputado Stefano Aguiar (PSD/MG), que \"Requer a retirada de assinatura da PEC 38/2025, que “Altera normas sobre a Administração Pública brasileira para aperfeiçoar a governança e a gestão pública, promover a transformação digital, impulsionar a profissionalização e extinguir privilégios no serviço público”.\".",
+   "url": "https://www.camara.leg.br/proposicoesWeb/prop_mostrarintegra?codteor=3156654",
+   "ambito": "Regimental",
+   "apreciacao": "Indefinida"
+  },
+  {
+   "dataHora": "2026-07-20T12:11",
+   "sequencia": 46,
+   "siglaOrgao": "MESA",
+   "uriOrgao": "https://dadosabertos.camara.leg.br/api/v2/orgaos/4",
+   "uriUltimoRelator": null,
+   "regime": ".",
+   "descricaoTramitacao": "Notificações",
+   "codTipoTramitacao": "1005",
+   "descricaoSituacao": "Aguardando Despacho do Presidente da Câmara dos Deputados (Chancela)",
+   "codSituacao": 1201,
+   "despacho": "Indeferido o Requerimento n. 3698/2026.",
+   "url": null,
+   "ambito": "Regimental",
+   "apreciacao": "Indefinida"
+  }
+ ],
+ "links": [
+  {
+   "rel": "self",
+   "href": "https://dadosabertos.camara.leg.br/api/v2/proposicoes/2576168/tramitacoes"
+  }
+ ]
+}

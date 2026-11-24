@@ -229,6 +229,7 @@ class CommitteeRecord:
     committee_type: str | None = None
     attributes: dict = field(default_factory=dict)
     members: list[CommitteeMemberRecord] = field(default_factory=list)
+    scheme: str = "senado.colegiado"
 
 
 @dataclass

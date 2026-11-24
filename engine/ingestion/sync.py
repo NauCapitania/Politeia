@@ -244,7 +244,9 @@ class Persistor:
             proposal_id = None
             if ev.matter_code:
                 proposal_id = self.s.scalar(select(Proposal.id).where(
-                    Proposal.institution_id == inst, Proposal.attributes["codigo_materia"].astext == ev.matter_code))
+                    Proposal.institution_id == inst, or_(
+                        Proposal.attributes["codigo_materia"].astext == ev.matter_code,
+                        and_(Proposal.source_system_id == self.source.id, Proposal.source_id == ev.matter_code))))
             values = dict(institution_id=inst, source_system_id=self.source.id, source_id=ev.source_id,
                           session_code=ev.session_code, held_on=ev.held_on, description=ev.description,
                           matter=ev.matter, matter_code=ev.matter_code, proposal_id=proposal_id, secret=ev.secret,
@@ -293,7 +295,7 @@ class Persistor:
         inst, today = self.source.institution_id, self.now.date()
         n_members = 0
         for c in batch.committees:
-            cid, created = self.resolve("committee", Identifier("senado.colegiado", c.source_code))
+            cid, created = self.resolve("committee", Identifier(c.scheme, c.source_code))
             values = dict(institution_id=inst, name=c.name, abbreviation=c.abbreviation,
                           committee_type=c.committee_type, source_code=c.source_code, attributes=c.attributes,
                           raw_record_id=self.raw_ids[c.ref.raw], last_observed_at=self.now)
@@ -393,6 +395,8 @@ class Persistor:
                           official_url=p.official_url, attributes=p.attributes, last_observed_at=self.now)
             if existing:
                 prop_id = existing
+                if p.attributes.get("detail_missing"):  # list-only row: keep details saved by earlier runs
+                    values = {k: v for k, v in values.items() if v is not None and k != "attributes"}
                 if list_record:
                     values.pop("last_observed_at")
                 self.s.execute(update(Proposal).where(Proposal.id == prop_id).values(**values))
