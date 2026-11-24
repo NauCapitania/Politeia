@@ -420,6 +420,29 @@ def test_replay_proposals_reuses_original_evidence_without_claiming_a_fresh_fetc
         assert (s.get(M.Proposal, prop_id).status, s.get(M.Proposal, prop_id).last_observed_at) == (None, finished)
 
     persist = Persistor.persist_proposals
+    with factory() as s:
+        for proposal in s.scalars(select(M.Proposal).where(M.Proposal.source_id.in_(["9111975", "9125400"]))):
+            proposal.status = "Before interrupted replay"
+        s.commit()
+
+    def fail_on_second_proposal(persistor, batch, evidence):
+        assert len(batch.proposals) == 1
+        persist(persistor, batch, evidence)
+        if batch.proposals[0].source_id == "9125400":
+            raise RuntimeError("test replay persistence failure")
+
+    with monkeypatch.context() as patch:
+        patch.setattr(Persistor, "persist_proposals", fail_on_second_proposal)
+        with pytest.raises(RuntimeError, match="test replay persistence failure"):
+            replay_proposals(factory, run_id=run_id)
+    with factory() as s:
+        assert dict(s.execute(select(M.Proposal.source_id, M.Proposal.status).where(
+            M.Proposal.source_id.in_(["9111975", "9125400"]))).all()) == {
+                "9111975": None, "9125400": "Before interrupted replay",
+            }
+        failed = s.scalar(select(M.IngestionRun).where(M.IngestionRun.status == "failed",
+                          M.IngestionRun.stats["mode"].as_string() == "replay"))
+        assert failed.stats["proposals"] == 1 and failed.finished_at is not None
 
     def after_live_update(persistor, batch, evidence):
         with factory() as s:

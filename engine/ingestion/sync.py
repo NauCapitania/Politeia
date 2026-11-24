@@ -1,8 +1,9 @@
-"""Persists connector batches: raw evidence first, then normalized records in a single transaction."""
+"""Persists raw evidence before normalized records."""
 
 import logging
 import uuid
 from collections.abc import Callable
+from dataclasses import replace
 from datetime import UTC, datetime
 
 from sqlalchemy import and_, delete, func, or_, select, text, update
@@ -550,7 +551,13 @@ def process_batch(session: Session, source: SourceSystem, run: IngestionRun, bat
     persistor = Persistor(session, run, source, raw_ids)
     try:
         if scope == "proposals":
-            persistor.persist_proposals(batch, evidence)
+            if evidence is None:
+                persistor.persist_proposals(batch)
+            else:
+                for proposal in batch.proposals:
+                    persistor.persist_proposals(replace(batch, proposals=[proposal]), evidence)
+                    run.stats = stats | persistor.stats | {"warnings": warnings}
+                    session.commit()
         else:
             {"members": persistor.persist_members, "composition": persistor.persist_composition,
              "votes": persistor.persist_votes, "speeches": persistor.persist_speeches, "news": persistor.persist_news,
