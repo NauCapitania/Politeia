@@ -467,7 +467,7 @@ kbd { font: 9px var(--mono); padding: 2px 4px; border: 1px solid var(--line-stro
   .analysis-row { padding: 16px 18px; gap: 10px; }
   .analysis-row small { font-size: 9px; }
   .subnav { padding: 0 16px; }
-  .evidence-window { top: 66px; right: 8px; width: calc(100vw - 16px); bottom: 102px; }
+  .evidence-window { top: 66px; right: 8px; width: calc(100vw - 16px); bottom: 146px; }
   .range-row { grid-template-columns: minmax(0, 1fr) minmax(60px, 1fr) 44px; gap: 6px; }
   .status-card { grid-template-columns: minmax(0, 1fr); }
   .master-timeline li { grid-template-columns: 68px minmax(0, 1fr); }
