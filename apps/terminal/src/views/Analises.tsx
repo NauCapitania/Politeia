@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Icon } from '@blueprintjs/core'
 import { ANALYSES, loadNotebooks, NOTEBOOK_KEY, type Notebook } from '../analyses'
 import { useStore } from '../store'
@@ -13,9 +13,23 @@ export function Analises() {
   const [saveError, setSaveError] = useState(false)
   const current = notebooks.find((n) => n.id === analysisId)
 
-  function save(next: Notebook[]) {
-    setNotebooks(next)
-    try { localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(next)); setSaveError(false) } catch { setSaveError(true) }
+  useEffect(() => {
+    const refresh = (event: StorageEvent) => { if (event.key === NOTEBOOK_KEY || event.key === null) setNotebooks(loadNotebooks()) }
+    window.addEventListener('storage', refresh)
+    return () => window.removeEventListener('storage', refresh)
+  }, [])
+
+  function save(notebook: Notebook) {
+    const merge = (all: Notebook[]) => all.some((n) => n.id === notebook.id) ? all.map((n) => n.id === notebook.id ? notebook : n) : [...all, notebook]
+    try {
+      const next = merge(loadNotebooks())
+      localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(next))
+      setNotebooks(next)
+      setSaveError(false)
+    } catch {
+      setNotebooks((all) => merge(all))
+      setSaveError(true)
+    }
   }
   function open(id: string) {
     if (id === 'senado-2027' || id === 'votacoes') setSenadoTab(id === 'senado-2027' ? 'presidencia2027' : 'votacoes')
@@ -29,13 +43,13 @@ export function Analises() {
     <p className="lede">{current.question}</p>{notice}
     <button className="quiet-button mb" onClick={() => setAgentDraft(`Análise: ${current.title}\nPergunta: ${current.question}\nInvestigue com fontes e datas, distinguindo fatos, declarações e hipóteses.`)}>Investigar com o agente →</button>
     <label className="notebook-label" htmlFor="analysis-notes">Evidências, links e hipóteses</label>
-    <textarea id="analysis-notes" className="notebook-notes" maxLength={40000} value={current.notes} placeholder="Registre a data e a fonte de cada fato. Separe hipóteses de conclusões." onChange={(e) => save(notebooks.map((n) => n.id === current.id ? { ...n, notes: e.target.value } : n))} />
+    <textarea id="analysis-notes" className="notebook-notes" maxLength={40000} value={current.notes} placeholder="Registre a data e a fonte de cada fato. Separe hipóteses de conclusões." onChange={(e) => save({ ...current, notes: e.target.value })} />
     <h2>Explore as conexões</h2><p className="muted">Consulte as instituições e use o agente para formular perguntas com fontes. Notas pessoais não são evidências verificadas.</p>
     <div className="toolbar"><button className="quiet-button" onClick={() => setView('congresso')}>Congresso Nacional →</button><button className="quiet-button" onClick={() => setView('stf')}>Supremo Tribunal Federal →</button><button className="quiet-button" onClick={() => setView('executivo')}>Poder Executivo →</button><button className="quiet-button" onClick={() => setView('partidos')}>Partidos →</button></div>
   </div>
   return <div className="view">
     <div className="overview-heading"><div><div className="eyebrow">CONEXÕES, NÃO SILOS</div><h1>Análises</h1><p>Uma plataforma, várias perguntas. Cada análise reúne um recorte dos dados institucionais.</p></div><button className="quiet-button" onClick={() => setCreating((v) => !v)} aria-expanded={creating}><Icon icon="add" size={14} /> Nova análise</button></div>
-    {creating && <form className="card analysis-form mb" onSubmit={(e) => { e.preventDefault(); if (!title.trim() || !question.trim()) return; const id = `local-${crypto.randomUUID()}`; save([...notebooks, { id, title: title.trim(), question: question.trim(), notes: '' }]); setCreating(false); setTitle(''); setQuestion(''); setAnalysis(id) }}>
+    {creating && <form className="card analysis-form mb" onSubmit={(e) => { e.preventDefault(); if (!title.trim() || !question.trim()) return; const id = `local-${crypto.randomUUID()}`; save({ id, title: title.trim(), question: question.trim(), notes: '' }); setCreating(false); setTitle(''); setQuestion(''); setAnalysis(id) }}>
       <label>Título<input required maxLength={100} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: tramitação da reforma tributária" /></label>
       <label>Pergunta de análise<textarea required maxLength={1000} value={question} onChange={(e) => setQuestion(e.target.value)} placeholder="O que você quer entender e quais conexões investigar?" /></label>
       <button className="quiet-button" type="submit">Criar caderno</button>{notice}

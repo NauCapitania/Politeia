@@ -206,6 +206,21 @@ describe('Plataforma modular', () => {
     expect(body).not.toContain('Notas privadas')
   })
 
+  it('preserva cadernos alterados em outra aba ao salvar notas locais', async () => {
+    const first = { id: 'local-one', title: 'Educação', question: 'Pergunta um', notes: '' }
+    const other = { id: 'local-two', title: 'Saúde', question: 'Pergunta dois', notes: 'Evidência salva em outra aba' }
+    localStorage.setItem('politeia.analises.v1', JSON.stringify([first]))
+    useStore.setState({ view: 'analises', analysisId: first.id })
+    renderApp()
+    const input = await screen.findByLabelText('Evidências, links e hipóteses')
+    // Another tab saves after this tab has loaded its local state.
+    localStorage.setItem('politeia.analises.v1', JSON.stringify([first, other]))
+    await userEvent.type(input, 'Nova nota')
+    const saved = JSON.parse(localStorage.getItem('politeia.analises.v1')!)
+    expect(saved).toContainEqual(other)
+    expect(saved).toContainEqual({ ...first, notes: 'Nova nota' })
+  })
+
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
     useStore.setState({ view: 'congresso' })
     renderApp()
