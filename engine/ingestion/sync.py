@@ -16,6 +16,7 @@ from engine.db.models import (
     Committee,
     CommitteeMembership,
     EntityEvidence,
+    ExecutiveBody,
     ExternalIdentifier,
     IndividualVote,
     IngestionRun,
@@ -169,8 +170,10 @@ class Persistor:
         self._count("mandates", len(seen_mandates))
 
         if batch.complete_member_list:
+            listed = (Mandate.status != "not_observed" if batch.complete_term_history
+                      else Mandate.status == "in_exercise")
             stale = self.s.execute(update(Mandate).where(
-                Mandate.source_system_id == self.source.id, Mandate.status == "in_exercise",
+                Mandate.source_system_id == self.source.id, listed,
                 Mandate.id.not_in(seen_mandates)).values(status="not_observed"))
             self._count("mandates_no_longer_listed", stale.rowcount or 0)
 
@@ -448,6 +451,38 @@ class Persistor:
                 self._count("events")
         self._count("proposals", len(batch.proposals))
 
+    # ---------------------------------------------------------------- executive structure
+    def persist_executive_structure(self, batch: Batch) -> None:
+        """Upsert SIORG organs/entities; those missing from a complete listing stay, flagged not current."""
+        inst = self.source.institution_id
+        existing = dict(self.s.execute(select(ExecutiveBody.siorg_code, ExecutiveBody.id)
+                                       .where(ExecutiveBody.institution_id == inst)).all())
+        seen = []
+        for b in batch.executive_bodies:
+            values = dict(source_system_id=self.source.id, parent_code=b.parent_code, unit_type=b.unit_type,
+                          name=b.name, acronym=b.acronym, legal_nature=b.legal_nature, competence=b.competence,
+                          purpose=b.purpose, mission=b.mission, legal_basis=b.legal_basis, site=b.site,
+                          version=b.version, version_start=b.version_start, is_current=True,
+                          attributes=b.attributes, raw_record_id=self.raw_ids[b.ref.raw], last_observed_at=self.now,
+                          last_seen_run_id=self.run.id)
+            body_id = existing.get(b.code)
+            if body_id:
+                self.s.execute(update(ExecutiveBody).where(ExecutiveBody.id == body_id).values(**values))
+                self._count("executive_bodies_updated")
+            else:
+                body_id = new_id("exb")
+                self.s.add(ExecutiveBody(id=body_id, institution_id=inst, siorg_code=b.code,
+                                         first_observed_at=self.now, **values))
+                self.s.flush()
+                self._count("executive_bodies_created")
+            seen.append(body_id)
+            self.evidence("executive_body", body_id, b.ref)
+        if seen:
+            gone = self.s.execute(update(ExecutiveBody).where(
+                ExecutiveBody.institution_id == inst, ExecutiveBody.is_current.is_(True),
+                ExecutiveBody.id.not_in(seen)).values(is_current=False))
+            self._count("executive_bodies_no_longer_listed", gone.rowcount or 0)
+
 
 def sync_source(factory: sessionmaker, source_id: str, scopes: list[str] | None = None, client=None) -> list[dict]:
     results = []
@@ -512,7 +547,8 @@ def process_batch(session: Session, source: SourceSystem, run: IngestionRun, bat
         else:
             {"members": persistor.persist_members, "composition": persistor.persist_composition,
              "votes": persistor.persist_votes, "speeches": persistor.persist_speeches, "news": persistor.persist_news,
-             "committees": persistor.persist_committees}[scope](batch)
+             "committees": persistor.persist_committees,
+             "structure": persistor.persist_executive_structure}[scope](batch)
     except Exception as exc:
         session.rollback()
         run = session.get(IngestionRun, run.id)

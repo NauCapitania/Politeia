@@ -14,7 +14,8 @@ from engine.db.models import DossierItem, Mandate, NewsItem, NewsMention, Person
 def _patterns(s: Session) -> list[tuple[str, str, re.Pattern, str]]:
     """(entity_kind, entity_id, pattern, confidence) for senators and curated actors (e.g. STF ministers)."""
     out = []
-    people = s.execute(select(Person.id, Person.name).join(Mandate, Mandate.person_id == Person.id).distinct())
+    people = s.execute(select(Person.id, Person.name).join(Mandate, Mandate.person_id == Person.id)
+                       .where(Mandate.role_type != "minister_of_state").distinct())
     for pid, name in people:
         if name and len(name.split()) >= 2:
             out.append(("person", pid, re.compile(rf"\b{re.escape(normalize_name(name))}\b"), "high"))

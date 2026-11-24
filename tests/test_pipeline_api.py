@@ -90,9 +90,9 @@ def test_raw_evidence_preserved_with_hash(factory):
     assert rows and all(len(h) == 64 and (p is not None or t) for h, p, t in rows)
 
 
-def test_senate_is_the_only_institution(api):
+def test_registered_institutions(api):
     insts = api.get("/v1/institutions").json()
-    assert {i["id"] for i in insts} == set(SOURCES)
+    assert {i["id"] for i in insts} == set(SOURCES) | {"ins_br_executivo"}
     m = api.get("/v1/institutions/ins_br_senado/members").json()
     p = api.get("/v1/institutions/ins_br_senado/proposals").json()
     assert m["total"] > 0 and p["total"] > 0
@@ -150,6 +150,8 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
 
     def capabilities_with_private_diagnostics(session, institution_id):
         capabilities = get_capabilities(session, institution_id)
+        if not capabilities:
+            return capabilities
         capabilities[0].issues = [
             {"code": "last_run_failed", "message": "internal connection details"},
             {"code": "missing_affiliation", "count": 2},

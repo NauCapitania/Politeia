@@ -228,6 +228,8 @@ def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: Thr
         save(path)
     save("dossies/stf-caso-master", optional=True)
     save("dossies/partidos", optional=True)
+    save("dossies/poder-executivo", optional=True)
+    save("executivo")
     committees = save("comissoes")
     votes = save("votacoes", limit=2000)
     details = (f"{route}/{row['id']}" for route, rows in (("comissoes", committees), ("votacoes", votes))
