@@ -97,7 +97,7 @@ export const useIngestion = (institution?: string) =>
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Src = { url: string; outlet: string; date?: string | null; kind: string }
 export type SeatRow = {
-  person_id: string; code?: string; name: string; photo_url?: string; uf?: string; party?: string | null
+  person_id: string; code?: string; name: string; full_name?: string | null; photo_url?: string; uf?: string; party?: string | null
   participation: string; exercise_start?: string; exercise_end?: string | null; mandate_end?: string | null
 }
 const get = <T,>(path: string, params?: Record<string, string | number | undefined | null>) => () => api<T>(path, params)

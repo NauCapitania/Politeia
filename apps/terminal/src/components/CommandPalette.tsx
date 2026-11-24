@@ -29,7 +29,7 @@ export function CommandPalette({ onClose }: { onClose: () => void }) {
     label: d.label, detail: d.detail, icon: d.icon, run: () => d.tab ? setSenadoTab(d.tab) : setView(d.view!),
   }))
   if (term) {
-    for (const s of (seats.data?.seats ?? []).filter((s) => normalize(`${s.name} ${s.party} ${s.uf}`).includes(term)).slice(0, 6)) {
+    for (const s of (seats.data?.seats ?? []).filter((s) => normalize(`${s.name} ${s.full_name ?? ''} ${s.party} ${s.uf}`).includes(term)).slice(0, 6)) {
       actions.push({ label: s.name, detail: `${s.party ?? 'Sem partido'} · ${s.uf ?? ''} · Perfil do senador`, icon: 'person', run: () => { setSenadoTab('composicao'); select(s.person_id) } })
     }
     actions.push({ label: `Buscar proposições: “${query.trim()}”`, detail: 'Pesquisar na base legislativa', icon: 'search', run: () => { setSearch(query.trim()); setSenadoTab('proposicoes') } })

@@ -71,11 +71,12 @@ describe('Espaço de trabalho', () => {
 
   it('busca um senador e abre e fecha suas evidências', async () => {
     useStore.setState({ view: 'inicio' })
+    mockFetch({ '/v1/senado/composicao': { date: '2026-11-24', observed: 1, seats: [{ ...seat(1), full_name: 'Senador Um' }] } })
     renderApp()
     await screen.findByRole('heading', { name: 'A política em perspectiva.' })
     await userEvent.keyboard('{Control>}k{/Control}')
     const input = await screen.findByRole('combobox')
-    await userEvent.type(input, 'Senador 1')
+    await userEvent.type(input, 'Senador Um')
     await userEvent.click(await screen.findByText('Senador 1', { exact: true }))
     expect(await screen.findByText('Senador Um')).toBeInTheDocument()
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument()
