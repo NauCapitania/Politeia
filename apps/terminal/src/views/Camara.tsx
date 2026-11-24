@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Button, Callout, HTMLSelect, InputGroup, NonIdealState, Spinner, Tab, Tabs } from '@blueprintjs/core'
-import { useIngestion, useInstitutions } from '../api/client'
+import { useCapabilities, useInstitutions } from '../api/client'
 import {
   CAMARA, useCamaraCommittee, useCamaraCommittees, useCamaraComposition, useCamaraSwitches, useCamaraVote, useCamaraVotes,
 } from '../api/camara'
@@ -16,9 +16,8 @@ const SYNC = (_scope: string) => 'Confira os filtros e a cobertura desta versão
 
 export function Camara() {
   const [tab, setTab] = useState<CamaraTab>('composicao')
-  const ingestion = useIngestion(CAMARA)
-  const runs = ingestion.data?.runs ?? []
-  const incomplete = ingestion.isSuccess && ['members', 'proposals', 'votes', 'committees'].some((scope) => runs.find((r) => r.scope.includes(scope))?.status !== 'succeeded')
+  const coverage = useCapabilities(CAMARA)
+  const incomplete = coverage.isSuccess && ['members', 'proposals', 'votes', 'committees'].some((scope) => !coverage.data?.some((c) => c.capability === scope && c.status === 'available'))
   return (
     <div className="view">
       <InstitutionMasthead kind="camara" eyebrow="PODER LEGISLATIVO · REPRESENTAÇÃO DO POVO" title="Câmara dos Deputados" subtitle="Representação, debate e fiscalização. Acompanhe o caminho das propostas." />
