@@ -13,6 +13,7 @@ import { ANALYSES } from '../analyses'
 type Turn = { papel: 'usuario' | 'agente'; texto: string; graficos?: ChartSpec[]; redes?: NetworkSpec[]; passos?: string[]; erro?: boolean }
 
 const STORAGE = 'politeia.agente.conversa'
+const MAX_QUESTION = 8000
 const SUGESTOES = [
   'Quem deve ganhar a Presidência do Senado em 2027, e por quê?',
   'Quais são as atualizações do caso Master e o que ainda está em aberto?',
@@ -40,6 +41,7 @@ export function Agente() {
   const janela = useRef<HTMLElement>(null)
   const input = useRef<HTMLTextAreaElement>(null)
   const drag = useDragControls()
+  const tooLong = draft.trim().length > MAX_QUESTION
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE, JSON.stringify(turns.slice(-40))) } catch { /* histórico é opcional */ }
@@ -69,7 +71,7 @@ export function Agente() {
 
   async function send(text: string) {
     const pergunta = text.trim()
-    if (!pergunta || busy) return
+    if (!pergunta || pergunta.length > MAX_QUESTION || busy) return
     const history = [...turns.filter((t) => !t.erro), { papel: 'usuario' as const, texto: pergunta }]
     setTurns([...turns, { papel: 'usuario', texto: pergunta }, { papel: 'agente', texto: '', passos: [], graficos: [], redes: [] }])
     setDraft('')
@@ -158,8 +160,9 @@ export function Agente() {
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void send(draft) } }} />
               {busy
                 ? <Button icon="stop" onClick={() => abort.current?.abort()} aria-label="Parar" title="Parar" />
-                : <Button type="submit" intent="primary" icon="send-message" disabled={!draft.trim()} aria-label="Enviar" title="Enviar (Enter)" />}
+                : <Button type="submit" intent="primary" icon="send-message" disabled={!draft.trim() || tooLong} aria-label="Enviar" title="Enviar (Enter)" />}
             </form>
+            {tooLong && <p className="agente-aviso warn-text" role="alert">A pergunta tem {draft.trim().length} caracteres. Reduza para até 8.000 antes de enviar; o rascunho foi preservado.</p>}
             <p className="agente-aviso">Análises e previsões são inferência, não fato. Confira as fontes.</p>
           </motion.section>
         )}

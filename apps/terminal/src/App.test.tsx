@@ -252,6 +252,18 @@ describe('Plataforma modular', () => {
     expect(await screen.findByRole('heading', { name: 'Supremo Tribunal Federal' })).toBeInTheDocument()
   })
 
+  it('não envia nem corta silenciosamente um rascunho acima do limite do agente', async () => {
+    useStore.setState({ view: 'analises', agentDraft: 'a'.repeat(8001) })
+    renderApp()
+    const input = await screen.findByLabelText('Pergunta ao agente') as HTMLTextAreaElement
+    expect(input.value).toHaveLength(8001)
+    expect(screen.getByRole('alert')).toHaveTextContent('Reduza para até 8.000')
+    expect(screen.getByRole('button', { name: 'Enviar' })).toBeDisabled()
+    await userEvent.click(input)
+    await userEvent.keyboard('{Enter}')
+    expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
+  })
+
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
     useStore.setState({ view: 'congresso' })
     renderApp()
