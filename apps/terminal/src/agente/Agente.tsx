@@ -35,6 +35,7 @@ export function Agente() {
   const [busy, setBusy] = useState(false)
   const abort = useRef<AbortController | null>(null)
   const scroller = useRef<HTMLDivElement>(null)
+  const janela = useRef<HTMLElement>(null)
   const input = useRef<HTMLTextAreaElement>(null)
   const drag = useDragControls()
 
@@ -48,10 +49,13 @@ export function Agente() {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') {
         e.preventDefault()
         setOpen((o) => !o)
-      } else if (e.key === 'Escape') setOpen(false)
+      } else if (e.key === 'Escape' && janela.current?.contains(document.activeElement)) {
+        e.stopPropagation()
+        setOpen(false)
+      }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
   }, [])
 
   useEffect(() => { if (open) input.current?.focus() }, [open])
@@ -92,7 +96,7 @@ export function Agente() {
     <>
       <AnimatePresence>
         {!open && (
-          <motion.button className="agente-launcher" onClick={() => setOpen(true)} aria-label="Abrir agente político"
+          <motion.button className={`agente-launcher ${selectedId ? 'com-evidencias' : ''}`} onClick={() => setOpen(true)} aria-label="Abrir agente político"
             title="Agente político (Ctrl+J)" initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.6, opacity: 0 }} whileHover={{ scale: 1.06 }}>
             <span className="agente-orb" /><span>Agente</span><kbd>Ctrl J</kbd>
@@ -101,7 +105,7 @@ export function Agente() {
       </AnimatePresence>
       <AnimatePresence>
         {open && (
-          <motion.section className={`agente-janela ${wide ? 'wide' : ''}`} role="dialog" aria-label="Agente político"
+          <motion.section ref={janela} className={`agente-janela ${wide ? 'wide' : ''} ${selectedId ? 'com-evidencias' : ''}`} role="dialog" aria-label="Agente político"
             drag dragControls={drag} dragListener={false} dragMomentum={false}
             initial={{ opacity: 0, y: 24, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.97 }} transition={{ type: 'spring', stiffness: 380, damping: 32 }}>
@@ -113,7 +117,7 @@ export function Agente() {
               </div>
               <Button minimal small icon="trash" title="Nova conversa" aria-label="Nova conversa" disabled={busy || !turns.length}
                 onClick={() => setTurns([])} />
-              <Button minimal small icon={wide ? 'minimize' : 'maximize'} title={wide ? 'Reduzir' : 'Ampliar'}
+              <Button minimal small className="agente-ampliar" icon={wide ? 'minimize' : 'maximize'} title={wide ? 'Reduzir' : 'Ampliar'}
                 aria-label={wide ? 'Reduzir' : 'Ampliar'} onClick={() => setWide((w) => !w)} />
               <Button minimal small icon="cross" title="Fechar (Esc)" aria-label="Fechar agente" onClick={() => setOpen(false)} />
             </header>

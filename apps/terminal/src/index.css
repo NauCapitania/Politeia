@@ -532,9 +532,12 @@ kbd { font: 9px var(--mono); padding: 2px 4px; border: 1px solid var(--line-stro
 .agente-entrada { display: flex; gap: 8px; align-items: flex-end; padding: 10px 12px 6px; border-top: 1px solid var(--line); }
 .agente-entrada textarea { resize: none; }
 .agente-aviso { font-size: 10px; color: var(--fg-3); margin: 0; padding: 0 12px 8px; }
+.agente-launcher.com-evidencias, .agente-janela.com-evidencias:not(.wide) { right: calc(min(420px, 100vw - 32px) + 32px); }
 @media (max-width: 760px) {
   .agente-launcher { right: 12px; bottom: 112px; }
-  .agente-janela, .agente-janela.wide { right: 8px; left: 8px; width: auto; top: 66px; bottom: 102px; height: auto; }
+  .agente-launcher.com-evidencias { display: none; }
+  .agente-ampliar { display: none; }
+  .agente-janela, .agente-janela.wide, .agente-janela.com-evidencias:not(.wide) { right: 8px; left: 8px; width: auto; top: 66px; bottom: 102px; height: auto; }
 }
 
 .agente-rede { margin: 4px 0 10px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-1); }
