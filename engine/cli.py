@@ -18,7 +18,7 @@ def main() -> None:
     sub.add_parser("bootstrap", help="register institution packs")
     sync = sub.add_parser("sync", help="ingest from official sources")
     sync.add_argument("--institution", action="append", help="institution id (default: all)")
-    sync.add_argument("--scope", action="append", help="members | proposals (default: all)")
+    sync.add_argument("--scope", action="append", help="composition | members | votes | speeches | proposals | news")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 
@@ -33,7 +33,7 @@ def main() -> None:
         source_ids = list(s.scalars(q))
     scopes = args.scope
     for sid in source_ids:
-        ordered = scopes or ["members", "proposals"]  # members first: author resolution needs persons
+        ordered = scopes or None  # connector order: persons before the records that reference them
         for result in sync_source(factory, sid, ordered):
             print(json.dumps({"source": sid} | result, ensure_ascii=False, default=str))
 

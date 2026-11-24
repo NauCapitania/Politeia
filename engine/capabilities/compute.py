@@ -14,10 +14,13 @@ from engine.db.models import (
     IngestionRun,
     LegislativeEvent,
     Mandate,
+    MandateExercise,
     PartyMembership,
     Proposal,
     ProposalAuthor,
+    Speech,
     ValidationIssue,
+    VoteEvent,
 )
 from engine.registry import pack_for
 
@@ -55,6 +58,22 @@ def _counts(s: Session, inst: str, capability: str) -> tuple[int, dict]:
             Proposal.institution_id == inst, ProposalAuthor.author_kind == "member",
             ProposalAuthor.person_id.is_(None))) or 0
         return sum(rows.values()), {"by_resolution": rows, "member_authors_unresolved": member_unresolved}
+    if capability == "composition_history":
+        n = s.scalar(select(func.count(func.distinct(Mandate.person_id))).where(Mandate.institution_id == inst)) or 0
+        return n, {}
+    if capability == "mandate_exercises":
+        n = s.scalar(select(func.count()).where(MandateExercise.institution_id == inst)) or 0
+        return n, {}
+    if capability == "votes":
+        n, lo, hi, secret = s.execute(select(func.count(), func.min(VoteEvent.held_on), func.max(VoteEvent.held_on),
+                                             func.count().filter(VoteEvent.secret.is_(True)))
+                                      .where(VoteEvent.institution_id == inst)).one()
+        return n or 0, {"from": lo.isoformat() if lo else None, "to": hi.isoformat() if hi else None,
+                        "secret": secret}
+    if capability == "speeches":
+        n = s.scalar(select(func.count()).select_from(Speech).join(Mandate, Mandate.person_id == Speech.person_id)
+                     .where(Mandate.institution_id == inst, Mandate.status == "in_exercise")) or 0
+        return n, {}
     if capability == "proposal_events":
         n = s.scalar(select(func.count()).where(LegislativeEvent.institution_id == inst)) or 0
         return n, {}

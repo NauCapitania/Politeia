@@ -141,6 +141,72 @@ class ProposalRecord:
 
 
 @dataclass
+class ExerciseRecord:
+    """A period in which `person` actually sat in the seat of `mandate`."""
+
+    person: Identifier
+    mandate: Identifier
+    source_exercise_id: str
+    ref: Ref
+    start_date: date | None = None
+    end_date: date | None = None
+    end_cause_code: str | None = None
+    end_cause: str | None = None
+
+
+@dataclass
+class IndividualVoteRecord:
+    person: Identifier
+    name: str
+    party: str | None
+    unit: str | None
+    vote_code: str | None
+    vote_label: str | None
+
+
+@dataclass
+class VoteEventRecord:
+    source_id: str
+    ref: Ref
+    held_on: date | None
+    description: str | None
+    secret: bool
+    result: str | None
+    session_code: str | None = None
+    matter: str | None = None
+    matter_code: str | None = None
+    totals: dict = field(default_factory=dict)
+    votes: list[IndividualVoteRecord] = field(default_factory=list)
+    attributes: dict = field(default_factory=dict)
+
+
+@dataclass
+class SpeechRecord:
+    source_id: str
+    person: Identifier
+    ref: Ref
+    delivered_on: date | None
+    kind: str | None = None
+    summary: str | None = None
+    indexing: str | None = None
+    session: str | None = None
+    url: str | None = None
+    text_url: str | None = None
+
+
+@dataclass
+class NewsRecord:
+    url: str
+    title: str
+    outlet: str
+    feed: str
+    ref: Ref
+    excerpt: str | None = None
+    published_at: datetime | None = None
+    topics: list[str] = field(default_factory=list)
+
+
+@dataclass
 class Issue:
     severity: str  # info | warning | error
     code: str
@@ -158,6 +224,10 @@ class Batch:
     mandates: list[MandateRecord] = field(default_factory=list)
     memberships: list[PartyMembershipRecord] = field(default_factory=list)
     proposals: list[ProposalRecord] = field(default_factory=list)
+    exercises: list[ExerciseRecord] = field(default_factory=list)
+    vote_events: list[VoteEventRecord] = field(default_factory=list)
+    speeches: list[SpeechRecord] = field(default_factory=list)
+    news: list[NewsRecord] = field(default_factory=list)
     issues: list[Issue] = field(default_factory=list)
     complete_member_list: bool = False
 

@@ -14,9 +14,11 @@ from engine.capabilities.compute import recompute_capabilities
 from engine.db.models import (
     EntityEvidence,
     ExternalIdentifier,
+    IndividualVote,
     IngestionRun,
     LegislativeEvent,
     Mandate,
+    MandateExercise,
     Party,
     PartyMembership,
     Person,
@@ -25,7 +27,9 @@ from engine.db.models import (
     RawRecord,
     RelationshipEvidence,
     SourceSystem,
+    Speech,
     ValidationIssue,
+    VoteEvent,
     new_id,
 )
 from engine.registry import build_connector
@@ -193,6 +197,93 @@ class Persistor:
             ).values(is_current=False))
         self._count("party_memberships", len(batch.memberships))
 
+    # ---------------------------------------------------------------- composition, votes, speeches
+    def ensure_person(self, ident: Identifier, name: str) -> str:
+        pid, created = self.resolve("person", ident)
+        if created:
+            self.s.add(Person(id=pid, name=name, first_observed_at=self.now, last_observed_at=self.now))
+            self.s.flush()
+            self._count("persons_created")
+        return pid
+
+    def persist_composition(self, batch: Batch) -> None:
+        self.persist_members(batch)
+        inst = self.source.institution_id
+        rows = []
+        for e in batch.exercises:
+            person_id = self.lookup("person", e.person)
+            mandate_id = self.lookup("mandate", e.mandate)
+            if not person_id or not mandate_id:
+                continue
+            rows.append(dict(institution_id=inst, person_id=person_id, mandate_id=mandate_id,
+                             source_exercise_id=e.source_exercise_id, start_date=e.start_date, end_date=e.end_date,
+                             end_cause_code=e.end_cause_code, end_cause=e.end_cause))
+        for i in range(0, len(rows), 500):
+            stmt = insert(MandateExercise).values(rows[i:i + 500])
+            self.s.execute(stmt.on_conflict_do_update(
+                constraint="uq_mandate_exercises_person_id_source_exercise_id",
+                set_={k: stmt.excluded[k] for k in ("mandate_id", "start_date", "end_date", "end_cause_code",
+                                                    "end_cause")}))
+        self._count("exercises", len(rows))
+
+    def persist_votes(self, batch: Batch) -> None:
+        inst = self.source.institution_id
+        n_votes = 0
+        for ev in batch.vote_events:
+            existing = self.s.scalar(select(VoteEvent.id).where(
+                VoteEvent.source_system_id == self.source.id, VoteEvent.source_id == ev.source_id))
+            vid = existing or new_id("vot")
+            proposal_id = None
+            if ev.matter_code:
+                proposal_id = self.s.scalar(select(Proposal.id).where(
+                    Proposal.institution_id == inst, Proposal.attributes["codigo_materia"].astext == ev.matter_code))
+            values = dict(institution_id=inst, source_system_id=self.source.id, source_id=ev.source_id,
+                          session_code=ev.session_code, held_on=ev.held_on, description=ev.description,
+                          matter=ev.matter, matter_code=ev.matter_code, proposal_id=proposal_id, secret=ev.secret,
+                          result=ev.result, totals=ev.totals, attributes=ev.attributes,
+                          raw_record_id=self.raw_ids[ev.ref.raw])
+            stmt = insert(VoteEvent).values(id=vid, **values)
+            self.s.execute(stmt.on_conflict_do_update(index_elements=[VoteEvent.id], set_=values))
+            rows = {}
+            for v in ev.votes:
+                pid = self.ensure_person(v.person, v.name)
+                rows[pid] = dict(vote_event_id=vid, person_id=pid, party_abbreviation=v.party,
+                                 represented_unit=v.unit, vote_code=v.vote_code, vote_label=v.vote_label)
+            if rows:
+                stmt = insert(IndividualVote).values(list(rows.values()))
+                self.s.execute(stmt.on_conflict_do_update(
+                    index_elements=[IndividualVote.vote_event_id, IndividualVote.person_id],
+                    set_={k: stmt.excluded[k] for k in ("party_abbreviation", "represented_unit", "vote_code",
+                                                        "vote_label")}))
+            n_votes += len(rows)
+        self._count("vote_events", len(batch.vote_events))
+        self._count("individual_votes", n_votes)
+
+    def persist_speeches(self, batch: Batch) -> None:
+        rows = []
+        for sp in batch.speeches:
+            pid = self.lookup("person", sp.person)
+            if not pid:
+                continue
+            existing = self.s.scalar(select(Speech.id).where(
+                Speech.source_system_id == self.source.id, Speech.source_id == sp.source_id))
+            rows.append(dict(id=existing or new_id("spc"), source_system_id=self.source.id, source_id=sp.source_id,
+                             person_id=pid, delivered_on=sp.delivered_on, kind=sp.kind, summary=sp.summary,
+                             indexing=sp.indexing, session=sp.session, url=sp.url, text_url=sp.text_url,
+                             raw_record_id=self.raw_ids[sp.ref.raw]))
+        for i in range(0, len(rows), 500):
+            stmt = insert(Speech).values(rows[i:i + 500])
+            self.s.execute(stmt.on_conflict_do_update(
+                constraint="uq_speeches_source_system_id_source_id",
+                set_={k: stmt.excluded[k] for k in ("person_id", "delivered_on", "kind", "summary", "indexing",
+                                                    "session", "url", "text_url", "raw_record_id")}))
+        self._count("speeches", len(rows))
+
+    def persist_news(self, batch: Batch) -> None:
+        from engine.media import persist_news
+
+        self._count("news", persist_news(self.s, self.source, self.raw_ids, batch))
+
     # ---------------------------------------------------------------- proposals
     def persist_proposals(self, batch: Batch) -> None:
         inst = self.source.institution_id
@@ -304,10 +395,9 @@ def _sync_scope(session: Session, source: SourceSystem, connector, scope: str) -
 
     persistor = Persistor(session, run, source, raw_ids)
     try:
-        if scope == "members":
-            persistor.persist_members(batch)
-        else:
-            persistor.persist_proposals(batch)
+        {"members": persistor.persist_members, "proposals": persistor.persist_proposals,
+         "composition": persistor.persist_composition, "votes": persistor.persist_votes,
+         "speeches": persistor.persist_speeches, "news": persistor.persist_news}[scope](batch)
     except Exception as exc:
         session.rollback()
         run = session.get(IngestionRun, run.id)
