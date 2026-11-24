@@ -28,6 +28,8 @@ LINK_RE = re.compile(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]")
 FILE_RE = re.compile(r"^\[\[(?:Ficheiro|Arquivo|File|Imagem|Image):", re.I)
 ATTR_RE = re.compile(r'^\s*(?:(?:rowspan|colspan|style|class|align)\s*=\s*"[^"]*"\s*)+\|(?!\|)')
 REF_RE = re.compile(r"<ref[^>/]*>(.*?)</ref>", re.S)
+NAMED_REF_RE = re.compile(r"<ref\s+name\s*=\s*\"?([^\">/]+?)\"?\s*>(.*?)</ref>", re.S)
+REUSED_REF_RE = re.compile(r"<ref\s+name\s*=\s*\"?([^\">/]+?)\"?\s*/>")
 TPL_FIELD = re.compile(r"\|\s*(url|t[ií]tulo|titulo|data|website|publicado|obra)\s*=\s*([^|}]*)")
 
 
@@ -47,9 +49,10 @@ def plain(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def refs(cell: str) -> list[dict]:
+def refs(cell: str, named: dict[str, str] | None = None) -> list[dict]:
     out = []
-    for body in REF_RE.findall(cell):
+    reused = [(named or {}).get(name.strip()) for name in REUSED_REF_RE.findall(cell)]
+    for body in REF_RE.findall(cell) + [b for b in reused if b]:
         fields = {k.lower(): v.strip() for k, v in TPL_FIELD.findall(body)}
         if fields.get("url"):
             out.append({"url": fields["url"], "title": fields.get("titulo") or fields.get("título"),
@@ -59,14 +62,42 @@ def refs(cell: str) -> list[dict]:
     return out
 
 
+def inline_cells(line: str) -> list[str]:
+    """Split `a || b || c` outside templates, links and refs."""
+    parts, depth, start, i = [], 0, 0, 0
+    while i < len(line):
+        if line.startswith(("{{", "[["), i):
+            depth, i = depth + 1, i + 2
+        elif line.startswith(("}}", "]]"), i):
+            depth, i = max(0, depth - 1), i + 2
+        elif line.startswith("<ref", i) and not line.startswith("<references", i):
+            end = line.find("/>", i) if re.match(r"<ref[^>]*/>", line[i:]) else line.find("</ref>", i)
+            i = len(line) if end < 0 else end + 2
+        elif depth == 0 and line.startswith("||", i):
+            parts.append(line[start:i])
+            start = i = i + 2
+        else:
+            i += 1
+    return parts + [line[start:]]
+
+
 def split_cells(row: str) -> list[str]:
     cells = []
     for line in row.split("\n"):
         if line.startswith("|") and not line.startswith(("|}", "|-", "|+")):
-            cells.append(ATTR_RE.sub("", line[1:]).strip())
+            cells += [ATTR_RE.sub("", c).strip() for c in inline_cells(line[1:])]
         elif cells and not line.startswith("!"):
             cells[-1] += "\n" + line
     return cells
+
+
+def table_rows(wikitext: str) -> list[str]:
+    return first_table(wikitext).split("\n|-")[1:]
+
+
+def cabinet_row(wikitext: str, n: int) -> str | None:
+    rows = table_rows(wikitext)
+    return rows[n].strip("\n") if 0 <= n < len(rows) else None
 
 
 def first_table(wikitext: str) -> str:
@@ -79,9 +110,13 @@ def parse_cabinet(wikitext: str) -> tuple[list[dict], list[str]]:
     """Rows of the first wikitable: ministry cells span several term rows (rowspan)."""
     terms, problems = [], []
     ministry = None
-    for n, row in enumerate(first_table(wikitext).split("\n|-")[1:]):
+    named = {k.strip(): v for k, v in NAMED_REF_RE.findall(wikitext)}
+    for n, row in enumerate(table_rows(wikitext)):
         cells = split_cells(row)
+        if not cells:
+            continue
         if len(cells) < 4:
+            problems.append(f"row {n}: too few cells")
             continue
         if not FILE_RE.match(cells[0]) and len(cells) >= 5 and not pt_date(cells[2]):
             link = LINK_RE.search(cells[0])
@@ -112,7 +147,7 @@ def parse_cabinet(wikitext: str) -> tuple[list[dict], list[str]]:
             "name": name, "interim": bool(re.search(r"interin[oa]", person_cell, re.I)),
             "party": None if normalize_name(party_abbr) in ("sem partido", "") else party_abbr.strip(),
             "uf": uf.strip() or None, "start": start, "end": pt_date(end_cell),
-            "end_note": None if pt_date(end_cell) else (end_text or None), "refs": refs(ref_cells),
+            "end_note": None if pt_date(end_cell) else (end_text or None), "refs": refs(ref_cells, named),
         })
     return terms, problems
 
@@ -138,7 +173,10 @@ class CabinetConnector(Connector):
             terms, problems = parse_cabinet(parsed.get("wikitext", ""))
             for p in problems:
                 batch.issues.append(Issue("warning", "cabinet_row_skipped", p, raw=idx))
+            if problems:  # a partial parse must not mark unparsed ministers as out of office
+                batch.complete_member_list = False
             seen: set[str] = set()
+            ordinal: dict[tuple, int] = {}
             for t in terms:
                 key = t["person_title"] or normalize_name(t["name"])
                 person = Identifier("ptwiki" if t["person_title"] else "ptwiki_name", key,
@@ -150,9 +188,11 @@ class CabinetConnector(Connector):
                         identifier=person, name=t["name"], ref=ref,
                         profile_url=f"https://pt.wikipedia.org/wiki/{t['person_title'].replace(' ', '_')}"
                         if t["person_title"] else None))
+                # no start date in the id: a corrected date on the page updates the same term
+                slot = (t["ministry_title"], key, "interim" if t["interim"] else "holder")
+                ordinal[slot] = ordinal.get(slot, 0) + 1
                 batch.mandates.append(MandateRecord(
-                    identifier=Identifier("ptwiki_cabinet_term",
-                                          f"{t['ministry_title']}|{key}|{t['start'].isoformat()}"),
+                    identifier=Identifier("ptwiki_cabinet_term", "|".join(slot) + f"|{ordinal[slot]}"),
                     person=person, role_type="minister_of_state", ref=ref,
                     represented_unit=t["ministry"], participation="interim" if t["interim"] else "holder",
                     start_date=t["start"], end_date=t["end"],

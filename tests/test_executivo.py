@@ -201,3 +201,61 @@ def test_resync_keeps_removed_bodies_and_terms_as_history(factory, api):
         assert frederico.status == "not_observed"
     d = api.get("/v1/executivo").json()
     assert "264359" not in {b["code"] for b in d["bodies"]}
+
+
+INLINE = "\n".join([
+    '{| class="wikitable"',
+    "! Ministério !! Foto !! Ministro !! Partido !! Início !! Fim !! Ref.",
+    "|-",
+    '| rowspan="2" | [[Ministério da Pesca e Aquicultura|Pesca e Aquicultura]] || [[Ficheiro:X.jpg|50px]] '
+    "|| [[André de Paula]] || [[PSD]]/PE || 1.º de janeiro de 2023 || 31 de março de 2026 "
+    '|| <ref name="pesca">{{citar web |url=https://g1.globo.com/pesca |titulo=Posse |website=G1}}</ref>',
+    "|-",
+    "| [[Ficheiro:Y.jpg|50px]] || [[Fulano de Tal]] || Sem partido || 1.º de abril de 2026 "
+    "|| {{N/A|''Em exercício''}} || <ref name=\"pesca\" />",
+    "|}",
+])
+
+
+def test_inline_cells_and_reused_named_refs():
+    terms, problems = parse_cabinet(INLINE)
+    assert not problems
+    assert [(t["name"], t["party"], t["ministry"]) for t in terms] == [
+        ("André de Paula", "PSD", "Pesca e Aquicultura"), ("Fulano de Tal", None, "Pesca e Aquicultura")]
+    assert terms[1]["refs"] == [{"url": "https://g1.globo.com/pesca", "title": "Posse", "date": None, "outlet": "G1"}]
+
+
+def wiki_handler(text: str):
+    body = json.dumps({"parse": {"title": "x", "revid": 1, "wikitext": text}}).encode()
+    return make_client(handler_for(BASE_ROWS, body), hosts=HOSTS)
+
+
+def test_partial_parse_is_not_a_complete_listing_and_ids_ignore_start_date():
+    second = INLINE.index("| [[Ficheiro:Y.jpg")
+    broken = INLINE[:second] + "| só uma célula\n|}"
+    batch = CabinetConnector({}, wiki_handler(broken)).run("members")
+    assert not batch.complete_member_list
+    assert any(i.code == "cabinet_row_skipped" for i in batch.issues)
+    ids = [m.identifier.value for m in CabinetConnector({}, wiki_handler(INLINE)).run("members").mandates]
+    moved = INLINE.replace("1.º de abril de 2026", "2 de abril de 2026")
+    assert ids == [m.identifier.value for m in CabinetConnector({}, wiki_handler(moved)).run("members").mandates]
+
+
+def test_cabinet_source_excerpt_is_the_cited_row(factory):
+    from engine.api.queries import source_record
+
+    with factory() as s:
+        mandate = s.scalar(select(M.Mandate).where(M.Mandate.institution_id == "ins_br_executivo")
+                           .order_by(M.Mandate.start_date))
+        ev = s.scalar(select(M.RelationshipEvidence).where(M.RelationshipEvidence.relationship_id == mandate.id))
+        rec = source_record(s, str(ev.raw_record_id), ev.json_path)
+    assert ev.json_path.startswith("$.parse.wikitext#row")
+    assert mandate.represented_unit in rec.excerpt or "Ministério" in rec.excerpt
+
+
+def test_news_does_not_link_cabinet_only_people(factory):
+    from engine.media import _patterns
+
+    with factory() as s:
+        names = {p.pattern for kind, _, p, _ in _patterns(s) if kind == "person"}
+    assert not any("andre de paula" in n for n in names)

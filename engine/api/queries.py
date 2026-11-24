@@ -8,6 +8,7 @@ from typing import Any
 from sqlalchemy import func, or_, select, union_all
 from sqlalchemy.orm import Session
 
+from connectors.executive.cabinet import cabinet_row
 from engine.api import schemas as S
 from engine.db.models import (
     CapabilityState,
@@ -489,6 +490,10 @@ def source_record(s: Session, raw_id: str, path: str | None) -> S.SourceRecord |
         n = int(re.findall(r"\d+", path)[0])
         parts = re.findall(r"<projeto .*?</projeto>", raw.payload_text, re.S)
         excerpt = parts[n - 1] if 0 < n <= len(parts) else None
+    if excerpt is None and path and "#row" in path:
+        base, _, row = path.partition("#row")
+        text = resolve_path(raw.payload, base)
+        excerpt = cabinet_row(text, int(row)) if isinstance(text, str) and row.isdigit() else None
     return S.SourceRecord(ref=_ref(raw, path), http_status=raw.http_status, response_format=raw.response_format,
                           parser_version=raw.parser_version, first_run_id=str(raw.first_run_id),
                           last_run_id=str(raw.last_run_id), last_seen_at=raw.last_seen_at,
