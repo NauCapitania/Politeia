@@ -100,6 +100,43 @@ def test_cartacapital_politics_uses_public_google_news_rss():
     assert news.excerpt is None
 
 
+def test_metropoles_rss_uses_politics_section_and_ignores_unrelated_items():
+    rss_source = next(s for s in pack_for("ins_br_senado")["sources"] if s["connector"] == "news-rss")
+    feed = next(f for f in rss_source["config"]["feeds"] if f["id"] == "metropoles")
+    payload = """<rss><channel>
+        <item><title>Real Madrid deve igualar salário de Bellingham ao de Vini Jr. em renovação</title>
+          <link>https://www.metropoles.com/esportes/futebol/real-madrid-bellingham</link>
+          <category>Política</category></item>
+        <item><title>Lula é citado em reportagem sobre reality show</title>
+          <link>https://www.metropoles.com/entretenimento/televisao/reality-show</link></item>
+        <item><title>Erika Hilton recebe ameaça de morte</title>
+          <link>https://www.metropoles.com/brasil/politica-brasil/erika-hilton</link></item>
+        <item><title>Eleições 2026: brasileiros reclamam de filas</title>
+          <link>https://www.metropoles.com/brasil/filas-para-votar</link></item>
+        <item><title>Câmara escura: aprenda a tirar fotos</title>
+          <link>https://www.metropoles.com/brasil/dicas-de-fotos?secao=politica</link></item>
+        <item><title>Corinthians: MPSP pede afastamento de presidente e intervenção judicial</title>
+          <link>https://www.metropoles.com/sao-paulo/afastamento-do-presidente-do-corinthians</link>
+          <description>MPSP diz que o clube foi capturado por um grupo político.</description></item>
+        <item><title>Notícia de última hora</title>
+          <link>https://www.metropoles.com/brasil/ultima-hora</link><category>Política</category></item>
+    </channel></rss>""".encode()
+
+    def handler(req: httpx.Request):
+        assert req.url.path == "/brasil/politica-brasil/feed"
+        return httpx.Response(200, content=payload)
+
+    client = make_client(handler, hosts=tuple(rss_source["allowed_hosts"]))
+    batch = NewsConnector({"feeds": [feed]}, client).run("news")
+    assert len(batch.raw) == 1
+    assert [n.title for n in batch.news] == [
+        "Erika Hilton recebe ameaça de morte",
+        "Eleições 2026: brasileiros reclamam de filas",
+        "Notícia de última hora",
+    ]
+    assert batch.news[-1].topics == ["politica"]
+
+
 def test_curated_dossiers_are_sourced_and_keep_messias_out_of_the_court():
     dossiers = {d["dossier"]: d for d in read_dossiers()}
     assert {"stf-caso-master", "presidencia-2025", "presidencia-2027"} <= set(dossiers)

@@ -1,12 +1,14 @@
 """Senate-monitor endpoints: composition by date, senator profile, votes, news, dossiers and presidency analyses."""
 
 from datetime import date
+from itertools import islice
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from connectors.news.politics import is_political_news
 from engine.analysis.presidencia import _claim, analysis_2025, analysis_2027
 from engine.db.models import (
     Claim,
@@ -150,13 +152,19 @@ def vote_detail(s: Session, vote_id: str, institution: str) -> dict:
 
 @router.get("/noticias")
 def noticias(s: DB, tema: str | None = None, entidade: str | None = None,
-             limit: Annotated[int, Query(le=200)] = 60):
+             limit: Annotated[int, Query(ge=0, le=200)] = 60):
     stmt = select(NewsItem)
     if tema:
         stmt = stmt.where(NewsItem.topics.contains([tema]))
     if entidade:
         stmt = stmt.join(NewsMention, NewsMention.news_item_id == NewsItem.id).where(NewsMention.entity_id == entidade)
-    rows = s.scalars(stmt.order_by(NewsItem.published_at.desc().nulls_last()).limit(limit)).all()
+    candidates = s.scalars(stmt.order_by(NewsItem.published_at.desc().nulls_last()).execution_options(yield_per=200))
+    try:
+        rows = list(islice((n for n in candidates if is_political_news(
+            n.url, n.title, n.excerpt, n.feed, topics=n.topics,
+        )), limit))
+    finally:
+        candidates.close()
     mentions: dict[str, list] = {}
     if rows:
         for m in s.scalars(select(NewsMention).where(NewsMention.news_item_id.in_([r.id for r in rows]))):

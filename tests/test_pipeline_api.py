@@ -161,12 +161,33 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
     monkeypatch.setattr(queries, "capabilities", capabilities_with_private_diagnostics)
     with factory() as session:
         load_dossiers(session)
+        session.add_all(M.NewsItem(id=id_, source_system_id="src_noticias_rss", feed="metropoles",
+                                   outlet="Metrópoles", url=f"https://www.metropoles.com/{path}",
+                                   title=title, published_at=datetime(2026, 11, day, tzinfo=UTC), topics=topics)
+                        for id_, path, title, day, topics in (
+                            ("nws_esporte", "esportes/futebol/real-madrid",
+                             "Real Madrid deve igualar salário de Bellingham ao de Vini Jr. em renovação", 24, []),
+                            ("nws_tv", "entretenimento/televisao/reality-show",
+                             "Série sobre o Senado ganha nova temporada", 23, ["senado", "politica"]),
+                            ("nws_justica", "poder-justica/caso-ninho-do-urubu",
+                             "MP do Rio tenta reverter absolvição de réus do caso Ninho do Urubu", 23, []),
+                            ("nws_senado", "brasil/relatorio", "Senado discute novo relatório", 22, ["senado"]),
+                            ("nws_secao", "brasil/politica-brasil/erika-hilton",
+                             "Erika Hilton recebe ameaça de morte", 21, []),
+                            ("nws_categoria", "brasil/ultima-hora", "Notícia de última hora", 20, ["politica"]),
+                        ))
         session.commit()
     now = datetime(2026, 11, 24, 1, 30, tzinfo=ZoneInfo("UTC"))
     export_snapshot(api, tmp_path, now)
 
     def read(path):
         return json.loads((tmp_path / f"{path}.json").read_text(encoding="utf-8"))
+
+    assert [n["id"] for n in api.get("/v1/noticias", params={"limit": 1}).json()] == ["nws_senado"]
+    assert [n["id"] for n in read("noticias")] == ["nws_senado", "nws_secao", "nws_categoria"]
+    assert [n["id"] for n in read("noticias/senado")] == ["nws_senado"]
+    with factory() as session:
+        assert session.get(M.NewsItem, "nws_esporte") is not None
 
     meta = read("meta")
     assert meta["generated_at"] == now.isoformat()

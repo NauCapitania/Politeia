@@ -8,6 +8,7 @@ from defusedxml import ElementTree
 
 from connectors.base.http import SourceAccessError
 from connectors.base.protocol import Batch, Connector, Issue, NewsRecord, RawResponse, Ref, normalize_name
+from connectors.news.politics import POLITICS_TOPIC, is_political_news
 
 EXCERPT_CHARS = 320
 TAG_RE = re.compile(r"<[^>]+>")
@@ -74,23 +75,30 @@ class NewsConnector(Connector):
                 title, link = _text(item, "title"), _text(item, "link")
                 if not title or not link or link in seen:
                     continue
-                seen.add(link)
                 outlet = feed["outlet"]
                 aggregated = feed.get("aggregator")
                 if aggregated:
                     outlet = _text(item, "source") or outlet
                     title = re.sub(rf"\s+-\s+{re.escape(outlet)}$", "", title)
+                title = html.unescape(title)
+                excerpt = None if aggregated else clean_excerpt(_text(item, "description"))
+                categories = [c.text for c in item.findall("category") if c.text]
+                if not is_political_news(link, title, excerpt, feed["id"], categories=categories):
+                    continue
+                seen.add(link)
+                topics = topics_for(f"{title} {excerpt or ''}")
+                if not is_political_news(link, title, excerpt, feed["id"]):
+                    topics.append(POLITICS_TOPIC)
                 published = None
                 if pub := _text(item, "pubDate"):
                     try:
                         published = parsedate_to_datetime(pub)
                     except (TypeError, ValueError):
                         published = None
-                excerpt = None if aggregated else clean_excerpt(_text(item, "description"))
                 batch.news.append(NewsRecord(
-                    url=link, title=html.unescape(title), outlet=outlet, feed=feed["id"],
+                    url=link, title=title, outlet=outlet, feed=feed["id"],
                     ref=Ref(idx, f"$.rss.channel.item[{i}]"), excerpt=excerpt, published_at=published,
-                    topics=topics_for(f"{title} {excerpt or ''}"),
+                    topics=topics,
                 ))
         return batch
 
