@@ -1,6 +1,6 @@
 {
  "dossier": "stf-caso-master",
- "as_of": "2026-11-23",
+ "as_of": "2026-11-24",
  "title": "STF e caso Banco Master",
  "disclaimer": "Menção em relatório ou reportagem não é prova de ilícito. O Politeia distingue fato oficial, cobertura jornalística, alegação e análise.",
  "items": [
@@ -539,8 +539,8 @@
     "received_on": "2026-11-23",
     "deadline_days": 15,
     "deadline_estimate": "2026-12-08",
-    "deadline_note": "Prazo administrativo de 15 dias (contagem em dias corridos é estimativa do Politeia); o descumprimento não gera sanção automática.",
-    "responsible": "Procurador-geral da República, Paulo Gonet, com a área criminal da PGR",
+    "deadline_note": "A PGR ainda não anunciou data para se manifestar, segundo a CNN Brasil. A contagem em dias corridos do prazo administrativo é uma estimativa do Politeia; o descumprimento não gera sanção automática.",
+    "responsible": "Paulo Gonet, o vice-PGR Hindemburgo Chateaubriand e outros dois subprocuradores, segundo a CNN Brasil",
     "possible_outcomes": [
      {
       "outcome": "Pedir arquivamento",
@@ -567,6 +567,12 @@
      "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
      "outlet": "CNN Brasil",
      "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/pgr-evita-cravar-prazo-sobre-relatorios-do-caso-master/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-23",
      "kind": "press_report"
     }
    ]
@@ -951,6 +957,60 @@
      "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
      "outlet": "CNN Brasil",
      "date": "2026-11-19",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_20",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-23",
+    "text": "STF divulga que Edson Fachin manteve a prisão preventiva de Daniel Vorcaro na PET 15.556, seguindo parecer da PGR sobre riscos à ordem pública e à instrução criminal.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://noticias.stf.jus.br/postsnoticias/stf-mantem-prisao-preventiva-de-daniel-vorcaro/",
+     "outlet": "STF",
+     "date": "2026-11-23",
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_21",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-23",
+    "text": "Metrópoles noticia que Kassio Nunes Marques relata o mandado de segurança em que a defesa de Vorcaro questiona a atuação de Fachin na Operação Compliance Zero. A relatoria é da ação, não da investigação principal.",
+    "status": "press_report",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://www.metropoles.com/colunas/manoela-alcantara/caso-master-kassio-e-relator-da-acao-de-vorcaro-contra-relatoria-de-fachin",
+     "outlet": "Metrópoles",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_22",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-23",
+    "text": "Segundo a CNN Brasil, Fachin deu dois dias às liquidantes do Master para avaliar a liberação de recursos do BRB, caso a caso; o Banco Central terá igual prazo em seguida. A intimação não libera os valores.",
+    "status": "press_report",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/fachin-intima-liquidante-do-master-a-avaliar-desbloqueio-de-recursos-do-brb/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-23",
      "kind": "press_report"
     }
    ]
