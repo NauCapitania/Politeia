@@ -134,10 +134,12 @@ class ProposalRecord:
     events: list[EventRecord] = field(default_factory=list)
     attributes: dict = field(default_factory=dict)
     extra_refs: list[Ref] = field(default_factory=list)
+    identifier_suffix: str | None = None
 
     @property
     def identifier(self) -> str:
-        return f"{self.type_code} {self.number}/{self.year}"
+        base = f"{self.type_code} {self.number}/{self.year}"
+        return f"{base} {self.identifier_suffix}" if self.identifier_suffix else base
 
 
 @dataclass
