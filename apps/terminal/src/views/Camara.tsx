@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import { Button, HTMLSelect, InputGroup, NonIdealState, Spinner, Tab, Tabs } from '@blueprintjs/core'
-import { useInstitutions } from '../api/client'
+import { Button, Callout, HTMLSelect, InputGroup, NonIdealState, Spinner, Tab, Tabs } from '@blueprintjs/core'
+import { useIngestion, useInstitutions } from '../api/client'
 import {
   CAMARA, useCamaraCommittee, useCamaraCommittees, useCamaraComposition, useCamaraSwitches, useCamaraVote, useCamaraVotes,
 } from '../api/camara'
@@ -12,14 +12,18 @@ import { Proposals } from './Proposals'
 import './camara.css'
 
 type CamaraTab = 'composicao' | 'trocas' | 'votacoes' | 'proposicoes' | 'comissoes'
-const SYNC = (scope: string) => `Execute \`python -m engine.cli sync --institution ${CAMARA} --scope ${scope}\`.`
+const SYNC = (scope: string) => `A cobertura de ${({ members: 'deputados e filiações', votes: 'votações', proposals: 'proposições', committees: 'comissões' } as Record<string, string>)[scope] ?? 'dados'} ainda está sendo preparada. Ausência de dados não significa ausência de atividade.`
 
 export function Camara() {
   const [tab, setTab] = useState<CamaraTab>('composicao')
+  const ingestion = useIngestion(CAMARA)
+  const runs = ingestion.data?.runs ?? []
+  const incomplete = ingestion.isSuccess && ['members', 'proposals', 'votes', 'committees'].some((scope) => runs.find((r) => r.scope.includes(scope))?.status !== 'succeeded')
   return (
     <div className="view">
       <InstitutionMasthead kind="camara" eyebrow="PODER LEGISLATIVO · REPRESENTAÇÃO DO POVO" title="Câmara dos Deputados" subtitle="Representação, debate e fiscalização. Acompanhe o caminho das propostas." />
       <p className="lede">513 deputados federais eleitos pelo sistema proporcional em cada UF, para mandatos de quatro anos. A Câmara inicia a maior parte dos projetos de lei, autoriza a abertura de processo contra o presidente da República e faz a tomada de contas do presidente quando elas não são apresentadas no prazo (CF, art. 51). Dados oficiais da API de Dados Abertos da Câmara.</p>
+      {incomplete && <Callout title="Cobertura em preparação" style={{ marginBottom: 20 }}>A cobertura da Câmara está incompleta nesta versão. Alguns painéis e perfis podem não conter todos os registros; isso não significa ausência de atividade. Os dados serão atualizados após a conclusão das coletas.</Callout>}
       <Tabs className="camara-tabs" id="camara-tabs" selectedTabId={tab} onChange={(t) => setTab(t as CamaraTab)} renderActiveTabPanelOnly>
         <Tab id="composicao" title="Composição" panel={<Composicao />} />
         <Tab id="trocas" title="Trocas de partido" panel={<Trocas />} />
