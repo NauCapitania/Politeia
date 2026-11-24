@@ -7,6 +7,8 @@ from connectors.base.http import SourceAccessError
 from connectors.base.protocol import (
     AuthorRecord,
     Batch,
+    CommitteeMemberRecord,
+    CommitteeRecord,
     Connector,
     EventRecord,
     ExerciseRecord,
@@ -51,7 +53,7 @@ def _https(url: str | None) -> str | None:
 class SenateConnector(Connector):
     id = "brazil-senate"
     version = "0.1.0"
-    scopes = ("composition", "members", "votes", "speeches", "proposals")
+    scopes = ("composition", "members", "votes", "speeches", "proposals", "committees")
 
     @property
     def base(self) -> str:
@@ -68,6 +70,8 @@ class SenateConnector(Connector):
             self._fetch_composition(batch)
         elif scope == "votes":
             self._fetch_votes(batch)
+        elif scope == "committees":
+            self._fetch_committees(batch)
         elif scope == "speeches":
             self._fetch_speeches(batch)
         else:
@@ -148,6 +152,29 @@ class SenateConnector(Connector):
                 batch.issues.append(Issue("warning", "votes_unavailable", str(exc), params))
             start = nxt
 
+    def _fetch_committees(self, batch: Batch) -> None:
+        """Active committees by type, then each committee's current composition (/comissao/{codigo})."""
+        seen: list[str] = []
+        for kind in self.config.get("committee_types", ["permanente", "temporaria", "cpi"]):
+            try:
+                resp = self.client.get(f"{self.base}/comissao/lista/{kind}")
+            except SourceAccessError as exc:
+                batch.issues.append(Issue("warning", "committee_list_unavailable", str(exc), {"tipo": kind}))
+                continue
+            idx = batch.add_raw(RawResponse(resp, "committee_list", kind))
+            for group in as_list(((batch.raw[idx].json().get("ListaBasicaComissoes") or {}).get("colegiado") or {})
+                                 .get("colegiados")):
+                for c in as_list(group.get("colegiado")):
+                    code = str(c.get("CodigoColegiado") or "")
+                    if code and code not in seen:
+                        seen.append(code)
+        for code in seen:
+            try:
+                r = self.client.get(f"{self.base}/comissao/{code}")
+                batch.add_raw(RawResponse(r, "committee", code))
+            except SourceAccessError as exc:
+                batch.issues.append(Issue("warning", "committee_unavailable", str(exc), {"codigoColegiado": code}))
+
     def _fetch_speeches(self, batch: Batch) -> None:
         resp = self.client.get(f"{self.base}/senador/lista/atual")
         idx = batch.add_raw(RawResponse(resp, "member_list"))
@@ -169,7 +196,7 @@ class SenateConnector(Connector):
     def normalize(self, batch: Batch) -> Batch:
         normalizers = {"members": self._normalize_members, "proposals": self._normalize_proposals,
                        "composition": self._normalize_composition, "votes": self._normalize_votes,
-                       "speeches": self._normalize_speeches}
+                       "speeches": self._normalize_speeches, "committees": self._normalize_committees}
         normalizers[batch.scope](batch)
         return batch
 
@@ -376,6 +403,58 @@ class SenateConnector(Connector):
                         vote_code=vote.get("siglaVotoParlamentar"), vote_label=vote.get("descricaoVotoParlamentar"),
                     ))
                 batch.vote_events.append(ev)
+
+    def _normalize_committees(self, batch: Batch) -> None:
+        listed: dict[str, dict] = {}
+        for raw in batch.raw:
+            if raw.record_kind != "committee_list":
+                continue
+            for group in as_list(((raw.json().get("ListaBasicaComissoes") or {}).get("colegiado") or {})
+                                 .get("colegiados")):
+                for c in as_list(group.get("colegiado")):
+                    listed.setdefault(str(c.get("CodigoColegiado")), c)
+        for idx, raw in enumerate(batch.raw):
+            if raw.record_kind != "committee":
+                continue
+            cols = as_list(((raw.json().get("ComissoesCongressoNacional") or {}).get("Colegiados") or {})
+                           .get("Colegiado"))
+            if not cols:
+                batch.issues.append(Issue("warning", "committee_empty", "Colegiado missing", raw=idx))
+                continue
+            c, base = cols[0], "$.ComissoesCongressoNacional.Colegiados.Colegiado[0]"
+            code = str(c.get("CodigoColegiado") or raw.source_record_key)
+            info = listed.get(code, {})
+            sec = c.get("InformacoesSecretaria") or {}
+            qty = (c.get("QuantidadesMembros") or {}).get("Distribuicao") or {}
+            rec = CommitteeRecord(
+                source_code=code, name=c.get("NomeColegiado") or info.get("NomeColegiado") or code,
+                abbreviation=c.get("SiglaColegiado"), ref=Ref(idx, base),
+                committee_type=(c.get("TipoColegiado") or {}).get("TipoColegiado"),
+                attributes={
+                    "active": True, "subtitle": info.get("DescricaoSubtitulo"), "purpose": info.get("TextoFinalidade"),
+                    "start_date": info.get("DataInicio") or c.get("DataInicio"),
+                    "seats": {"titulares": qty.get("SenadoresTitulares"), "suplentes": qty.get("SenadoresSuplentes")},
+                    "secretary": sec.get("Secretario"), "email": sec.get("eMail"),
+                    "meetings": sec.get("AgendaReuniao"),
+                    "url": f"https://legis.senado.leg.br/comissoes/comissao?codcol={code}",
+                },
+            )
+            roles = {str(x.get("CodigoParlamentar")): x.get("TipoCargo")
+                     for x in as_list((c.get("Cargos") or {}).get("Cargo")) if x.get("CodigoParlamentar")}
+            for b, pb in enumerate(as_list((c.get("MembrosBlocoSF") or {}).get("PartidoBloco"))):
+                for i, m in enumerate(as_list((pb.get("MembrosSF") or {}).get("Membro"))):
+                    pcode = str(m.get("CodigoParlamentar") or "")
+                    if not pcode:
+                        continue
+                    kind = "suplente" if (m.get("TipoVaga") or "").lower().startswith("supl") else "titular"
+                    rec.members.append(CommitteeMemberRecord(
+                        person=Identifier(PERSON, pcode),
+                        name=(m.get("NomeParlamentar") or "").removeprefix("Senadora ").removeprefix("Senador "),
+                        ref=Ref(idx, f"{base}.MembrosBlocoSF.PartidoBloco[{b}].MembrosSF.Membro[{i}]"),
+                        seat_kind=kind, party=m.get("Partido"), unit=m.get("SiglaUf"),
+                        bloc=pb.get("UnidadePartidaria"), role=roles.get(pcode) if kind == "titular" else None,
+                    ))
+            batch.committees.append(rec)
 
     def _normalize_speeches(self, batch: Batch) -> None:
         for idx, raw in enumerate(batch.raw):

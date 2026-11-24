@@ -114,3 +114,8 @@ export const useNews = (tema?: string, entidade?: string) =>
 export const useDossier = (d: string) => useQuery({ queryKey: ['dossier', d], queryFn: get<any>(`/dossies/${d}`) })
 export const usePres2025 = () => useQuery({ queryKey: ['pres2025'], queryFn: get<any>('/presidencia/2025') })
 export const usePres2027 = () => useQuery({ queryKey: ['pres2027'], queryFn: get<any>('/presidencia/2027') })
+export const useSeats2027 = (enabled: boolean) =>
+  useQuery({ queryKey: ['seats-2027'], queryFn: get<any>('/senado/composicao/2027'), enabled })
+export const useCommittees = () => useQuery({ queryKey: ['committees'], queryFn: get<any[]>('/comissoes') })
+export const useCommittee = (id?: string | null) =>
+  useQuery({ queryKey: ['committee', id], queryFn: get<any>(`/comissoes/${id}`), enabled: !!id })

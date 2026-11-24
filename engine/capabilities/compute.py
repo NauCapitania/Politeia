@@ -11,6 +11,8 @@ from sqlalchemy.orm import Session
 
 from engine.db.models import (
     CapabilityState,
+    Committee,
+    CommitteeMembership,
     IngestionRun,
     LegislativeEvent,
     Mandate,
@@ -80,6 +82,12 @@ def _counts(s: Session, inst: str, capability: str) -> tuple[int, dict]:
         n = s.scalar(select(func.count()).select_from(NewsItem)) or 0
         linked = s.scalar(select(func.count(func.distinct(NewsMention.news_item_id)))) or 0
         return n, {"linked_to_entities": linked}
+    if capability == "committees":
+        n = s.scalar(select(func.count()).where(Committee.institution_id == inst)) or 0
+        seats = s.scalar(select(func.count()).select_from(CommitteeMembership).join(
+            Committee, Committee.id == CommitteeMembership.committee_id).where(
+            Committee.institution_id == inst, CommitteeMembership.is_current.is_(True))) or 0
+        return n, {"current_seats": seats}
     if capability == "proposal_events":
         n = s.scalar(select(func.count()).where(LegislativeEvent.institution_id == inst)) or 0
         return n, {}

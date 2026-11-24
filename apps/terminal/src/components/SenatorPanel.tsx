@@ -47,6 +47,14 @@ export function SenatorPanel({ id }: { id: string }) {
               {!d.news.length && <p className="muted">Nenhuma notícia recente cita o nome completo deste senador.</p>}
               {d.news.map((n: any) => <div key={n.id} className="row"><a className="link" href={n.url} target="_blank" rel="noreferrer">{n.title}</a><div className="small muted">{n.outlet} · {fmtDate(n.published_at)}</div></div>)}
             </div>} />
+            <Tab id="comissoes" title={`Comissões (${d.committees?.length ?? 0})`} panel={<div>
+              {!d.committees?.length && <p className="muted">Sem comissões na composição atual.</p>}
+              <ul className="changes">
+                {d.committees?.map((c: any) => (
+                  <li key={`${c.id}-${c.seat_kind}`}><b className="mono">{c.abbreviation}</b> {c.name} — {c.seat_kind}{c.role ? ` · ${c.role.toLowerCase()}` : ''}</li>
+                ))}
+              </ul>
+            </div>} />
             <Tab id="posicoes" title="Posições" panel={<div>
               {!d.claims.length && <p className="muted">Nenhuma posição registrada com fonte. Ausência de registro não significa oposição.</p>}
               {d.claims.map((c: any) => <div key={c.id} className="row"><Badge kind={c.claim_type} /> {c.statement}<div><SrcList sources={c.sources} /></div></div>)}

@@ -207,6 +207,29 @@ class NewsRecord:
 
 
 @dataclass
+class CommitteeMemberRecord:
+    person: Identifier
+    name: str
+    ref: Ref
+    seat_kind: str  # titular | suplente
+    party: str | None = None
+    unit: str | None = None
+    bloc: str | None = None
+    role: str | None = None
+
+
+@dataclass
+class CommitteeRecord:
+    source_code: str
+    name: str
+    ref: Ref
+    abbreviation: str | None = None
+    committee_type: str | None = None
+    attributes: dict = field(default_factory=dict)
+    members: list[CommitteeMemberRecord] = field(default_factory=list)
+
+
+@dataclass
 class Issue:
     severity: str  # info | warning | error
     code: str
@@ -228,6 +251,7 @@ class Batch:
     vote_events: list[VoteEventRecord] = field(default_factory=list)
     speeches: list[SpeechRecord] = field(default_factory=list)
     news: list[NewsRecord] = field(default_factory=list)
+    committees: list[CommitteeRecord] = field(default_factory=list)
     issues: list[Issue] = field(default_factory=list)
     complete_member_list: bool = False
 

@@ -4,7 +4,7 @@ import logging
 import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import func, select, update
+from sqlalchemy import func, or_, select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -12,6 +12,8 @@ from connectors.base.http import SourceAccessError
 from connectors.base.protocol import Batch, Identifier, Ref
 from engine.capabilities.compute import recompute_capabilities
 from engine.db.models import (
+    Committee,
+    CommitteeMembership,
     EntityEvidence,
     ExternalIdentifier,
     IndividualVote,
@@ -35,7 +37,7 @@ from engine.db.models import (
 from engine.registry import build_connector
 
 log = logging.getLogger("politeia.sync")
-PREFIX = {"person": "per", "party": "pty", "mandate": "man"}
+PREFIX = {"person": "per", "party": "pty", "mandate": "man", "committee": "com"}
 
 
 def _now() -> datetime:
@@ -281,6 +283,49 @@ class Persistor:
                                                     "session", "url", "text_url", "raw_record_id")}))
         self._count("speeches", len(rows))
 
+    def persist_committees(self, batch: Batch) -> None:
+        """Upsert committees and their current seats; seats no longer listed are closed, not deleted."""
+        inst, today = self.source.institution_id, self.now.date()
+        n_members = 0
+        for c in batch.committees:
+            cid, created = self.resolve("committee", Identifier("senado.colegiado", c.source_code))
+            values = dict(institution_id=inst, name=c.name, abbreviation=c.abbreviation,
+                          committee_type=c.committee_type, source_code=c.source_code, attributes=c.attributes,
+                          raw_record_id=self.raw_ids[c.ref.raw], last_observed_at=self.now)
+            stmt = insert(Committee).values(id=cid, first_observed_at=self.now, **values)
+            self.s.execute(stmt.on_conflict_do_update(index_elements=[Committee.id], set_=values))
+            self.evidence("committee", cid, c.ref)
+            self._count("committees_created" if created else "committees_updated")
+            rows = {}
+            for m in c.members:
+                pid = self.ensure_person(m.person, m.name)
+                rows[(pid, m.seat_kind)] = dict(
+                    id=new_id("cms"), committee_id=cid, person_id=pid, seat_kind=m.seat_kind, role=m.role,
+                    party_abbreviation=m.party, represented_unit=m.unit, bloc=m.bloc, is_current=True,
+                    valid_from=today, last_observed_at=self.now, raw_record_id=self.raw_ids[m.ref.raw])
+            if rows:
+                stmt = insert(CommitteeMembership).values(list(rows.values()))
+                # Only an open period is extended; a senator returning after leaving starts a new row.
+                self.s.execute(stmt.on_conflict_do_update(
+                    index_elements=["committee_id", "person_id", "seat_kind"],
+                    index_where=text("is_current"),
+                    set_={k: stmt.excluded[k] for k in ("role", "party_abbreviation", "represented_unit", "bloc",
+                                                        "last_observed_at", "raw_record_id")}))
+            self.s.execute(update(CommitteeMembership).where(
+                CommitteeMembership.committee_id == cid, CommitteeMembership.is_current.is_(True),
+                CommitteeMembership.last_observed_at < self.now).values(is_current=False, valid_to=today))
+            n_members += len(rows)
+        self._count("committee_members", n_members)
+        if not any(i.code in ("committee_list_unavailable", "committee_unavailable") for i in batch.issues):
+            # Complete listing: committees absent from it are no longer active (e.g. a CPI that ended).
+            gone = select(Committee.id).where(Committee.institution_id == inst, or_(
+                Committee.last_observed_at.is_(None), Committee.last_observed_at < self.now))
+            self.s.execute(update(CommitteeMembership).where(
+                CommitteeMembership.committee_id.in_(gone), CommitteeMembership.is_current.is_(True))
+                .values(is_current=False, valid_to=today))
+            self.s.execute(update(Committee).where(Committee.id.in_(gone)).values(
+                attributes=Committee.attributes.op("||")(func.jsonb_build_object("active", False))))
+
     def persist_news(self, batch: Batch) -> None:
         from engine.media import persist_news
 
@@ -400,7 +445,8 @@ def _sync_scope(session: Session, source: SourceSystem, connector, scope: str) -
     try:
         {"members": persistor.persist_members, "proposals": persistor.persist_proposals,
          "composition": persistor.persist_composition, "votes": persistor.persist_votes,
-         "speeches": persistor.persist_speeches, "news": persistor.persist_news}[scope](batch)
+         "speeches": persistor.persist_speeches, "news": persistor.persist_news,
+         "committees": persistor.persist_committees}[scope](batch)
     except Exception as exc:
         session.rollback()
         run = session.get(IngestionRun, run.id)

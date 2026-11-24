@@ -162,8 +162,8 @@
       "scope": "proposals"
     },
     "committees": {
-      "declared": "not_ingested",
-      "note": "Disponível em /senador/{codigo}/comissoes e /comissao; ainda não ingerido."
+      "scope": "committees",
+      "note": "Comissões permanentes, temporárias e CPIs em atividade (/comissao/lista/{tipo} e /comissao/{codigo}); composição atual observada a cada sincronização."
     },
     "composition_history": {
       "scope": "composition"
