@@ -9,9 +9,9 @@ function b64url(input: string) {
   return Uint8Array.from(atob(s + '='.repeat((4 - (s.length % 4)) % 4)), (c) => c.charCodeAt(0))
 }
 
-async function certs(team: string, fetchImpl: typeof fetch): Promise<Jwk[]> {
+async function certs(team: string, fetchImpl: typeof fetch, fresh = false): Promise<Jwk[]> {
   const cached = certCache.get(team)
-  if (cached && Date.now() - cached.at < 3_600_000) return cached.keys
+  if (!fresh && cached && Date.now() - cached.at < 3_600_000) return cached.keys
   const res = await fetchImpl(`https://${team}/cdn-cgi/access/certs`)
   if (!res.ok) throw new Error('certs')
   const { keys } = await res.json() as { keys: Jwk[] }
@@ -25,13 +25,14 @@ export async function verifyAccess(
   fetchImpl: typeof fetch = fetch,
   now = Date.now() / 1000,
 ): Promise<string | null> {
-  if (!token) return null
+  if (!token || !opts.allowedEmails.length) return null
   const [h, p, s] = token.split('.')
   if (!h || !p || !s) return null
   try {
     const header = JSON.parse(new TextDecoder().decode(b64url(h))) as { alg?: string; kid?: string }
     if (header.alg !== 'RS256') return null
     const jwk = (await certs(opts.team, fetchImpl)).find((k) => k.kid === header.kid)
+      ?? (await certs(opts.team, fetchImpl, true)).find((k) => k.kid === header.kid)
     if (!jwk) return null
     const key = await crypto.subtle.importKey('jwk', jwk, { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify'])
     const ok = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, b64url(s), new TextEncoder().encode(`${h}.${p}`))
@@ -41,7 +42,7 @@ export async function verifyAccess(
     if (!auds.includes(opts.aud) || claims.iss !== `https://${opts.team}`) return null
     if (!claims.exp || claims.exp < now || (claims.nbf && claims.nbf > now + 60)) return null
     const email = claims.email?.toLowerCase()
-    if (!email || (opts.allowedEmails.length && !opts.allowedEmails.includes(email))) return null
+    if (!email || !opts.allowedEmails.includes(email)) return null
     return email
   } catch {
     return null
