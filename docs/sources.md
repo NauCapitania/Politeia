@@ -21,25 +21,23 @@ Observed on 2026-11-12: 81 senators in exercise (70 "Titular", 11 "1º Suplente"
 
 **Limitations:** the `/processo` list has authors only as free text; structured authors need one `/processo/{id}` call per proposal. Seat count (81) is not in the API; it comes from the Constitution (art. 46, §1º — 3 per state × 26 states + DF).
 
-## ALEPE — `https://dadosabertos.alepe.pe.gov.br/api/v1/`
+Additional Senate endpoints (verified 2026-11-23):
 
-Portal: `https://dadosabertos.alepe.pe.gov.br/` (own API, not SAPL). No authentication. No documented rate limit.
+| Endpoint | Used for |
+|---|---|
+| `GET /senador/lista/legislatura/{57,58}` | everyone who held or exercised a seat since 2023 |
+| `GET /senador/{codigo}/mandatos` | mandates, `Exercicios` (start/end/cause) and substitutes → composition on any date |
+| `GET /votacao?dataInicio&dataFim` | plenary roll calls with `votos[]`; `votacaoSecreta = "S"` marks secret ballots (only "Votou") |
+| `GET /senador/{codigo}/discursos?dataInicio&dataFim` | speeches (summary, indexing, text URL) |
 
-| Endpoint | Format | Used for | Important fields |
-|---|---|---|---|
-| `GET /parlamentares/` (trailing slash; without it → 301) | JSON (default) / CSV (`formato=csv`) | Members | `nomeParlamentar`, `partido` — **only these two fields**. Docs mention e-mail, response does not include it |
-| `GET /proposicoes/projetos/` | XML (default) / CSV | Proposals (list) | `projeto@docid`, `numero`, `ano`, `legislatura`, `tipo`, `subtipo`, `ementa`, `dataPublicacao` (dd/mm/yyyy), `autores/autor@nome`, `autor@tipo` (DEPUTADO / EXTERNO / COMISSAO). Defaults to current year; filters `ano`, `legislatura` |
-| `GET /proposicoes/projetos/?numero=N&ano=Y` | XML | Proposal detail | full text (`materia`, `materiaHtml`); no status, no procedural history observed |
-| `/proposicoes/indicacoes/`, `/proposicoes/requerimentos/` | XML | not yet ingested | |
-| `/servidores`, `/cargos`, `/lotacoes`, `/remuneracao`, `/contratos`, `/licitacoes` | JSON/CSV | not ingested (staff/financial data; out of scope, personal data) | |
+`/votacao/orientacaoBancada/{data}` returned 404; committee routes returned 301 and are not ingested yet.
 
-Observed on 2026-11-12: 49 members; 658 projects for 2026 (549 PLO, 95 PR, 7 PLC, 4 PEC, 1 LDO, 1 PPA, 1 LOA); `docid` unique; (tipo, numero, ano) unique in the sample.
+## News — public RSS
 
-**Limitations (made visible in Politeia):**
-- No official member identifier. Politeia derives a source key from the normalized parliamentary name and marks it as `name-derived`.
-- No mandate dates, no party history, no photos, no committees, no votes, no procedural history, no current status for proposals.
-- Proposal authors are names only; linking to members is a name match inside the same institution, recorded as `extracted` (not `verified`), and unmatched authors stay unresolved.
-- Official seat count is not published by the API; it is left unverified.
+Agência Senado, g1 Política, Folha Poder, Estadão Política, Poder360, Gazeta do Povo República, Metrópoles,
+Agência Brasil Política, CartaCapital Política (HTTP 200 on 2026-11-23) plus three Google News RSS searches
+(impeachment de ministro do STF, Banco Master e STF, eleição da Presidência do Senado 2027).
+CNN Brasil, O Globo and R7 feeds tested returned 4xx. Only title, link, date, outlet and a ≤320-char excerpt are stored.
 
 ## Connector strategy
 
@@ -47,4 +45,3 @@ Observed on 2026-11-12: 49 members; 658 projects for 2026 (549 PLO, 95 PR, 7 PLC
 - Shared HTTP client: timeouts, per-source rate limit (Senate ≤ 5 req/s), bounded retries with exponential backoff + jitter on 429/500/502/503/504 and network errors, `Retry-After` honored, deprecation headers logged.
 - Every response is stored as a raw record (URL, status, format, retrieval time, SHA-256, payload, parser version) before normalization.
 - Senate proposals: list window of recent proposals for the main types (PL, PLP, PEC, PDL, PRS), then detail per proposal for structured authors and events.
-- ALEPE proposals: current-year list (summary fields only).

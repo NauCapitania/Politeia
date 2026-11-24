@@ -1,86 +1,82 @@
 # Politeia
 
-Politeia é uma infraestrutura de inteligência institucional para casas legislativas. Ela conecta fontes públicas
-oficiais, normaliza seus dados em uma ontologia comum (pessoas, mandatos, partidos, proposições, eventos), preserva a
-evidência original de cada fato e entrega tudo por uma API única e por uma interface que funciona para qualquer
-instituição registrada.
+Monitor pessoal do **Senado Federal**: composição ao longo do tempo, perfis de senadores, votações, discursos,
+notícias, a eleição da Presidência do Senado (2025 e 2027) e o acompanhamento do **STF e do caso Master** —
+com foco em pedidos de impeachment de ministros do Supremo.
 
-Hack Brasil 2026 · trilha **Logística & automação**, para parlamentares, gabinetes e instituições legislativas.
+Princípios:
+- **Fonte oficial primeiro.** Cada resposta das APIs do Senado é guardada intacta (URL, horário, SHA-256) antes da normalização.
+- **Tempo é dado de primeira classe.** Mandatos, exercícios e filiações têm datas; a composição é reconstruída para qualquer dia.
+- **Natureza da informação explícita.** Fato oficial, declaração, reportagem e análise/inferência são marcados separadamente.
+  Menção em relatório ou reportagem não é prova de ilícito; ausência de declaração não é oposição.
+- **Sem APIs pagas** nesta versão. Notícias vêm de RSS públicos; guardamos só título, link, data e um trecho curto.
 
-A primeira versão integra **Senado Federal** e **Assembleia Legislativa de Pernambuco (ALEPE)**, alternáveis na mesma
-interface sem nenhum código de frontend específico por instituição.
+## O que existe
+
+| Aba | Conteúdo | Origem |
+|---|---|---|
+| Senado | Hemiciclo das 81 cadeiras com *slider* de data (desde 1º/02/2023), suplentes em exercício, trocas de partido | Dados Abertos: listas por legislatura, `/senador/{cod}/mandatos`, `/filiacoes` |
+| Perfil | Mandatos, exercícios, histórico partidário, votos, discursos, notícias, posições com fonte | Dados Abertos + RSS + dossiês |
+| Votações | Votações nominais de plenário desde 2025, voto a voto; secretas sinalizadas | `/votacao` |
+| Presidência 2025 | Placar oficial 73/4/4, apoio partidário × cadeiras, probabilidade estimada por senador com justificativa | Dossiê curado + modelo |
+| Presidência 2027 | Candidatos potenciais, posição sobre impeachment, cenários de votos (intervalos), composições projetadas divergentes | Dossiê curado |
+| STF e caso Master | 11 cadeiras (10 ministros + vaga de Barroso), status dos relatórios da PF, prazo da PGR, quem decide o quê, rito do impeachment, linha do tempo | Dossiê curado + RSS |
+| Notícias | Agência Senado, g1, Folha, Estadão, Poder360, Gazeta do Povo, Metrópoles, Agência Brasil, CartaCapital e buscas do Google Notícias | RSS |
+
+### Voto secreto de 2025
+
+Não existe registro oficial de quem votou em quem. O Politeia atribui a cada senador uma probabilidade *a priori*
+(apoio declarado do partido, afinidade com candidaturas de oposição, autovoto, declarações públicas com fonte) e a
+**condiciona exatamente ao placar oficial** por programação dinâmica (`engine/analysis/secret_ballot.py`): a soma das
+probabilidades reproduz 73/4/4. Os parâmetros são hipóteses explícitas e aparecem na interface como “Hipótese”.
+
+### Dossiês curados
+
+`dossiers/*.json` guarda o que não está em API oficial (resultado da eleição em cédula, apoios partidários, status
+na PGR, linha do tempo do caso Master). Todo item precisa de fonte; o carregador rejeita itens sem fonte.
+Atualize o JSON e rode `python -m engine.cli dossiers`.
 
 ## Arquitetura
 
 ```
-apps/terminal          React 19 + Vite + Blueprint 6 + D3 + Motion (consome só a API Politeia)
-engine/api             FastAPI v1, contratos Pydantic, read-models
-engine/ingestion       execuções de ingestão, raw records, persistência idempotente
-engine/capabilities    capacidades derivadas da ingestão real (não declaradas)
-engine/db              SQLAlchemy 2 + Alembic (schemas registry, ingestion, core, legislative, evidence)
-connectors/base        cliente HTTP (allow-list, rate limit, retry/backoff, hashing) e contratos de conector
-connectors/senate      conector Dados Abertos do Senado (JSON)
-connectors/alepe       conector Dados Abertos da ALEPE (JSON + XML)
-institution-packs/*    configuração por instituição: assentos, terminologia, fontes, capacidades esperadas
+connectors/base        protocolo comum, cliente HTTP (rate limit, retries, hosts permitidos), contratos
+connectors/senate      Dados Abertos do Senado: composition, members, votes, speeches, proposals
+connectors/news        RSS público, ligação conservadora por nome completo
+institution-packs/     configuração declarativa do Senado (fontes, feeds, capacidades)
+engine/                ingestão, modelo de domínio (SQLAlchemy + Alembic), análises, API FastAPI
+dossiers/              fatos e alegações curados com fontes
+apps/terminal          interface React 19 + Vite + Blueprint, em português
 ```
 
-Detalhes em [docs/architecture.md](docs/architecture.md); inventário das fontes em [docs/sources.md](docs/sources.md).
+Pipeline: conector → evidência bruta → registros normalizados → resolução de identidade → relações datadas → API → interface.
 
 ## Como rodar
 
 Pré-requisitos: Python 3.12+, [uv](https://docs.astral.sh/uv/), Node 22+, Docker.
 
 ```bash
-# 1. Banco: Postgres local, ou Supabase definindo POLITEIA_DATABASE_URL com a URI do Session pooler
-#    (postgresql://... é aceito; o driver psycopg é aplicado automaticamente)
-docker compose -f infra/docker-compose.yml up -d
+docker compose -f infra/docker-compose.yml up -d   # ou POLITEIA_DATABASE_URL apontando para o Supabase
 cp .env.example .env
-
-# 2. Engine
 uv sync
 uv run alembic upgrade head
-uv run python -m engine.cli sync            # bootstrap dos packs + ingestão real (membros, depois proposições)
-uv run uvicorn engine.api.app:app --port 8000   # OpenAPI em http://localhost:8000/docs
+uv run python -m engine.cli sync                   # composition, members, votes, speeches, proposals, news
+uv run python -m engine.cli dossiers               # dossiês curados + ligação de notícias
+uv run uvicorn engine.api.app:app --port 8000      # OpenAPI em http://localhost:8000/docs
 
-# 3. Interface
-cd apps/terminal
-npm install
-npm run dev                                  # http://localhost:5173 (proxy /v1 -> :8000)
+cd apps/terminal && npm install && npm run dev     # http://localhost:5173 (proxy /v1 -> :8000)
 ```
 
-Outros comandos:
+Escopos isolados: `uv run python -m engine.cli sync --scope news` (notícias a cada execução) ou `--scope votes`.
 
-```bash
-uv run python -m engine.cli sync --institution ins_pe_alepe --scope proposals
-uv run pytest                                # conectores, pipeline e API (usa o banco politeia_test)
-uv run ruff check .
-cd apps/terminal && npm test && npm run build
-npm run api:types                            # regenera o cliente TypeScript a partir do OpenAPI
-```
-
-Os testes de pipeline/API criam o schema em `POLITEIA_TEST_DATABASE_URL`
-(padrão `postgresql+psycopg://politeia:politeia@localhost:5432/politeia_test`; crie com
-`docker exec <container> psql -U politeia -c "create database politeia_test"`).
-
-## Dados reais importados (12/11/2026)
-
-| Instituição | Membros em exercício | Proposições | Eventos de tramitação | Histórico partidário |
-|---|---|---|---|---|
-| Senado Federal | 81 (70 titulares, 11 suplentes) | 164 (PL, PLP, PEC, PDL, PRS dos últimos 45 dias) | 434 | sim (filiações oficiais) |
-| ALEPE | 49 | 658 (projetos de 2026) | indisponível na fonte | indisponível na fonte |
+Testes: `uv run pytest`, `uv run ruff check .`, `cd apps/terminal && npm test && npm run build`.
+Os testes de pipeline/API usam `POLITEIA_TEST_DATABASE_URL`
+(padrão `postgresql+psycopg://politeia:politeia@localhost:5432/politeia_test`).
 
 ## Limitações conhecidas
 
-- **ALEPE sem identificador oficial de parlamentar:** a identidade é derivada do nome normalizado e marcada como
-  `name-derived`; autores de proposições são ligados a pessoas apenas por correspondência exata de nome (`extracted`).
-- **ALEPE sem datas de mandato, histórico partidário e tramitação** nos endpoints usados; a interface mostra essas
-  capacidades como "indisponível na fonte" em vez de inventar dados.
-- **Número oficial de assentos da ALEPE não verificado** em fonte oficial; a composição mostra apenas membros observados.
-- **Senado:** proposições limitadas a uma janela de 45 dias e 400 detalhes por execução; comissões e votações planejadas.
-- RLS ativado em todas as tabelas, sem políticas: no Supabase a Data API não lê nem grava nada; só o engine acessa
-  (o advisor `rls_enabled_no_policy`, nível INFO, é esperado).
-
-## Adicionando uma terceira instituição
-
-Veja [docs/architecture.md](docs/architecture.md#adicionando-uma-instituição): basta um `pack.json` novo e, se a fonte
-tiver formato próprio, um conector que produza os mesmos registros normalizados. Nem API nem interface mudam.
+- **Redes sociais:** sem API gratuita para leitura automática (X e Meta são pagas ou restritas); o perfil liga para a página
+  oficial do senador, que lista as redes.
+- **Comissões** ainda não são ingeridas (o endpoint testado mudou de rota).
+- **Notícias** ligam senadores/ministros só por nome completo exato; apelidos e sobrenomes isolados ficam sem ligação.
+- **Cenários de 2027** são intervalos derivados de contagens divulgadas por aliados e imprensa, não previsão.
+- **Dossiês** são curadoria manual datada (`as_of`) e precisam ser atualizados conforme o caso evolui.

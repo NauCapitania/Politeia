@@ -62,7 +62,7 @@ def test_news_rss_keeps_headline_link_excerpt_and_topics_only():
 
     cfg = {"feeds": [{"id": "f1", "url": "https://feed.example/rss", "outlet": "Exemplo"},
                      {"id": "f2", "url": "https://down.example/rss", "outlet": "Fora"}]}
-    c = NewsConnector(cfg, make_client(handler, hosts=("feed.example", "down.example"), max_retries=0))
+    c = NewsConnector(cfg, make_client(handler, hosts=("feed.example", "down.example")))
     b = c.run("news")
     assert [n.url for n in b.news] == ["https://ex.com/a"]
     n = b.news[0]
@@ -73,7 +73,7 @@ def test_news_rss_keeps_headline_link_excerpt_and_topics_only():
 
 
 def test_curated_dossiers_are_sourced_and_keep_messias_out_of_the_court():
-    dossiers = {d["id"]: d for d in read_dossiers()}
+    dossiers = {d["dossier"]: d for d in read_dossiers()}
     assert {"stf-caso-master", "presidencia-2025", "presidencia-2027"} <= set(dossiers)
     stf = dossiers["stf-caso-master"]["items"]
     ministers = [i for i in stf if i["kind"] == "minister"]
@@ -86,7 +86,7 @@ def test_curated_dossiers_are_sourced_and_keep_messias_out_of_the_court():
 
 
 def test_dossier_without_sources_is_rejected(tmp_path):
-    (tmp_path / "x.json").write_text(json.dumps({"id": "x", "as_of": "2026-11-23", "items": [
+    (tmp_path / "x.json").write_text(json.dumps({"dossier": "x", "as_of": "2026-11-23", "items": [
         {"id": "a", "kind": "k", "payload": {}, "sources": []}]}))
     with pytest.raises(DossierError):
         read_dossiers(tmp_path)
