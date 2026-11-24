@@ -305,6 +305,14 @@ describe('Plataforma modular', () => {
     expect(vi.mocked(fetch).mock.calls.some(([url]) => String(url).includes('/senadores/per_deputado'))).toBe(false)
   })
 
+  it('preserva o perfil completo do senador aberto nas notícias', async () => {
+    useStore.setState({ view: 'noticias' })
+    renderApp()
+    await waitFor(() => expect(useStore.getState().institutionId).toBe(inst.id))
+    act(() => useStore.getState().select('per_1'))
+    expect(await screen.findByText('Senador Um')).toBeInTheDocument()
+  })
+
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
     useStore.setState({ view: 'congresso' })
     renderApp()
