@@ -1,0 +1,16 @@
+{
+ "dados": [
+  {
+   "id": 2003,
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/orgaos/2003",
+   "sigla": "CCJC",
+   "nome": "Comissão de Constituição e Justiça e de Cidadania",
+   "apelido": "Constituição e Justiça e de Cidadania",
+   "codTipoOrgao": 2,
+   "tipoOrgao": "Comissão Permanente",
+   "nomePublicacao": "Comissão de Constituição e Justiça e de Cidadania",
+   "nomeResumido": "Constituição e Justiça"
+  }
+ ],
+ "links": []
+}

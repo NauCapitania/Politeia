@@ -51,3 +51,38 @@ def make_client(handler, hosts=("legis.senado.leg.br",), **kw) -> SourceHttpClie
 @pytest.fixture
 def load_json():
     return lambda rel: json.loads(fixture_bytes(rel))
+
+
+def chamber_sources(overrides: dict | None = None):
+    """Recorded responses from the official Câmara endpoints, keyed by path."""
+    routes = {
+        r"/api/v2/deputados$": "deputados.json",
+        r"/api/v2/deputados/(\d+)$": "deputado_{}.json",
+        r"/api/v2/deputados/(\d+)/historico$": "historico_{}.json",
+        r"/api/v2/proposicoes$": "proposicoes.json",
+        r"/api/v2/proposicoes/(\d+)$": "proposicao_{}.json",
+        r"/api/v2/proposicoes/(\d+)/autores$": "autores_{}.json",
+        r"/api/v2/proposicoes/(\d+)/tramitacoes$": "tramitacoes_{}.json",
+        r"/api/v2/votacoes$": "votacoes.json",
+        r"/api/v2/votacoes/([\d-]+)/votos$": "votos_{}.json",
+        r"/api/v2/orgaos$": "orgaos.json",
+        r"/api/v2/orgaos/(\d+)$": "orgao_{}.json",
+        r"/api/v2/orgaos/(\d+)/membros$": "membros_{}.json",
+    }
+    calls: list[str] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(str(request.url))
+        for pattern, target in (overrides or {}).items():
+            if re.search(pattern, request.url.path):
+                return target(request) if callable(target) else target
+        for pattern, name in routes.items():
+            m = re.search(pattern, request.url.path)
+            if m:
+                file = FIX / "chamber" / name.format(*m.groups())
+                if file.exists():
+                    return httpx.Response(200, content=file.read_bytes(), headers={"content-type": "application/json"})
+                return httpx.Response(200, json={"dados": [], "links": []})
+        return httpx.Response(404, json={"erro": "not found"})
+
+    return handler, calls

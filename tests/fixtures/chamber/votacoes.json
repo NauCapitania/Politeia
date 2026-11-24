@@ -1,0 +1,31 @@
+{
+ "dados": [
+  {
+   "id": "2500526-52",
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2500526-52",
+   "data": "2025-11-26",
+   "dataHoraRegistro": "2025-11-26T21:16:58",
+   "siglaOrgao": "PLEN",
+   "uriOrgao": "https://dadosabertos.camara.leg.br/api/v2/orgaos/180",
+   "uriEvento": "https://dadosabertos.camara.leg.br/api/v2/eventos/80517",
+   "proposicaoObjeto": null,
+   "uriProposicaoObjeto": null,
+   "descricao": "Aprovado o Projeto de Decreto Legislativo nº 167, de 2025.",
+   "aprovacao": 1
+  },
+  {
+   "id": "2524984-37",
+   "uri": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2524984-37",
+   "data": "2025-11-26",
+   "dataHoraRegistro": "2025-11-26T21:10:04",
+   "siglaOrgao": "PLEN",
+   "uriOrgao": "https://dadosabertos.camara.leg.br/api/v2/orgaos/180",
+   "uriEvento": "https://dadosabertos.camara.leg.br/api/v2/eventos/80517",
+   "proposicaoObjeto": null,
+   "uriProposicaoObjeto": null,
+   "descricao": "Mantido o texto. Sim: 313; Não: 88; Abstenção: 2; Total: 403.",
+   "aprovacao": null
+  }
+ ],
+ "links": []
+}

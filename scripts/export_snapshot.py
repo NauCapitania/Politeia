@@ -24,6 +24,7 @@ from sqlalchemy.exc import ArgumentError, DBAPIError, OperationalError
 from sqlalchemy.orm import sessionmaker
 
 from engine.api.app import app
+from engine.api.camara import INSTITUTION as CAMARA
 from engine.db.session import get_session
 from engine.senado import INSTITUTION
 from engine.settings import get_settings
@@ -32,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "apps/terminal/public/data"
 START = date(2023, 2, 1)
 NEWS_TOPICS = ("impeachment_stf", "pgr", "stf", "caso_master", "presidencia_senado", "senado")
-SENATE_SOURCE = "src_br_senado_dadosabertos"
+PUBLIC_SOURCES = {"src_br_senado_dadosabertos", "src_br_camara_dadosabertos"}
 DEFAULT_WORKERS = 4
 RETRY_DELAYS = (1, 2, 4)
 PROPOSAL_BATCH = 100
@@ -130,6 +131,7 @@ def export_snapshot(api: TestClient, output: Path, now: datetime, *, workers: in
 def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: ThreadPoolExecutor, workers: int) -> None:
     today = now.astimezone(ZoneInfo("America/Sao_Paulo")).date()
     people: set[str] = set()
+    deputies: set[str] = set()
     sources: dict[str, set[str]] = defaultdict(set)
 
     def get(route: str, **params):
@@ -145,7 +147,7 @@ def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: Thr
             person = row.get("person_id") or (row.get("id") if row.get("kind") == "person" else None)
             if isinstance(person, str) and person.startswith("per_"):
                 people.add(person)
-            if row.get("source_system_id") == SENATE_SOURCE and row.get("raw_record_id"):
+            if row.get("source_system_id") in PUBLIC_SOURCES and row.get("raw_record_id"):
                 sources[row["raw_record_id"]].add(row.get("json_path") or "")
 
     def save(path: str, file: str | None = None, **params):
@@ -181,6 +183,8 @@ def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: Thr
             ]
         write(f"{base}/capabilities", capabilities)
         save(f"{base}/proposal-types")
+        if institution_id == CAMARA:
+            deputies.update(s["person_id"] for s in save(f"{base}/composition")["seats"] if s["person_id"])
         runs = get("ingestion/status", institution=institution_id)
         for run in runs["runs"]:
             # Keep status and issue counts; internal diagnostics can contain connection details.
@@ -235,6 +239,14 @@ def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: Thr
     save("noticias", limit=120)
     save_many(("noticias", f"noticias/{topic}", {"limit": 120, "tema": topic}) for topic in NEWS_TOPICS)
 
+    if any(inst["id"] == CAMARA for inst in institutions):
+        chamber_committees = save("camara/comissoes")
+        chamber_votes = save("camara/votacoes", limit=2000)
+        save("camara/trocas")
+        save_many((path, path, {}) for path in (
+            *(f"camara/comissoes/{row['id']}" for row in chamber_committees),
+            *(f"camara/votacoes/{row['id']}" for row in chamber_votes if row.get("nominal"))))
+
     parties = set()
     exported_people = []
     for person, profile in fetch_many((f"senadores/{p}", p, {"optional": True}) for p in sorted(people)):
@@ -249,7 +261,7 @@ def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: Thr
                 path = f"entities/{entity_id}{suffix}"
                 yield path, path, {}
 
-    for path, data in fetch_many(entity_requests(exported_people)):
+    for path, data in fetch_many(entity_requests([*exported_people, *sorted(deputies - set(exported_people))])):
         write(path, data)
         collect(data)
         if path.endswith("/relationships"):

@@ -1,0 +1,40 @@
+{
+ "dados": [
+  {
+   "tipoVoto": "Sim",
+   "dataRegistroVoto": "2025-11-26T21:06:27",
+   "deputado_": {
+    "id": 74398,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/74398",
+    "nome": "Maria do Rosário",
+    "siglaPartido": "PT",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/36844",
+    "siglaUf": "RS",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/74398.jpg",
+    "email": "dep.mariadorosario@camara.leg.br"
+   }
+  },
+  {
+   "tipoVoto": "Não",
+   "dataRegistroVoto": "2025-11-26T21:06:20",
+   "deputado_": {
+    "id": 204512,
+    "uri": "https://dadosabertos.camara.leg.br/api/v2/deputados/204512",
+    "nome": "Delegado Marcelo Freitas",
+    "siglaPartido": "UNIÃO",
+    "uriPartido": "https://dadosabertos.camara.leg.br/api/v2/partidos/38009",
+    "siglaUf": "MG",
+    "idLegislatura": 57,
+    "urlFoto": "https://www.camara.leg.br/internet/deputado/bandep/204512.jpg",
+    "email": "dep.delegadomarcelofreitas@camara.leg.br"
+   }
+  }
+ ],
+ "links": [
+  {
+   "rel": "self",
+   "href": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2524984-37/votos"
+  }
+ ]
+}

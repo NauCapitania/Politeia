@@ -1,0 +1,26 @@
+{
+ "dados": {
+  "id": 2003,
+  "uri": "https://dadosabertos.camara.leg.br/api/v2/orgaos/2003",
+  "sigla": "CCJC",
+  "nome": "Comissão de Constituição e Justiça e de Cidadania",
+  "apelido": "Constituição e Justiça e de Cidadania",
+  "codTipoOrgao": 2,
+  "tipoOrgao": "Comissão Permanente",
+  "nomePublicacao": "Comissão de Constituição e Justiça e de Cidadania",
+  "nomeResumido": "Constituição e Justiça",
+  "dataInicio": "2011-03-02T00:00",
+  "dataInstalacao": "2026-02-10T00:00",
+  "dataFim": null,
+  "dataFimOriginal": null,
+  "casa": "",
+  "sala": "Anexo II, Plenário 01",
+  "urlWebsite": "https://www.camara.leg.br/CCJC"
+ },
+ "links": [
+  {
+   "rel": "self",
+   "href": "https://dadosabertos.camara.leg.br/api/v2/orgaos/2003"
+  }
+ ]
+}
