@@ -197,6 +197,28 @@ def test_ballots_without_choices_are_a_secret_vote():
     assert ev.secret and not ev.votes and not ev.attributes["nominal"]
 
 
+def test_vote_turned_secret_drops_stored_individual_votes(factory):
+    ballots = _fixture("votos_2524984-37.json")
+    for b in ballots["dados"]:
+        b["tipoVoto"] = None
+
+    def stored(s):
+        return s.scalar(select(func.count()).select_from(M.IndividualVote).join(M.VoteEvent).where(
+            M.VoteEvent.source_id == "2524984-37"))
+
+    with factory() as s:
+        assert stored(s) > 0
+    try:
+        handler, _ = chamber_sources({r"/votacoes/2524984-37/votos$": httpx.Response(200, json=ballots)})
+        sync_source(factory, SOURCE, ["votes"], client=make_client(handler, hosts=HOSTS))
+        with factory() as s:
+            assert s.scalar(select(M.VoteEvent.secret).where(M.VoteEvent.source_id == "2524984-37"))
+            assert stored(s) == 0
+    finally:
+        handler, _ = chamber_sources()
+        sync_source(factory, SOURCE, ["votes"], client=make_client(handler, hosts=HOSTS))
+
+
 def test_failed_roster_skips_the_committee():
     c, _ = connector({r"/orgaos/2003/membros$": httpx.Response(503)})
     b = c.run("committees")
