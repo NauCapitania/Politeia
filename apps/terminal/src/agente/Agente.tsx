@@ -7,13 +7,15 @@ import { useStore } from '../store'
 import { askAgent, type ChartSpec, type NetworkSpec } from './client'
 import { Grafico } from './Grafico'
 import { Rede } from './Rede'
+import { viewLabel } from '../platform'
+import { ANALYSES, loadNotebooks } from '../analyses'
 
 type Turn = { papel: 'usuario' | 'agente'; texto: string; graficos?: ChartSpec[]; redes?: NetworkSpec[]; passos?: string[]; erro?: boolean }
 
 const STORAGE = 'politeia.agente.conversa'
 const SUGESTOES = [
   'Quem deve ganhar a Presidência do Senado em 2027, e por quê?',
-  'O caso Master vai dar em pizza? Quais as evidências?',
+  'Quais são as atualizações do caso Master e o que ainda está em aberto?',
   'Faça um gráfico das bancadas por partido hoje.',
   'Como cada partido tende a votar num impeachment de ministro do STF?',
 ]
@@ -27,7 +29,7 @@ function load(): Turn[] {
 }
 
 export function Agente() {
-  const { view, senadoTab, selectedId } = useStore()
+  const { view, senadoTab, analysisId, selectedId, agentDraft, setAgentDraft } = useStore()
   const [open, setOpen] = useState(false)
   const [wide, setWide] = useState(false)
   const [turns, setTurns] = useState<Turn[]>(load)
@@ -59,6 +61,9 @@ export function Agente() {
   }, [])
 
   useEffect(() => { if (open) input.current?.focus() }, [open])
+  useEffect(() => {
+    if (agentDraft) { setOpen(true); setDraft(agentDraft); setAgentDraft(null) }
+  }, [agentDraft, setAgentDraft])
 
   const patchLast = (fn: (t: Turn) => Turn) => setTurns((all) => [...all.slice(0, -1), fn(all[all.length - 1])])
 
@@ -73,7 +78,7 @@ export function Agente() {
     try {
       await askAgent(
         history.map(({ papel, texto }) => ({ papel, texto })),
-        { tela: view === 'senado' ? TELAS[senadoTab] : view, selecionado: selectedId },
+        { tela: view === 'senado' ? TELAS[senadoTab] : view === 'analises' && analysisId ? `Análise: ${ANALYSES.find((a) => a.id === analysisId)?.title ?? loadNotebooks().find((a) => a.id === analysisId)?.title ?? 'Caderno pessoal'}`.slice(0, 80) : viewLabel(view), selecionado: selectedId },
         (event) => {
           if (event.tipo === 'passo') patchLast((t) => ({ ...t, passos: [...(t.passos ?? []), event.texto] }))
           else if (event.tipo === 'grafico') patchLast((t) => ({ ...t, graficos: [...(t.graficos ?? []), event.grafico] }))
@@ -124,7 +129,7 @@ export function Agente() {
             <div className="agente-corpo" ref={scroller}>
               {!turns.length && (
                 <div className="agente-vazio">
-                  <p>Pergunte sobre o Senado, o STF e o caso Master. O agente consulta os dados do app, pesquisa notícias e desenha gráficos.</p>
+                  <p>Investigue instituições, projetos e análises como o caso Master. O agente consulta as fontes disponíveis, pesquisa notícias e desenha gráficos; lacunas de cobertura não são conclusões.</p>
                   {SUGESTOES.map((s) => <button key={s} className="agente-sugestao" onClick={() => send(s)}>{s}</button>)}
                 </div>
               )}

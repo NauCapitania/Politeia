@@ -3,6 +3,7 @@ import { InputGroup, NonIdealState, Spinner } from '@blueprintjs/core'
 import { useCommittee, useCommittees } from '../api/client'
 import { fmtDate, partyColor } from '../format'
 import { useStore } from '../store'
+import { InstitutionGuide } from '../components/InstitutionGuide'
 
 const ROLE: Record<string, string> = { PRESIDENTE: 'Presidente', 'VICE-PRESIDENTE': 'Vice-presidente', RELATOR: 'Relator' }
 
@@ -22,8 +23,9 @@ export function Comissoes() {
     <div className="view">
       <h1>Comissões do Senado</h1>
       <p className="lede">Comissões permanentes, temporárias e CPIs em atividade, com a composição atual publicada nos Dados Abertos do Senado. Clique em um senador para abrir o perfil.</p>
+      <InstitutionGuide kind="comissoes" />
       {list.isLoading && <Spinner size={24} />}
-      {list.data && !list.data.length && <NonIdealState icon="people" title="Comissões ainda não ingeridas" description="Execute `python -m engine.cli sync --scope committees`." />}
+      {list.data && !list.data.length && <NonIdealState icon="people" title="Comissões ainda não disponíveis" description="A composição aparecerá após a coleta oficial. Ausência na base não significa que uma comissão esteja inativa." />}
       {!!list.data?.length && (
         <div className="committees">
           <div className="committee-list">

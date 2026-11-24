@@ -1,3 +1,11 @@
+# Plataforma modular
+
+As instituições e as análises são espaços independentes. `src/platform.ts` centraliza os destinos e as abas por poder; `src/analyses.ts` registra os recortes analíticos. O caso Master usa o dossiê existente, sem transformar o cadastro do Supremo em um caso específico.
+
+`src/views/InstitutionModules.tsx` integra os módulos pelas exportações nomeadas `Camara`, `Executivo` e `Partidos`, nos respectivos arquivos de `src/views/`, sem props obrigatórias. Antes de cada módulo ser entregue, o destino mostra explicitamente a lacuna de cobertura; o build continua independente. Cada módulo deve tratar seus próprios estados de coleta, erro e ausência de dados, sem reutilizar o identificador institucional do Senado.
+
+Os cadernos em **Análises → Nova análise** guardam pergunta e notas apenas no `localStorage` deste navegador (`politeia.analises.v1`). Não há sincronização ou coleta automática. **Investigar com o agente** prepara uma pergunta para revisão antes do envio; notas não são enviadas automaticamente.
+
 # Snapshot estático e Cloudflare Pages
 
 O terminal usa a API por padrão. Em `VITE_DATA_MODE=static`, lê o snapshot JSON de `public/data/`

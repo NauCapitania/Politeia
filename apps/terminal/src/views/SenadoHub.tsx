@@ -7,6 +7,7 @@ import { Presidencia2025 } from './Presidencia2025'
 import { Presidencia2027 } from './Presidencia2027'
 import { Proposals } from './Proposals'
 import { Comissoes } from './Comissoes'
+import { InstitutionGuide } from '../components/InstitutionGuide'
 
 const TABS: { id: SenadoTab; title: string }[] = [
   { id: 'composicao', title: 'Composição' },
@@ -30,6 +31,7 @@ export function SenadoHub({ inst }: { inst: Institution }) {
           {TABS.map((t) => <Tab key={t.id} id={t.id} title={t.title} />)}
         </Tabs>
       </div>
+      <div className="module-guide"><InstitutionGuide kind="senado" /></div>
       {body}
     </div>
   )

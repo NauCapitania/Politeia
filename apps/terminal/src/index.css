@@ -2,6 +2,61 @@
 @import '@blueprintjs/icons/lib/css/blueprint-icons.css';
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
 
+/* Modular analysis platform; all surfaces follow the active theme. */
+.power-navigation { border-bottom: 1px solid var(--line); background: var(--bg-1); }
+.power-tabs, .chamber-tabs { display: flex; gap: 6px; padding: 9px 32px; overflow-x: auto; }
+.power-tabs button, .chamber-tabs button { background: none; color: var(--fg-2); border: 1px solid transparent; border-radius: 5px; font: inherit; padding: 8px 14px; cursor: pointer; white-space: nowrap; }
+.power-tabs button[aria-selected="true"], .chamber-tabs button[aria-selected="true"] { background: var(--accent-soft); color: var(--accent); border-color: var(--line); }
+.chamber-tabs { border-top: 1px solid var(--line); padding-block: 5px; }
+.chamber-tabs button { font-size: 11px; padding: 6px 10px; }
+.institution-guide { margin: 18px 0; background: var(--bg-1); border: 1px solid var(--line); border-radius: var(--radius); }
+.institution-guide summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; font-weight: 600; cursor: pointer; }
+.institution-guide summary::before { content: '+'; color: var(--accent); font: 16px var(--mono); }
+.institution-guide[open] summary::before { content: '−'; }
+.institution-guide summary span { margin-left: auto; font-weight: 400; color: var(--fg-3); font-size: 11px; }
+.guide-body { padding: 0 18px 18px; line-height: 1.7; color: var(--fg-1); }
+.guide-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.guide-columns p { margin-top: 4px; }
+.module-guide { max-width: 1600px; padding: 0 32px; margin: 0 auto; }
+.module-guide .institution-guide { margin-bottom: 0; }
+.power-map { margin: 28px 0; padding: 24px; border: 1px solid var(--line); background: var(--bg-1); border-radius: var(--radius); }
+.power-map h2, .legislative-process h2 { font-size: 18px; font-weight: 500; margin: 10px 0 18px; }
+.power-nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.power-nodes button { display: flex; flex-direction: column; gap: 10px; padding: 20px 16px; text-align: left; border: 1px solid var(--line-strong); background: var(--bg-2); color: var(--fg-0); border-radius: var(--radius); cursor: pointer; font: inherit; }
+.power-nodes button:hover { border-color: var(--accent); }
+.power-nodes button span { text-transform: uppercase; letter-spacing: .12em; color: var(--accent); font-size: 10px; }
+.power-nodes button small { color: var(--fg-2); line-height: 1.6; }
+.power-relations { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; margin: 14px 0; }
+.power-relations p { font-size: 12px; color: var(--fg-2); line-height: 1.7; }
+.power-relations b { display: block; color: var(--fg-1); }
+.congress-cards, .analysis-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 20px 0; }
+.congress-cards button { text-align: left; color: var(--fg-0); font: inherit; cursor: pointer; }
+.congress-cards h2 { font-size: 18px; }
+.congress-cards p { color: var(--fg-2); }
+.legislative-process { margin: 32px 0; }
+.process-stages { display: flex; overflow-x: auto; gap: 8px; margin: 20px 0 12px; padding-bottom: 5px; }
+.process-stages button { flex: 1; min-width: 120px; background: var(--bg-1); border: 1px solid var(--line); border-radius: var(--radius); color: var(--fg-1); cursor: pointer; padding: 14px; text-align: left; font: inherit; font-size: 12px; }
+.process-stages button span { display: block; color: var(--fg-3); font: 12px var(--mono); margin-bottom: 12px; }
+.process-stages button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
+.analysis-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.analysis-tile { text-align: left; color: var(--fg-0); cursor: pointer; font: inherit; display: flex; align-items: flex-start; flex-direction: column; gap: 12px; min-height: 245px; }
+.analysis-tile:hover { border-color: var(--accent); }
+.analysis-tile.featured { background: linear-gradient(140deg, var(--accent-soft), var(--bg-1)); border-color: var(--line-strong); }
+.analysis-tile h2 { margin: 0; font-size: 20px; font-weight: 500; }
+.analysis-tile p { margin: 0; color: var(--fg-2); line-height: 1.7; }
+.analysis-scopes { color: var(--fg-3); font-size: 11px; }
+.analysis-open { display: flex; width: 100%; justify-content: space-between; color: var(--accent); font-size: 12px; margin-top: auto; padding-top: 16px; }
+.analysis-back { padding: 20px 32px 0; }
+.analysis-form { max-width: 720px; }
+.analysis-form label, .notebook-label { display: block; font-size: 12px; color: var(--fg-1); margin: 8px 0; }
+.analysis-form input, .analysis-form textarea, .notebook-notes { display: block; width: 100%; padding: 12px; margin: 8px 0 16px; background: var(--bg-0); color: var(--fg-0); border: 1px solid var(--line-strong); border-radius: 5px; font: inherit; resize: vertical; }
+.notebook-notes { min-height: 260px; line-height: 1.8; }
+.minister-roster { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.analysis-entry { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; margin-top: 30px; }
+.analysis-entry > div { flex: 1; min-width: 220px; }
+@media (max-width: 1000px) { .analysis-grid { grid-template-columns: 1fr; }.power-nodes { gap: 8px; }.power-nodes button { padding: 14px 10px; } }
+@media (max-width: 650px) { .guide-columns, .power-nodes, .power-relations, .congress-cards { grid-template-columns: 1fr; }.power-map { padding: 16px; }.power-tabs, .chamber-tabs { padding-inline: 14px; }.module-guide { padding-inline: 14px; }.institution-guide summary span { display: none; } }
+
 :root {
   --bg-0: #08090b;
   --bg-1: #101114;

@@ -44,7 +44,7 @@ const renderApp = () => render(<QueryClientProvider client={new QueryClient()}><
 
 beforeEach(() => {
   localStorage.clear()
-  useStore.setState({ institutionId: null, view: 'senado', senadoTab: 'composicao', sidebarCollapsed: false, selectedId: null, partyFilter: null, search: '' })
+  useStore.setState({ institutionId: null, view: 'senado', analysisId: null, agentDraft: null, senadoTab: 'composicao', sidebarCollapsed: false, selectedId: null, partyFilter: null, search: '' })
   mockFetch()
 })
 
@@ -144,6 +144,67 @@ describe('Espaço de trabalho', () => {
     await userEvent.keyboard('{ArrowDown}{ArrowUp}{Enter}')
     expect(useStore.getState()).toMatchObject({ view: 'senado', senadoTab: 'proposicoes', search: 'sucessao inexistente' })
     await waitFor(() => expect(screen.queryByRole('combobox', { name: 'Buscar espaços, senadores ou proposições' })).not.toBeInTheDocument())
+  })
+})
+
+describe('Plataforma modular', () => {
+  it('separa a instituição Supremo da análise Master e preserva a linha do tempo', async () => {
+    mockFetch({ '/v1/dossies/stf-caso-master': { items: {
+      minister: [{ id: 'min-1', name: 'Ministro de teste', seat: 1, sources: src }],
+      procedure_actor: [], impeachment_step: [], timeline_event: [{ id: 'ev-1', date: '2026-11-24', track: 'caso', text: 'Evento de teste com fonte', status: 'fact_reported', sources: src }],
+    } } })
+    renderApp()
+    await userEvent.click(screen.getByRole('button', { name: 'Supremo Tribunal Federal' }))
+    expect(await screen.findByRole('heading', { name: 'Supremo Tribunal Federal' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Ministro de teste' })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Linha do tempo' })).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Abrir análise do caso Master →' }))
+    expect(await screen.findByRole('heading', { name: 'Caso Master' })).toBeInTheDocument()
+    expect(screen.getByText('Evento de teste com fonte', { exact: false })).toBeInTheDocument()
+    expect(useStore.getState()).toMatchObject({ view: 'analises', analysisId: 'caso-master' })
+    await userEvent.click(screen.getByRole('button', { name: 'Todas as análises' }))
+    expect(await screen.findByRole('heading', { name: 'Análises' })).toBeInTheDocument()
+  })
+
+  it('cria outra análise, conserva suas notas e prepara uma pergunta sem enviar automaticamente', async () => {
+    useStore.setState({ view: 'analises' })
+    const app = renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Nova análise' }))
+    await userEvent.type(screen.getByLabelText('Título'), 'Orçamento e educação')
+    await userEvent.type(screen.getByLabelText('Pergunta de análise'), 'Quais comissões examinam o orçamento?')
+    await userEvent.click(screen.getByRole('button', { name: 'Criar caderno' }))
+    await userEvent.type(screen.getByLabelText('Evidências, links e hipóteses'), 'Hipótese a verificar, sem conclusão.')
+    app.unmount()
+    renderApp()
+    expect(await screen.findByLabelText('Evidências, links e hipóteses')).toHaveValue('Hipótese a verificar, sem conclusão.')
+    await userEvent.click(screen.getByRole('button', { name: 'Investigar com o agente →' }))
+    expect((await screen.findByLabelText('Pergunta ao agente') as HTMLTextAreaElement).value).toContain('Quais comissões examinam o orçamento?')
+    expect(vi.mocked(fetch).mock.calls.some(([url]) => url === '/api/agente')).toBe(false)
+  })
+
+  it('mantém o mapa e os guias acessíveis mesmo sem uma instituição ingerida', async () => {
+    mockFetch({ '/v1/institutions': [] })
+    useStore.setState({ view: 'congresso' })
+    renderApp()
+    expect(await screen.findByRole('heading', { name: 'Congresso Nacional' })).toBeInTheDocument()
+    expect(screen.getByText('Como funciona o Congresso')).toBeInTheDocument()
+  })
+
+  it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {
+    useStore.setState({ view: 'congresso' })
+    renderApp()
+    await screen.findByRole('heading', { name: 'Congresso Nacional' })
+    await userEvent.click(screen.getByRole('button', { name: /Sanção ou veto/ }))
+    expect(screen.getByText(/PECs seguem rito próprio/)).toBeInTheDocument()
+    expect(screen.getByText(/não andamento de uma proposição específica/)).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Judiciário' }))
+    expect(await screen.findByRole('heading', { name: 'Supremo Tribunal Federal' })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Executivo' }))
+    expect(useStore.getState().view).toBe('executivo')
+    expect(await screen.findByText('Como funciona o Executivo')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Legislativo' }))
+    await userEvent.click(await screen.findByRole('tab', { name: 'Senado Federal' }))
+    expect(await screen.findByRole('tab', { name: 'Composição' })).toBeInTheDocument()
   })
 })
 
