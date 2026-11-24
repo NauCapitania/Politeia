@@ -51,6 +51,7 @@ beforeEach(() => {
 describe('Espaço de trabalho', () => {
   it('alterna entre temas e preserva a escolha ao reabrir o aplicativo', async () => {
     const first = renderApp()
+    expect(localStorage.getItem('politeia-theme')).toBeNull()
     await userEvent.click(screen.getByRole('button', { name: 'Alternar para modo claro' }))
     expect(document.documentElement).toHaveAttribute('data-theme', 'light')
     expect(document.documentElement).not.toHaveClass('bp6-dark')

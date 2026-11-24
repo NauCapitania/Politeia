@@ -16,7 +16,11 @@ export function useTheme() {
     document.documentElement.dataset.theme = theme
     document.documentElement.classList.toggle('bp6-dark', theme === 'dark')
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#08090b' : '#fafafa')
-    try { localStorage.setItem('politeia-theme', theme) } catch { /* Optional persistence. */ }
   }, [theme])
-  return { theme, toggleTheme: () => setTheme((value) => value === 'dark' ? 'light' : 'dark') }
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    try { localStorage.setItem('politeia-theme', next) } catch { /* Optional persistence. */ }
+    setTheme(next)
+  }
+  return { theme, toggleTheme }
 }
