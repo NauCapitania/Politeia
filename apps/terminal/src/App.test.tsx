@@ -238,3 +238,28 @@ describe('Monitor do Senado', () => {
     expect(screen.getAllByText('Hipótese').length).toBeGreaterThan(0)
   })
 })
+
+describe('Agente político', () => {
+  it('abre a janela, mostra os passos, o gráfico e a resposta do agente', async () => {
+    const lines = [
+      { tipo: 'passo', texto: 'Lendo /senado/composicao/2026-11-24' },
+      { tipo: 'grafico', grafico: { tipo: 'barra', titulo: 'Bancadas por partido', rotulos: ['PL', 'PT'], series: [{ nome: 'Senadores', valores: [14, 9] }] } },
+      { tipo: 'rede', rede: { titulo: 'Conexões do PL', nos: [{ id: 'pl', rotulo: 'PL', grupo: 'Partido' }, { id: 's1', rotulo: 'Senador A', grupo: 'Senador' }], arestas: [{ origem: 's1', destino: 'pl', rotulo: 'filiado' }] } },
+      { tipo: 'resposta', texto: 'O **PL** lidera. [Fato oficial]', modelo: 'm' },
+    ].map((l) => JSON.stringify(l)).join('\n') + '\n'
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => url === '/api/agente'
+      ? new Response(lines, { headers: { 'content-type': 'application/x-ndjson' } })
+      : new Response(JSON.stringify(DATA[url.split('?')[0]] ?? []), { status: 200 })))
+    localStorage.clear()
+    renderApp()
+    await userEvent.click(await screen.findByRole('button', { name: 'Abrir agente político' }))
+    await userEvent.type(screen.getByLabelText('Pergunta ao agente'), 'Qual a maior bancada?{Enter}')
+    expect(await screen.findByText('lidera. [Fato oficial]', { exact: false })).toBeInTheDocument()
+    expect(screen.getByText('Lendo /senado/composicao/2026-11-24')).toBeInTheDocument()
+    expect(screen.getByLabelText('Bancadas por partido')).toBeInTheDocument()
+    expect(screen.getByLabelText('Conexões do PL')).toBeInTheDocument()
+    const body = JSON.parse((fetch as unknown as { mock: { calls: [string, RequestInit][] } }).mock.calls.find(([u]) => u === '/api/agente')![1].body as string)
+    expect(body.mensagens).toEqual([{ papel: 'usuario', texto: 'Qual a maior bancada?' }])
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Enviar' })).toBeInTheDocument())
+  })
+})

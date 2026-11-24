@@ -16,6 +16,7 @@ import { CommandPalette } from './components/CommandPalette'
 import { StatusBar } from './components/StatusBar'
 import { LocalTerminal } from './components/LocalTerminal'
 import { useTheme } from './useTheme'
+import { Agente } from './agente/Agente'
 
 const VIEWS = { inicio: Overview, senado: SenadoHub, stf: Stf, noticias: Noticias, sources: Sources }
 
@@ -72,6 +73,7 @@ export default function App() {
       <StatusBar onCommand={() => setCommandOpen(true)} />
       {commandOpen && <CommandPalette onClose={() => setCommandOpen(false)} />}
       <LocalTerminal isOpen={terminalOpen} onClose={() => setTerminalOpen(false)} />
+      <Agente />
     </div></MotionConfig>
   )
 }

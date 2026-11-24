@@ -1,5 +1,7 @@
 /public/data/
 /public/.politeia-snapshot-*/
+/.wrangler/
+/.dev.vars
 # Logs
 logs
 *.log
