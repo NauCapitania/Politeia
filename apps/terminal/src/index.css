@@ -415,7 +415,7 @@ kbd { font: 9px var(--mono); padding: 2px 4px; border: 1px solid var(--line-stro
 .folder-items.is-collapsed { display: none; }
 .nav-item.nested { padding-left: 24px; }
 .sidebar.collapsed .nav-label, .sidebar.collapsed .folder-toggle { display: none; }
-.sidebar.collapsed .folder-items.is-collapsed { display: block; }
+.sidebar.collapsed .folder-items.is-collapsed { display: contents; }
 .sidebar.collapsed .nav-item.nested { padding-left: 10px; }
 .overview-heading { min-height: 174px; padding: 28px; border: 1px solid var(--line); border-radius: 10px; background: linear-gradient(90deg, var(--hero-start) 16%, var(--hero-mid) 40%, var(--hero-end) 100%), url('/escola-de-atenas.webp') right 40% / cover; }
 .overview-heading h1 { letter-spacing: -.045em; }
