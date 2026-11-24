@@ -346,6 +346,8 @@ class Persistor:
                           official_url=p.official_url, attributes=p.attributes, last_observed_at=self.now)
             if existing:
                 prop_id = existing
+                if p.attributes.get("detail_missing"):  # list-only row: keep details saved by earlier runs
+                    values = {k: v for k, v in values.items() if v is not None and k != "attributes"}
                 self.s.execute(update(Proposal).where(Proposal.id == prop_id).values(**values))
             else:
                 prop_id = new_id("prp")
