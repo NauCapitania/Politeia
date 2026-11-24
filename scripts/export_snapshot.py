@@ -2,32 +2,113 @@
 
 import argparse
 import json
+import os
+import re
 import sys
 from collections import defaultdict
 from collections.abc import Iterable, Iterator
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
 from datetime import date, datetime, timedelta
 from itertools import batched
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from time import sleep
+from urllib.parse import quote, quote_plus
 from zoneinfo import ZoneInfo
 
 from fastapi.testclient import TestClient
+from psycopg import OperationalError as DriverOperationalError
+from sqlalchemy import create_engine, make_url
+from sqlalchemy.exc import ArgumentError, DBAPIError, OperationalError
+from sqlalchemy.orm import sessionmaker
 
 from engine.api.app import app
+from engine.db.session import get_session
 from engine.senado import INSTITUTION
+from engine.settings import get_settings
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "apps/terminal/public/data"
 START = date(2023, 2, 1)
 NEWS_TOPICS = ("impeachment_stf", "pgr", "stf", "caso_master", "presidencia_senado", "senado")
 SENATE_SOURCE = "src_br_senado_dadosabertos"
-WORKERS = 12
+DEFAULT_WORKERS = 4
+RETRY_DELAYS = (1, 2, 4)
 PROPOSAL_BATCH = 100
 
 
 class SnapshotError(Exception):
     pass
+
+
+def snapshot_workers() -> int:
+    try:
+        workers = int(os.getenv("SNAPSHOT_WORKERS", str(DEFAULT_WORKERS)))
+        if workers > 0:
+            return workers
+    except ValueError:
+        pass
+    raise SnapshotError("SNAPSHOT_WORKERS deve ser um inteiro positivo.")
+
+
+@contextmanager
+def snapshot_client(workers: int) -> Iterator[TestClient]:
+    engine = create_engine(get_settings().database_url, pool_pre_ping=True, pool_size=workers, max_overflow=0)
+    factory = sessionmaker(engine, expire_on_commit=False)
+
+    def session():
+        with factory() as db:
+            yield db
+
+    previous_session = app.dependency_overrides.get(get_session)
+    app.dependency_overrides[get_session] = session
+    try:
+        with TestClient(app) as api:
+            yield api
+    finally:
+        if previous_session is None:
+            app.dependency_overrides.pop(get_session)
+        else:
+            app.dependency_overrides[get_session] = previous_session
+        engine.dispose()
+
+
+def redact_error(exc: Exception, database_url: str) -> str:
+    detail = str(exc.orig if isinstance(exc, DBAPIError) else exc)
+    detail = detail.replace(database_url, "[redigido]") if database_url else detail
+    detail = re.sub(r"""(?i)\b(?:postgres(?:ql)?(?:\+[\w]+)?|[\w+.-]+(?=://[^\s/@]+@))://[^\s'"<>]+""",
+                    "[redigido]", detail)
+    detail = re.sub(r"""(?i)\bpassword\s*[:=]\s*(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[^\s,;]+)""",
+                    "password=[redigido]", detail)
+    try:
+        password = make_url(database_url).password
+    except ArgumentError:
+        password = None
+    if password:
+        for variant in sorted({password, quote(password, safe=""), quote_plus(password)}, key=len, reverse=True):
+            detail = detail.replace(variant, "[redigido]")
+    kind = type(exc).__name__
+    return f"{kind}: {detail}" if detail else kind
+
+
+def get_snapshot_data(api: TestClient, route: str, *, optional: bool = False, **params):
+    path = f"/v1/{route}"
+    for delay in (*RETRY_DELAYS, None):
+        try:
+            response = api.get(path, params=params)
+        except (OperationalError, DriverOperationalError) as exc:
+            if delay is None:
+                detail = redact_error(exc, get_settings().database_url)
+                raise SnapshotError(f"{path}: {detail}") from None
+        else:
+            if response.is_success:
+                return response.json()
+            if optional and response.status_code == 404:
+                return None
+            if response.status_code < 500 or delay is None:
+                raise SnapshotError(f"{path}: HTTP {response.status_code}")
+        sleep(delay)
 
 
 def objects(value: object) -> Iterator[dict]:
@@ -40,23 +121,19 @@ def objects(value: object) -> Iterator[dict]:
             yield from objects(child)
 
 
-def export_snapshot(api: TestClient, output: Path, now: datetime) -> None:
-    with ThreadPoolExecutor(max_workers=WORKERS) as executor:
-        _export_snapshot(api, output, now, executor)
+def export_snapshot(api: TestClient, output: Path, now: datetime, *, workers: int | None = None) -> None:
+    workers = snapshot_workers() if workers is None else workers
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        _export_snapshot(api, output, now, executor, workers)
 
 
-def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: ThreadPoolExecutor) -> None:
+def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: ThreadPoolExecutor, workers: int) -> None:
     today = now.astimezone(ZoneInfo("America/Sao_Paulo")).date()
     people: set[str] = set()
     sources: dict[str, set[str]] = defaultdict(set)
 
-    def get(route: str, *, optional: bool = False, **params):
-        response = api.get(f"/v1/{route}", params=params)
-        if optional and response.status_code == 404:
-            return None
-        if not response.is_success:
-            raise SnapshotError(f"/v1/{route}: HTTP {response.status_code}")
-        return response.json()
+    def get(route: str, **params):
+        return get_snapshot_data(api, route, **params)
 
     def write(path: str, value) -> None:
         file = output / f"{path}.json"
@@ -82,7 +159,7 @@ def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: Thr
             path, file, params = request
             return file, get(path, **params)
 
-        for batch in batched(requests, WORKERS):
+        for batch in batched(requests, workers):
             yield from executor.map(fetch, batch)
 
     def save_many(requests: Iterable[tuple[str, str, dict]]) -> None:
@@ -196,11 +273,12 @@ def main() -> None:
     args = parser.parse_args()
     output = args.output.resolve()
     try:
+        workers = snapshot_workers()
         output.parent.mkdir(parents=True, exist_ok=True)
         with TemporaryDirectory(prefix=".politeia-snapshot-", dir=output.parent) as temp:
             staging = Path(temp) / "next"
-            with TestClient(app, raise_server_exceptions=False) as api:
-                export_snapshot(api, staging, datetime.now(ZoneInfo("UTC")))
+            with snapshot_client(workers) as api:
+                export_snapshot(api, staging, datetime.now(ZoneInfo("UTC")), workers=workers)
             previous = Path(temp) / "previous"
             if output.exists():
                 output.rename(previous)
@@ -211,8 +289,7 @@ def main() -> None:
                     previous.rename(output)
                 raise
     except Exception as exc:
-        # Do not print underlying exceptions or API bodies: they may include credentials.
-        detail = str(exc) if isinstance(exc, SnapshotError) else type(exc).__name__
+        detail = redact_error(exc, get_settings().database_url)
         sys.exit(f"Não foi possível gerar o snapshot: {detail}")
     print(f"Snapshot salvo em {output}.")
 

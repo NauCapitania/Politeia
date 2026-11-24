@@ -16,6 +16,8 @@ npm --prefix apps/terminal run preview
 Os arquivos do snapshot são gerados a cada deploy e não entram no Git. O exportador usa apenas
 rotas de leitura e não roda migrações. A versão pública mantém as fontes e os status de ingestão,
 sem publicar cabeçalhos das respostas de origem nem mensagens internas de erro.
+`SNAPSHOT_WORKERS` limita o número de requisições e conexões simultâneas (padrão: 4).
+Se o banco limitar conexões, experimente `SNAPSHOT_WORKERS=1`.
 
 Com os secrets `CLOUDFLARE_API_TOKEN` (Pages:Edit) e `CLOUDFLARE_ACCOUNT_ID` no ambiente, rode
 `npm --prefix apps/terminal run deploy:pages` para exportar, compilar e publicar no projeto
