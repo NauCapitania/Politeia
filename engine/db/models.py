@@ -6,6 +6,8 @@ Schemas:
 - core: persons, identifiers, mandates, parties, memberships, committees
 - legislative: proposals, authorship, rapporteurs, events
 - evidence: links from derived facts to the raw records that support them
+- media: news items from public feeds and the entities they mention
+- analysis: curated dossiers and claims (declarations, press reports, analyses) with sources
 """
 
 import uuid
@@ -36,7 +38,7 @@ NAMING = {
     "pk": "pk_%(table_name)s",
 }
 
-SCHEMAS = ("registry", "ingestion", "core", "legislative", "evidence")
+SCHEMAS = ("registry", "ingestion", "core", "legislative", "evidence", "media", "analysis")
 
 
 class Base(DeclarativeBase):
@@ -399,3 +401,166 @@ class RelationshipEvidence(Base):
     raw_record_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("ingestion.raw_records.id"), index=True)
     json_path: Mapped[str] = mapped_column(Text)
     observed_at: Mapped[datetime] = _now()
+
+
+# --------------------------------------------------------------------------- exercises, votes, speeches
+
+
+class MandateExercise(Base):
+    """A period in which a person actually held the seat (titular or suplente in exercise)."""
+
+    __tablename__ = "mandate_exercises"
+    __table_args__ = (
+        UniqueConstraint("person_id", "source_exercise_id"),
+        Index("ix_mandate_exercises_validity", "institution_id", "start_date", "end_date"),
+        {"schema": "core"},
+    )
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    institution_id: Mapped[str] = mapped_column(ForeignKey("registry.institutions.id"))
+    person_id: Mapped[str] = mapped_column(ForeignKey("core.persons.id"), index=True)
+    mandate_id: Mapped[str] = mapped_column(ForeignKey("core.mandates.id", ondelete="CASCADE"), index=True)
+    source_exercise_id: Mapped[str] = mapped_column(Text)
+    start_date: Mapped[date | None] = mapped_column(Date)
+    end_date: Mapped[date | None] = mapped_column(Date)
+    end_cause_code: Mapped[str | None] = mapped_column(Text)
+    end_cause: Mapped[str | None] = mapped_column(Text)
+
+
+class VoteEvent(Base):
+    __tablename__ = "vote_events"
+    __table_args__ = (
+        UniqueConstraint("source_system_id", "source_id"),
+        Index("ix_vote_events_held_on", "institution_id", "held_on"),
+        {"schema": "legislative"},
+    )
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    institution_id: Mapped[str] = mapped_column(ForeignKey("registry.institutions.id"))
+    source_system_id: Mapped[str] = mapped_column(ForeignKey("registry.source_systems.id"))
+    source_id: Mapped[str] = mapped_column(Text)
+    session_code: Mapped[str | None] = mapped_column(Text)
+    held_on: Mapped[date | None] = mapped_column(Date)
+    description: Mapped[str | None] = mapped_column(Text)
+    matter: Mapped[str | None] = mapped_column(Text)
+    matter_code: Mapped[str | None] = mapped_column(Text)
+    proposal_id: Mapped[str | None] = mapped_column(ForeignKey("legislative.proposals.id"), index=True)
+    secret: Mapped[bool] = mapped_column(Boolean)
+    result: Mapped[str | None] = mapped_column(Text)
+    totals: Mapped[dict] = mapped_column(JSONB, default=dict)
+    attributes: Mapped[dict] = mapped_column(JSONB, default=dict)
+    raw_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.raw_records.id"), index=True)
+
+
+class IndividualVote(Base):
+    __tablename__ = "individual_votes"
+    __table_args__ = {"schema": "legislative"}
+
+    vote_event_id: Mapped[str] = mapped_column(
+        ForeignKey("legislative.vote_events.id", ondelete="CASCADE"), primary_key=True)
+    person_id: Mapped[str] = mapped_column(ForeignKey("core.persons.id"), primary_key=True, index=True)
+    party_abbreviation: Mapped[str | None] = mapped_column(Text)
+    represented_unit: Mapped[str | None] = mapped_column(Text)
+    vote_code: Mapped[str | None] = mapped_column(Text)
+    vote_label: Mapped[str | None] = mapped_column(Text)
+
+
+class Speech(Base):
+    __tablename__ = "speeches"
+    __table_args__ = (
+        UniqueConstraint("source_system_id", "source_id"),
+        Index("ix_speeches_person_date", "person_id", "delivered_on"),
+        {"schema": "legislative"},
+    )
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    source_system_id: Mapped[str] = mapped_column(ForeignKey("registry.source_systems.id"))
+    source_id: Mapped[str] = mapped_column(Text)
+    person_id: Mapped[str] = mapped_column(ForeignKey("core.persons.id"))
+    delivered_on: Mapped[date | None] = mapped_column(Date)
+    kind: Mapped[str | None] = mapped_column(Text)
+    summary: Mapped[str | None] = mapped_column(Text)
+    indexing: Mapped[str | None] = mapped_column(Text)
+    session: Mapped[str | None] = mapped_column(Text)
+    url: Mapped[str | None] = mapped_column(Text)
+    text_url: Mapped[str | None] = mapped_column(Text)
+    raw_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.raw_records.id"), index=True)
+
+
+# --------------------------------------------------------------------------- media
+
+
+class NewsItem(Base):
+    """Headline-level record of a public feed item. Full article text is never stored."""
+
+    __tablename__ = "news_items"
+    __table_args__ = (Index("ix_news_items_published", "published_at"), {"schema": "media"})
+
+    id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    source_system_id: Mapped[str] = mapped_column(ForeignKey("registry.source_systems.id"), index=True)
+    feed: Mapped[str] = mapped_column(Text)
+    outlet: Mapped[str] = mapped_column(Text)
+    url: Mapped[str] = mapped_column(Text, unique=True)
+    title: Mapped[str] = mapped_column(Text)
+    excerpt: Mapped[str | None] = mapped_column(Text)
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    topics: Mapped[list] = mapped_column(JSONB, default=list)
+    raw_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.raw_records.id"), index=True)
+    first_observed_at: Mapped[datetime] = _now()
+
+
+class NewsMention(Base):
+    __tablename__ = "news_mentions"
+    __table_args__ = (Index("ix_news_mentions_entity", "entity_kind", "entity_id"), {"schema": "media"})
+
+    news_item_id: Mapped[str] = mapped_column(ForeignKey("media.news_items.id", ondelete="CASCADE"),
+                                              primary_key=True)
+    entity_kind: Mapped[str] = mapped_column(String(32), primary_key=True)
+    entity_id: Mapped[str] = mapped_column(String(64), primary_key=True)
+    matched_text: Mapped[str] = mapped_column(Text)
+    method: Mapped[str] = mapped_column(String(32))  # exact_name | alias
+    confidence: Mapped[str] = mapped_column(String(16))  # high | medium | low
+
+
+# --------------------------------------------------------------------------- analysis
+
+
+class DossierItem(Base):
+    """Curated, source-cited knowledge (contests, ministers, case timeline, procedure) loaded from dossiers/."""
+
+    __tablename__ = "dossier_items"
+    __table_args__ = (Index("ix_dossier_items_dossier_kind", "dossier", "kind"), {"schema": "analysis"})
+
+    id: Mapped[str] = mapped_column(String(96), primary_key=True)
+    dossier: Mapped[str] = mapped_column(String(64))
+    kind: Mapped[str] = mapped_column(String(32))
+    payload: Mapped[dict] = mapped_column(JSONB)
+    sources: Mapped[list] = mapped_column(JSONB, default=list)
+    as_of: Mapped[date | None] = mapped_column(Date)
+    content_sha256: Mapped[str] = mapped_column(String(64))
+    loaded_at: Mapped[datetime] = _now()
+
+
+class Claim(Base):
+    """A sourced statement about a subject: official fact, declaration, press report or analysis."""
+
+    __tablename__ = "claims"
+    __table_args__ = (
+        Index("ix_claims_topic_subject", "topic", "subject_id"),
+        {"schema": "analysis"},
+    )
+
+    id: Mapped[str] = mapped_column(String(96), primary_key=True)
+    dossier: Mapped[str] = mapped_column(String(64))
+    topic: Mapped[str] = mapped_column(String(64))
+    subject_kind: Mapped[str] = mapped_column(String(32))
+    subject_id: Mapped[str | None] = mapped_column(String(64))
+    subject_label: Mapped[str] = mapped_column(Text)
+    position: Mapped[str | None] = mapped_column(Text)
+    statement: Mapped[str] = mapped_column(Text)
+    claim_type: Mapped[str] = mapped_column(String(32))  # official | declaration | press_report | analysis
+    confidence: Mapped[str] = mapped_column(String(16))
+    review_status: Mapped[str] = mapped_column(String(16))  # curated | auto | disputed
+    stated_on: Mapped[date | None] = mapped_column(Date)
+    sources: Mapped[list] = mapped_column(JSONB, default=list)
+    attributes: Mapped[dict] = mapped_column(JSONB, default=dict)
