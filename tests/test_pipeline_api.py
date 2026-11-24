@@ -15,6 +15,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, func, select
 from sqlalchemy.orm import sessionmaker
 
+from connectors.base.protocol import Batch
 from connectors.senate.connector import SenateConnector
 from engine.capabilities.compute import recompute_capabilities
 from engine.db import models as M
@@ -357,12 +358,34 @@ def test_replay_proposals_reuses_original_evidence_without_claiming_a_fresh_fetc
         author = s.scalar(select(M.ProposalAuthor).where(M.ProposalAuthor.proposal_id == proposal.id))
         person_id = author.person_id
         prop_id, author_id = proposal.id, author.id
+        proposal.status = "Old normalization of the same observation"
+        proposal.last_observed_at = finished
+        s.commit()
+
+    same_run = replay_proposals(factory, run_id=run_id)
+    assert same_run["status"] == "succeeded"
+    assert same_run["stats"].get("proposals_replay_skipped_newer", 0) == 0
+    with factory() as s:
+        assert (s.get(M.Proposal, prop_id).status, s.get(M.Proposal, prop_id).last_observed_at) == (None, finished)
 
     persist = Persistor.persist_proposals
 
     def after_live_update(persistor, batch, evidence):
         with factory() as s:
             proposal = s.get(M.Proposal, prop_id)
+            older = batch.raw[batch.proposals[0].ref.raw]
+            changed = [item | {"situacaoAtual": "Newer live status"} for item in older.json()]
+            response = replace(older.response, retrieved_at=finished, content=json.dumps(changed).encode())
+            newer_batch = Batch(scope="proposals", raw=[replace(older, response=response, parsed=changed)])
+            source = s.get(M.SourceSystem, source_id)
+            newer_run = M.IngestionRun(institution_id=source.institution_id, source_system_id=source_id,
+                                       connector=source.connector, connector_version="test", scope=["proposals"],
+                                       status="succeeded", finished_at=finished)
+            s.add(newer_run)
+            s.flush()
+            [newer_id] = store_raw(s, newer_run, source, newer_batch)
+            s.add(M.EntityEvidence(entity_kind="proposal", entity_id=prop_id, raw_record_id=newer_id,
+                                   json_path="$[1]"))
             proposal.status = "Newer live status"
             proposal.last_observed_at = finished
             author = s.get(M.ProposalAuthor, author_id)

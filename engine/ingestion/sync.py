@@ -334,6 +334,13 @@ class Persistor:
         self._count("news", persist_news(self.s, self.source, self.raw_ids, batch))
 
     # ---------------------------------------------------------------- proposals
+    def _has_newer_proposal_evidence(self, proposal_id: str, replayed: list[RawRecord]) -> bool:
+        newer = [and_(RawRecord.record_kind == raw.record_kind, RawRecord.id != raw.id,
+                      RawRecord.last_seen_at > raw.last_seen_at) for raw in replayed]
+        return self.s.scalar(select(EntityEvidence.id).join(RawRecord, RawRecord.id == EntityEvidence.raw_record_id)
+                             .where(EntityEvidence.entity_kind == "proposal", EntityEvidence.entity_id == proposal_id,
+                                    or_(*newer)).limit(1)) is not None
+
     def _link_missing_replayed_authors(self, proposal_id: str, authors: list[AuthorRecord],
                                       detail: RawRecord, detail_ref: Ref) -> None:
         for author in authors:
@@ -364,23 +371,25 @@ class Persistor:
         for p in batch.proposals:
             list_record = evidence[p.ref.raw] if evidence is not None else None
             detail_ref = p.extra_refs[0] if p.extra_refs else p.ref
-            query = select(Proposal.id, Proposal.last_observed_at).where(
+            query = select(Proposal.id).where(
                 Proposal.source_system_id == self.source.id, Proposal.source_id == p.source_id)
-            if list_record is not None:
+            if evidence is not None:
                 query = query.with_for_update()
-            existing = self.s.execute(query).one_or_none()
-            if existing and list_record and existing.last_observed_at > list_record.last_seen_at:
-                if p.extra_refs:
-                    self._link_missing_replayed_authors(existing.id, p.authors, evidence[detail_ref.raw], detail_ref)
-                self._count("proposals_replay_skipped_newer")
-                continue
+            existing = self.s.scalar(query)
+            if existing and evidence is not None:
+                replayed = [evidence[ref.raw] for ref in (p.ref, *p.extra_refs)]
+                if self._has_newer_proposal_evidence(existing, replayed):
+                    if p.extra_refs:
+                        self._link_missing_replayed_authors(existing, p.authors, evidence[detail_ref.raw], detail_ref)
+                    self._count("proposals_replay_skipped_newer")
+                    continue
             values = dict(institution_id=inst, source_system_id=self.source.id, source_id=p.source_id,
                           type_code=p.type_code, type_name=p.type_name, number=p.number, year=p.year,
                           identifier=p.identifier, title=p.title, ementa=p.ementa, introduced_on=p.introduced_on,
                           status=p.status, status_date=p.status_date, in_progress=p.in_progress,
                           official_url=p.official_url, attributes=p.attributes, last_observed_at=self.now)
             if existing:
-                prop_id = existing.id
+                prop_id = existing
                 if list_record:
                     values.pop("last_observed_at")
                 self.s.execute(update(Proposal).where(Proposal.id == prop_id).values(**values))
