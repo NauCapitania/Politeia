@@ -214,8 +214,8 @@ def proposals(s: Session, inst_id: str, *, q: str | None, type_code: str | None,
 
 
 def proposal_types(s: Session, inst_id: str) -> list[dict[str, Any]]:
-    rows = s.execute(select(Proposal.type_code, Proposal.type_name, func.count()).where(
-        Proposal.institution_id == inst_id).group_by(Proposal.type_code, Proposal.type_name)
+    rows = s.execute(select(Proposal.type_code, func.mode().within_group(Proposal.type_name), func.count()).where(
+        Proposal.institution_id == inst_id).group_by(Proposal.type_code)
         .order_by(func.count().desc())).all()
     return [{"type_code": c, "type_name": n, "count": k} for c, n, k in rows]
 
