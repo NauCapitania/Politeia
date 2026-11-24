@@ -128,6 +128,14 @@ def test_proposal_authors_link_to_people_only_with_evidence(api):
     assert all(a["person_id"] is None for a in authors if a["kind"] != "member")
 
 
+def test_snapshot_exports_without_stf_dossier(api, tmp_path):
+    assert api.get("/v1/dossies/stf-caso-master").status_code == 404
+    export_snapshot(api, tmp_path, datetime(2026, 11, 24, tzinfo=ZoneInfo("UTC")))
+
+    assert json.loads((tmp_path / "dossies/stf-caso-master.json").read_text(encoding="utf-8")) is None
+    assert (tmp_path / "meta.json").is_file()
+
+
 def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory, tmp_path, monkeypatch):
     from engine.api import queries
 

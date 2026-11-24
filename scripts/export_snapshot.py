@@ -119,8 +119,9 @@ def export_snapshot(api: TestClient, output: Path, now: datetime) -> None:
         save("senado/composicao", f"senado/composicao/{day}", data=day)
     save("senado/composicao/2027")
 
-    for path in ("presidencia/2025", "presidencia/2027", "dossies/stf-caso-master"):
+    for path in ("presidencia/2025", "presidencia/2027"):
         save(path)
+    save("dossies/stf-caso-master", optional=True)
     for committee in save("comissoes"):
         save(f"comissoes/{committee['id']}")
     for vote in save("votacoes", limit=2000):
