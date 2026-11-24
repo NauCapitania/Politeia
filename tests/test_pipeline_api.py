@@ -4,7 +4,9 @@ import json
 import os
 import subprocess
 import sys
-from datetime import datetime
+from dataclasses import replace
+from datetime import UTC, datetime
+from uuid import UUID
 from zoneinfo import ZoneInfo
 
 import httpx
@@ -13,11 +15,14 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, func, select
 from sqlalchemy.orm import sessionmaker
 
+from connectors.senate.connector import SenateConnector
+from engine.capabilities.compute import recompute_capabilities
 from engine.db import models as M
 from engine.db.session import get_session
 from engine.dossiers import load_dossiers
-from engine.ingestion.sync import sync_source
-from engine.registry import bootstrap
+from engine.ingestion.replay import replay_proposals
+from engine.ingestion.sync import store_raw, sync_source
+from engine.registry import bootstrap, build_connector
 from scripts.export_snapshot import export_snapshot
 from tests.conftest import TEST_DB, make_client, official_sources
 
@@ -275,3 +280,74 @@ def test_total_scope_outage_updates_coverage_before_next_scope(factory, api):
     run = next(r for r in runs if r["id"] == failed["run_id"])
     assert run["stats"]["raw_records"] == 0 and run["stats"]["warnings"] > 0
     assert run["issues"][0]["code"] == "votes_unavailable"
+
+
+def test_replay_proposals_reuses_original_evidence_without_claiming_a_fresh_fetch(factory, api, monkeypatch):
+    source_id = SOURCES["ins_br_senado"]
+    seen = datetime(2026, 1, 5, 12, tzinfo=UTC)
+    finished = datetime.now(UTC)
+    proposals = [
+        {"id": 9111975, "identificacao": "PL 5522/2026"},
+        {"id": 9125400, "identificacao": "PL 3220/2019 (Substitutivo-CD)"},
+    ]
+    handler, _ = official_sources({
+        r"/dadosabertos/processo$": lambda req: httpx.Response(
+            200, json=proposals if req.url.params["sigla"] == "PL" else []),
+        r"/dadosabertos/processo/(9111975|9125400)$": httpx.Response(200, json={"autoriaIniciativa": [
+            {"siglaTipo": "SENADOR", "codigoParlamentar": 6459, "autor": "Autora fora do exercício"},
+        ]}),
+    })
+    with factory() as s:
+        source = s.get(M.SourceSystem, source_id)
+        connector = build_connector(source, make_client(handler))
+        batch = connector.fetch("proposals")
+        for raw in batch.raw:
+            raw.response = replace(raw.response, retrieved_at=seen)
+        run = M.IngestionRun(institution_id=source.institution_id, source_system_id=source.id, connector=connector.id,
+                             connector_version=connector.version, scope=["proposals"], status="partial",
+                             started_at=finished, finished_at=finished, stats={"raw_records": len(batch.raw)})
+        s.add(run)
+        s.flush()
+        raw_ids = store_raw(s, run, source, batch)
+        s.commit()
+        run_id = run.id
+        raws = s.scalars(select(M.RawRecord).where(M.RawRecord.id.in_(raw_ids))).all()
+        raw_history = {r.id: (r.first_run_id, r.last_run_id, r.retrieved_at, r.last_seen_at, r.content_sha256)
+                       for r in raws}
+        recompute_capabilities(s, source.institution_id)
+        s.commit()
+    before = api.get("/v1/institutions/ins_br_senado").json()["last_ingested_at"]
+
+    def forbidden(*args):
+        pytest.fail("offline replay contacted the source")
+
+    monkeypatch.setattr(SenateConnector, "fetch", forbidden)
+    targeted = replay_proposals(factory, proposal_ids=[9125400])
+    assert targeted["status"] == "succeeded" and targeted["stats"]["proposals"] == 1
+    assert count(factory, M.Proposal, source_id="9111975") == 0
+    replay = replay_proposals(factory, run_id=run_id)
+    assert replay["status"] == "succeeded"
+    assert replay["stats"]["mode"] == "replay"
+    assert replay["stats"]["source_run_id"] == str(run_id) and replay["stats"]["requests"] == 0
+    assert replay["stats"]["proposals"] == 2 and count(factory, M.Proposal, source_id="9125400") == 1
+
+    with factory() as s:
+        proposal = s.scalar(select(M.Proposal).where(M.Proposal.source_id == "9125400"))
+        assert proposal.first_observed_at == proposal.last_observed_at == seen
+        assert proposal.identifier == proposals[1]["identificacao"]
+        author = s.scalar(select(M.ProposalAuthor).where(M.ProposalAuthor.proposal_id == proposal.id))
+        assert author.resolution == "official_id"
+        person = s.get(M.Person, author.person_id)
+        assert person.first_observed_at == person.last_observed_at == seen
+        evidence = s.scalar(select(M.EntityEvidence).where(
+            M.EntityEvidence.entity_id == proposal.id, M.EntityEvidence.json_path == "$[1]"))
+        assert evidence.raw_record_id in raw_ids
+        raws = s.scalars(select(M.RawRecord).where(M.RawRecord.id.in_(raw_ids))).all()
+        assert {r.id: (r.first_run_id, r.last_run_id, r.retrieved_at, r.last_seen_at, r.content_sha256)
+                for r in raws} == raw_history
+        assert s.get(M.IngestionRun, UUID(replay["run_id"])).stats["mode"] == "replay"
+        assert s.get(M.CapabilityState, ("ins_br_senado", "proposals")).last_success_at == finished
+
+    status = api.get("/v1/ingestion/status", params={"institution": "ins_br_senado"}).json()
+    assert status["runs"][0]["stats"]["mode"] == "replay"
+    assert api.get("/v1/institutions/ins_br_senado").json()["last_ingested_at"] == before

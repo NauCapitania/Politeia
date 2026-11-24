@@ -2,6 +2,7 @@
 
 import logging
 import uuid
+from collections.abc import Callable
 from datetime import UTC, datetime
 
 from sqlalchemy import func, or_, select, text, update
@@ -201,10 +202,11 @@ class Persistor:
         self._count("party_memberships", len(batch.memberships))
 
     # ---------------------------------------------------------------- composition, votes, speeches
-    def ensure_person(self, ident: Identifier, name: str) -> str:
+    def ensure_person(self, ident: Identifier, name: str, evidence: RawRecord | None = None) -> str:
         pid, created = self.resolve("person", ident)
         if created:
-            self.s.add(Person(id=pid, name=name, first_observed_at=self.now, last_observed_at=self.now))
+            self.s.add(Person(id=pid, name=name, first_observed_at=evidence.retrieved_at if evidence else self.now,
+                              last_observed_at=evidence.last_seen_at if evidence else self.now))
             self.s.flush()
             self._count("persons_created")
         return pid
@@ -332,9 +334,11 @@ class Persistor:
         self._count("news", persist_news(self.s, self.source, self.raw_ids, batch))
 
     # ---------------------------------------------------------------- proposals
-    def persist_proposals(self, batch: Batch) -> None:
+    def persist_proposals(self, batch: Batch, evidence: list[RawRecord] | None = None) -> None:
         inst = self.source.institution_id
         for p in batch.proposals:
+            list_record = evidence[p.ref.raw] if evidence is not None else None
+            detail_ref = p.extra_refs[0] if p.extra_refs else p.ref
             existing = self.s.scalar(select(Proposal.id).where(
                 Proposal.source_system_id == self.source.id, Proposal.source_id == p.source_id))
             values = dict(institution_id=inst, source_system_id=self.source.id, source_id=p.source_id,
@@ -344,10 +348,15 @@ class Persistor:
                           official_url=p.official_url, attributes=p.attributes, last_observed_at=self.now)
             if existing:
                 prop_id = existing
+                if list_record:
+                    values.pop("last_observed_at")
                 self.s.execute(update(Proposal).where(Proposal.id == prop_id).values(**values))
             else:
                 prop_id = new_id("prp")
-                self.s.add(Proposal(id=prop_id, first_observed_at=self.now, **values))
+                if list_record:
+                    values["last_observed_at"] = list_record.last_seen_at
+                self.s.add(Proposal(id=prop_id, first_observed_at=list_record.retrieved_at if list_record else self.now,
+                                    **values))
                 self.s.flush()
                 self._count("proposals_created")
             self.evidence("proposal", prop_id, p.ref)
@@ -359,8 +368,8 @@ class Persistor:
                 person_id = self.lookup("person", a.person) if a.person else None
                 if (not person_id and a.person and a.kind == "member"
                         and a.resolution == "official_id" and a.name != "?"):
-                    person_id = self.ensure_person(a.person, a.name)
-                    self.evidence("person", person_id, p.extra_refs[0] if p.extra_refs else p.ref)
+                    person_id = self.ensure_person(a.person, a.name, evidence[detail_ref.raw] if evidence else None)
+                    self.evidence("person", person_id, detail_ref)
                 resolution = a.resolution if person_id else "unresolved"
                 attrs = dict(a.attributes)
                 if a.person and not person_id:
@@ -377,7 +386,7 @@ class Persistor:
                 ).returning(ProposalAuthor.id)
                 author_id = self.s.execute(stmt).scalar_one()
                 ordinals.append(a.ordinal)
-                self.rel_evidence("proposal_author", author_id, p.extra_refs[0] if p.extra_refs else p.ref)
+                self.rel_evidence("proposal_author", author_id, detail_ref)
                 self._count("authors")
                 if person_id:
                     self._count("authors_linked")
@@ -426,9 +435,18 @@ def _sync_scope(session: Session, source: SourceSystem, connector, scope: str) -
 
     raw_ids = store_raw(session, run, source, batch)
     session.commit()  # raw evidence survives even if normalization fails
+    stats = {"requests": connector.client.request_count, "raw_records": len(raw_ids),
+             "deprecated_endpoints": dict(connector.client.deprecations)}
+    return process_batch(session, source, run, batch, raw_ids, stats,
+                         lambda value: connector.validate(connector.normalize(value)))
 
+
+def process_batch(session: Session, source: SourceSystem, run: IngestionRun, batch: Batch,
+                  raw_ids: list[uuid.UUID], stats: dict, normalize: Callable[[Batch], Batch],
+                  evidence: list[RawRecord] | None = None) -> dict:
+    scope = batch.scope
     try:
-        connector.validate(connector.normalize(batch))
+        normalize(batch)
     except Exception as exc:  # noqa: BLE001 — unknown source shapes must not crash the run
         log.exception("normalization failed")
         batch.issues.append(_issue("error", "normalization_failed", repr(exc)))
@@ -437,8 +455,6 @@ def _sync_scope(session: Session, source: SourceSystem, connector, scope: str) -
         session.add(ValidationIssue(run_id=run.id, severity=issue.severity, code=issue.code, message=issue.message,
                                     context=issue.context,
                                     raw_record_id=raw_ids[issue.raw] if issue.raw is not None else None))
-    stats = {"requests": connector.client.request_count, "raw_records": len(raw_ids),
-             "deprecated_endpoints": dict(connector.client.deprecations)}
     warnings = sum(1 for i in batch.issues if i.severity == "warning")
     if batch.has_errors or (warnings and not raw_ids):
         reason = "validation errors" if batch.has_errors else "no source responses"
@@ -449,10 +465,12 @@ def _sync_scope(session: Session, source: SourceSystem, connector, scope: str) -
 
     persistor = Persistor(session, run, source, raw_ids)
     try:
-        {"members": persistor.persist_members, "proposals": persistor.persist_proposals,
-         "composition": persistor.persist_composition, "votes": persistor.persist_votes,
-         "speeches": persistor.persist_speeches, "news": persistor.persist_news,
-         "committees": persistor.persist_committees}[scope](batch)
+        if scope == "proposals":
+            persistor.persist_proposals(batch, evidence)
+        else:
+            {"members": persistor.persist_members, "composition": persistor.persist_composition,
+             "votes": persistor.persist_votes, "speeches": persistor.persist_speeches, "news": persistor.persist_news,
+             "committees": persistor.persist_committees}[scope](batch)
     except Exception as exc:
         session.rollback()
         run = session.get(IngestionRun, run.id)
@@ -475,4 +493,5 @@ def _issue(severity: str, code: str, message: str):
 
 def last_run_time(session: Session, institution_id: str):
     return session.scalar(select(func.max(IngestionRun.finished_at)).where(
-        IngestionRun.institution_id == institution_id, IngestionRun.status.in_(("succeeded", "partial"))))
+        IngestionRun.institution_id == institution_id, IngestionRun.status.in_(("succeeded", "partial")),
+        IngestionRun.is_source_fetch()))

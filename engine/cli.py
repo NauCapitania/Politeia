@@ -3,12 +3,14 @@
 import argparse
 import json
 import logging
+from uuid import UUID
 
 from sqlalchemy import select
 
 from engine.db.models import SourceSystem
 from engine.db.session import session_factory
 from engine.dossiers import load_dossiers
+from engine.ingestion.replay import replay_proposals
 from engine.ingestion.sync import sync_source
 from engine.registry import CONNECTORS, bootstrap
 
@@ -21,10 +23,22 @@ def main() -> None:
     sync = sub.add_parser("sync", help="ingest from official sources")
     sync.add_argument("--institution", action="append", help="institution id (default: all)")
     sync.add_argument("--scope", action="append", help="composition | members | votes | speeches | proposals | news")
+    replay = sub.add_parser("replay-proposals", help="normalize stored Senate proposal evidence without refetching")
+    selection = replay.add_mutually_exclusive_group(required=True)
+    selection.add_argument("--from-run", type=UUID, help="latest usable proposals fetch run ID")
+    selection.add_argument("--proposal-id", type=int, action="append", help="Senate proposal ID; repeatable")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 
     factory = session_factory()
+    if args.cmd == "replay-proposals":
+        try:
+            result = replay_proposals(factory, run_id=args.from_run, proposal_ids=args.proposal_id)
+        except ValueError as exc:
+            replay.error(str(exc))
+        print(json.dumps(result, ensure_ascii=False, default=str))
+        return
+
     with factory() as s:
         bootstrap(s)
         if args.cmd == "bootstrap":
