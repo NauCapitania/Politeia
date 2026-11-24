@@ -377,7 +377,10 @@ class ChamberConnector(Connector):
                 for i, m in enumerate(raw.json().get("dados") or []):
                     members.setdefault(raw.source_record_key, []).append((idx, i, m))
         now = today()
+        lost = {str(i.context.get("id")) for i in batch.issues if i.code == "committee_unavailable"}
         for oid, (idx, c) in details.items():
+            if oid in lost:  # incomplete roster would close seats of members who never left
+                continue
             if not isinstance(c, dict):
                 batch.issues.append(Issue("warning", "committee_empty", "orgao.dados missing", raw=idx))
                 continue
