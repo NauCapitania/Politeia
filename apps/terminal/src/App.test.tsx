@@ -280,13 +280,18 @@ describe('Plataforma modular', () => {
     await userEvent.type(input, 'Nota não salva')
     expect(screen.getByRole('status')).toHaveTextContent('Não foi possível salvar')
     failure.mockRestore()
-    localStorage.setItem(key, JSON.stringify([first, other]))
+    const remote = { ...first, notes: 'Nova evidência em outra aba' }
+    localStorage.setItem(key, JSON.stringify([remote, other]))
     act(() => window.dispatchEvent(new StorageEvent('storage', { key })))
     expect(input).toHaveValue('Nota não salva')
     await userEvent.click(screen.getByRole('button', { name: 'Todas as análises' }))
     await userEvent.click(screen.getByRole('button', { name: /Saúde/ }))
     await userEvent.type(screen.getByLabelText('Evidências, links e hipóteses'), '!')
-    expect(JSON.parse(localStorage.getItem(key)!)).toEqual([{ ...first, notes: 'Nota não salva' }, { ...other, notes: 'Outra aba!' }])
+    expect(JSON.parse(localStorage.getItem(key)!)).toEqual([remote, { ...other, notes: 'Outra aba!' }])
+    expect(screen.getByRole('status')).toHaveTextContent('Não foi possível salvar')
+    await userEvent.click(screen.getByRole('button', { name: 'Todas as análises' }))
+    await userEvent.click(screen.getByRole('button', { name: /Educação/ }))
+    expect(screen.getByLabelText('Evidências, links e hipóteses')).toHaveValue('Nota não salva')
   })
 
   it('mostra deputados no inspetor de pessoas sem abrir um perfil do Senado', async () => {

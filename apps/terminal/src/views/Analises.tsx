@@ -26,13 +26,15 @@ export function Analises() {
 
   function save(notebook: Notebook) {
     pending.current = mergeNotebooks(pending.current, [notebook])
-    const next = mergeNotebooks(loadNotebooks(), pending.current)
-    setNotebooks(next)
+    const saved = loadNotebooks()
+    const next = mergeNotebooks(saved, [notebook])
     try {
       localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(next))
-      pending.current = []
-      setSaveError(false)
+      pending.current = pending.current.filter((n) => n.id !== notebook.id)
+      setNotebooks(mergeNotebooks(next, pending.current))
+      setSaveError(pending.current.length > 0)
     } catch {
+      setNotebooks(mergeNotebooks(saved, pending.current))
       setSaveError(true)
     }
   }
