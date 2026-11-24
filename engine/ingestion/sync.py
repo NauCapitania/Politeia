@@ -357,6 +357,10 @@ class Persistor:
             ordinals = []
             for a in p.authors:
                 person_id = self.lookup("person", a.person) if a.person else None
+                if (not person_id and a.person and a.kind == "member"
+                        and a.resolution == "official_id" and a.name != "?"):
+                    person_id = self.ensure_person(a.person, a.name)
+                    self.evidence("person", person_id, p.extra_refs[0] if p.extra_refs else p.ref)
                 resolution = a.resolution if person_id else "unresolved"
                 attrs = dict(a.attributes)
                 if a.person and not person_id:
@@ -402,8 +406,8 @@ def sync_source(factory: sessionmaker, source_id: str, scopes: list[str] | None 
         wanted = connector.discover() if scopes is None else [sc for sc in scopes if sc in connector.scopes]
         for scope in wanted:
             results.append(_sync_scope(session, source, connector, scope))
-        recompute_capabilities(session, source.institution_id)
-        session.commit()
+            recompute_capabilities(session, source.institution_id)
+            session.commit()
     return results
 
 
@@ -435,9 +439,11 @@ def _sync_scope(session: Session, source: SourceSystem, connector, scope: str) -
                                     raw_record_id=raw_ids[issue.raw] if issue.raw is not None else None))
     stats = {"requests": connector.client.request_count, "raw_records": len(raw_ids),
              "deprecated_endpoints": dict(connector.client.deprecations)}
-    if batch.has_errors:
-        run.status, run.error = "failed", "validation errors; normalized data left unchanged"
-        run.stats, run.finished_at = stats, _now()
+    warnings = sum(1 for i in batch.issues if i.severity == "warning")
+    if batch.has_errors or (warnings and not raw_ids):
+        reason = "validation errors" if batch.has_errors else "no source responses"
+        run.status, run.error = "failed", f"{reason}; normalized data left unchanged"
+        run.stats, run.finished_at = stats | {"warnings": warnings}, _now()
         session.commit()
         return {"run_id": str(run.id), "scope": scope, "status": run.status, "error": run.error}
 
@@ -453,7 +459,6 @@ def _sync_scope(session: Session, source: SourceSystem, connector, scope: str) -
         run.status, run.error, run.finished_at = "failed", f"persistence failed: {exc!r}", _now()
         session.commit()
         raise
-    warnings = sum(1 for i in batch.issues if i.severity == "warning")
     warnings += 1 if persistor.stats.get("speeches_unknown_person") else 0
     run.status = "partial" if warnings else "succeeded"
     run.stats = stats | persistor.stats | {"warnings": warnings}
