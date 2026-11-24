@@ -106,8 +106,8 @@ export const useSeats = (data: string) =>
 export const useChanges = () => useQuery({ queryKey: ['changes'], queryFn: get<any[]>('/senado/mudancas') })
 export const useSenator = (id?: string | null) =>
   useQuery({ queryKey: ['senator', id], queryFn: get<any>(`/senadores/${id}`), enabled: !!id })
-export const useVotes = (q?: string, secreta?: string) =>
-  useQuery({ queryKey: ['votes', q, secreta], queryFn: get<any[]>('/votacoes', { q, secreta, limit: 200 }), placeholderData: keepPreviousData })
+export const useVotes = (q?: string, secreta?: string, limit = 200) =>
+  useQuery({ queryKey: ['votes', q, secreta, limit], queryFn: get<any[]>('/votacoes', { q, secreta, limit }), placeholderData: keepPreviousData })
 export const useVote = (id?: string | null) => useQuery({ queryKey: ['vote', id], queryFn: get<any>(`/votacoes/${id}`), enabled: !!id })
 export const useNews = (tema?: string, entidade?: string) =>
   useQuery({ queryKey: ['news', tema, entidade], queryFn: get<any[]>('/noticias', { tema, entidade, limit: 120 }), placeholderData: keepPreviousData })

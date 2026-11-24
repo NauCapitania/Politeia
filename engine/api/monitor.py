@@ -97,7 +97,7 @@ def senador(person_id: str, s: DB):
 
 
 @router.get("/votacoes")
-def votacoes(s: DB, limit: Annotated[int, Query(le=200)] = 50, secreta: bool | None = None,
+def votacoes(s: DB, limit: Annotated[int, Query(le=2000)] = 50, secreta: bool | None = None,
              q: str | None = None):
     stmt = select(VoteEvent).where(VoteEvent.institution_id == INSTITUTION)
     if secreta is not None:
