@@ -12,7 +12,7 @@ import { Proposals } from './Proposals'
 import './camara.css'
 
 type CamaraTab = 'composicao' | 'trocas' | 'votacoes' | 'proposicoes' | 'comissoes'
-const SYNC = (scope: string) => `A cobertura de ${({ members: 'deputados e filiações', votes: 'votações', proposals: 'proposições', committees: 'comissões' } as Record<string, string>)[scope] ?? 'dados'} ainda está sendo preparada. Ausência de dados não significa ausência de atividade.`
+const SYNC = (_scope: string) => 'Confira os filtros e a cobertura desta versão. Ausência de registros neste recorte não significa ausência de atividade.'
 
 export function Camara() {
   const [tab, setTab] = useState<CamaraTab>('composicao')
