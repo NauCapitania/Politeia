@@ -1,6 +1,7 @@
 """Senate-monitor endpoints: composition by date, senator profile, votes, news, dossiers and presidency analyses."""
 
 from datetime import date
+from itertools import islice
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -25,6 +26,7 @@ from engine.db.models import (
     VoteEvent,
 )
 from engine.db.session import get_session
+from engine.media import political_news
 from engine.senado import INSTITUTION, change_events, person_codes, seats_2027, seats_on
 
 router = APIRouter(prefix="/v1")
@@ -150,13 +152,17 @@ def vote_detail(s: Session, vote_id: str, institution: str) -> dict:
 
 @router.get("/noticias")
 def noticias(s: DB, tema: str | None = None, entidade: str | None = None,
-             limit: Annotated[int, Query(le=200)] = 60):
+             limit: Annotated[int, Query(ge=0, le=200)] = 60):
     stmt = select(NewsItem)
     if tema:
         stmt = stmt.where(NewsItem.topics.contains([tema]))
     if entidade:
         stmt = stmt.join(NewsMention, NewsMention.news_item_id == NewsItem.id).where(NewsMention.entity_id == entidade)
-    rows = s.scalars(stmt.order_by(NewsItem.published_at.desc().nulls_last()).limit(limit)).all()
+    candidates = s.scalars(stmt.order_by(NewsItem.published_at.desc().nulls_last()).execution_options(yield_per=200))
+    try:
+        rows = list(islice(political_news(s, candidates), limit))
+    finally:
+        candidates.close()
     mentions: dict[str, list] = {}
     if rows:
         for m in s.scalars(select(NewsMention).where(NewsMention.news_item_id.in_([r.id for r in rows]))):
