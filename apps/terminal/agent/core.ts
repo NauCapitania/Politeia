@@ -38,6 +38,7 @@ export type NewsItem = { titulo: string; link: string; data: string; veiculo: st
 const MAX_STEPS = 8
 const MAX_TOOL_CHARS = 40_000
 const MAX_HISTORY = 20
+const TIME_BUDGET_MS = 75_000
 const GEMINI = 'https://generativelanguage.googleapis.com/v1beta/models'
 
 const TOOLS = [{
@@ -176,22 +177,22 @@ export class GeminiError extends Error {
   }
 }
 
-async function generate(deps: AgentDeps, model: string, system: string, contents: Content[]) {
+async function generate(deps: AgentDeps, model: string, system: string, contents: Content[], final = false) {
   const res = await (deps.fetchImpl ?? fetch)(`${GEMINI}/${model}:generateContent`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-goog-api-key': deps.apiKey },
     signal: deps.signal,
-    body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents, tools: TOOLS, generationConfig: { temperature: 0.4 } }),
+    body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents, tools: TOOLS, ...(final ? { toolConfig: { functionCallingConfig: { mode: 'NONE' } } } : {}), generationConfig: { temperature: 0.4 } }),
   })
   if (!res.ok) throw new GeminiError(res.status, `Gemini ${res.status}`)
   const data = await res.json() as { candidates?: { content?: Content; finishReason?: string }[] }
   return data.candidates?.[0]?.content ?? { role: 'model' as const, parts: [] }
 }
 
-async function generateWithFallback(deps: AgentDeps, state: { model: number }, system: string, contents: Content[]) {
+async function generateWithFallback(deps: AgentDeps, state: { model: number }, system: string, contents: Content[], final = false) {
   for (;;) {
     try {
-      return await generate(deps, deps.models[state.model], system, contents)
+      return await generate(deps, deps.models[state.model], system, contents, final)
     } catch (error) {
       const retryable = error instanceof GeminiError && [429, 500, 503, 404].includes(error.status)
       if (!retryable || state.model >= deps.models.length - 1) throw error
@@ -253,10 +254,13 @@ export async function runAgent(
   const system = `${SYSTEM_PROMPT}\n\nHoje é ${date}.${contextLine(contexto)}`
   const contents = toContents(messages)
   const state = { model: 0 }
+  const started = Date.now()
   emit({ tipo: 'passo', texto: 'Pensando' })
   for (let step = 0; step < MAX_STEPS; step++) {
     deps.signal?.throwIfAborted()
-    const content = await generateWithFallback(deps, state, system, contents)
+    const final = step === MAX_STEPS - 1 || Date.now() - started > TIME_BUDGET_MS
+    if (final && step > 0) emit({ tipo: 'passo', texto: 'Escrevendo a resposta com o que já levantei' })
+    const content = await generateWithFallback(deps, state, system, contents, final)
     const parts = content.parts ?? []
     contents.push({ role: 'model', parts })
     const calls = parts.filter((p) => p.functionCall).map((p) => p.functionCall!)
@@ -282,10 +286,16 @@ export function parseNewsRss(xml: string, limit = 10): NewsItem[] {
     const veiculo = tag('source')
     let titulo = tag('title')
     if (veiculo && titulo.endsWith(` - ${veiculo}`)) titulo = titulo.slice(0, -veiculo.length - 3)
-    items.push({ titulo, link: tag('link'), data: tag('pubDate'), veiculo })
+    items.push({ titulo, link: tag('link'), data: brDate(tag('pubDate')), veiculo })
     if (items.length >= limit) break
   }
   return items
+}
+
+function brDate(pubDate: string) {
+  const d = new Date(pubDate)
+  if (Number.isNaN(d.getTime())) return pubDate
+  return new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short', timeZone: 'America/Sao_Paulo' }).format(d)
 }
 
 function decode(text: string) {

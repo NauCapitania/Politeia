@@ -53,7 +53,7 @@ describe('auxiliares', () => {
 
   it('lê o RSS do Google Notícias', () => {
     const xml = '<rss><channel><item><title>PGR analisa caso Master - Folha</title><link>https://n/1</link><pubDate>Mon, 23 Nov 2026 10:00:00 GMT</pubDate><source url="https://folha">Folha</source></item></channel></rss>'
-    expect(parseNewsRss(xml)).toEqual([{ titulo: 'PGR analisa caso Master', link: 'https://n/1', data: 'Mon, 23 Nov 2026 10:00:00 GMT', veiculo: 'Folha' }])
+    expect(parseNewsRss(xml)).toEqual([{ titulo: 'PGR analisa caso Master', link: 'https://n/1', data: '23/11/2026, 07:00', veiculo: 'Folha' }])
   })
 })
 
