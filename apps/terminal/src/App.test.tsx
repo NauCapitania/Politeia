@@ -17,6 +17,10 @@ const src = [{ url: 'https://www25.senado.leg.br/x', outlet: 'Senado', date: '20
 const posterior = { 'Davi Alcolumbre': 0.9, 'Astronauta Marcos Pontes': 0.05, 'Eduardo Girão': 0.05 }
 const DATA: Record<string, unknown> = {
   '/v1/institutions': [inst],
+  '/v1/executivo': {
+    institution_id: 'ins_br_executivo', presidency: null, bodies: [], unmatched: [], sources: [],
+    counts: { bodies: 0, top_level: 0, ministries: 0, entities: 0, ministers_in_office: 0, terms: 0 },
+  },
   '/v1/institutions/ins_br_senado/capabilities': [{ capability: 'members', status: 'available', record_count: 81, coverage: {}, last_success_at: null, note: null, issues: [] }],
   '/v1/senado/composicao': { date: '2026-11-24', observed: 81, seats: Array.from({ length: 81 }, (_, i) => seat(i)) },
   '/v1/senado/mudancas': [],
