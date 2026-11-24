@@ -80,7 +80,7 @@ export default function App() {
       </main>
       <AnimatePresence>{selectedId && <motion.section className="evidence-window" key="evidence" aria-label="Painel de evidências" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 24 }}>
         <div className="evidence-titlebar"><span>INSPEÇÃO / EVIDÊNCIAS</span><button onClick={() => useStore.getState().select(null)} aria-label="Fechar painel de evidências">Fechar · Esc</button></div>
-        {(view === 'senado' && senadoTab === 'proposicoes') || view === 'sources' || !selectedId.startsWith('per_') ? <Inspector inst={inst} /> : <SenatorPanel id={selectedId} />}
+        {(view === 'senado' && senadoTab === 'proposicoes') || (view !== 'senado' && view !== 'inicio') || !selectedId.startsWith('per_') ? <Inspector inst={inst} /> : <SenatorPanel id={selectedId} />}
       </motion.section>}</AnimatePresence>
       <StatusBar onCommand={() => setCommandOpen(true)} />
       {commandOpen && <CommandPalette onClose={() => setCommandOpen(false)} />}
