@@ -9,7 +9,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from email.utils import parsedate_to_datetime
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import urlencode, urljoin, urlsplit
 
 import httpx
 
@@ -17,6 +17,7 @@ log = logging.getLogger("politeia.http")
 
 RETRYABLE_STATUS = {429, 500, 502, 503, 504}
 KEPT_HEADERS = ("content-type", "last-modified", "etag", "deprecation", "sunset", "link")
+SENATE_RELAY_HOSTS = frozenset({"legis.senado.leg.br", "www12.senado.leg.br"})
 
 
 class SourceAccessError(RuntimeError):
@@ -72,6 +73,8 @@ class SourceHttpClient:
         base_backoff_s: float = 1.0,
         timeout_s: float = 30.0,
         user_agent: str = "Politeia/0.1",
+        senado_proxy_url: str | None = None,
+        senado_proxy_secret: str | None = None,
         transport: httpx.BaseTransport | None = None,
         sleep: Callable[[float], None] = time.sleep,
     ):
@@ -83,6 +86,18 @@ class SourceHttpClient:
         self._last_request = 0.0
         self.request_count = 0
         self.deprecations: dict[str, str] = {}
+        if bool(senado_proxy_url) != bool(senado_proxy_secret):
+            raise ValueError("SENADO_PROXY_URL and SENADO_PROXY_SECRET must be set together")
+        self.senado_proxy_url = None
+        if senado_proxy_url:
+            try:
+                proxy = httpx.URL(senado_proxy_url)
+            except httpx.InvalidURL:
+                raise ValueError("SENADO_PROXY_URL must be a clean HTTPS URL") from None
+            if proxy.scheme != "https" or not proxy.host or proxy.userinfo or proxy.query or proxy.fragment:
+                raise ValueError("SENADO_PROXY_URL must be a clean HTTPS URL")
+            self.senado_proxy_url = proxy
+        self._senado_proxy_secret = senado_proxy_secret
         self._client = httpx.Client(
             timeout=httpx.Timeout(timeout_s),
             headers={"User-Agent": user_agent},
@@ -122,6 +137,15 @@ class SourceHttpClient:
                     pass
         return self.base_backoff_s * 2 ** (attempt - 1) + random.uniform(0, self.base_backoff_s)
 
+    def _get(self, url: str, accept: str) -> httpx.Response:
+        host = urlsplit(url).hostname
+        if self.senado_proxy_url is not None and host in SENATE_RELAY_HOSTS:
+            return self._client.get(
+                self.senado_proxy_url, params={"url": url},
+                headers={"Accept": accept, "Authorization": f"Bearer {self._senado_proxy_secret}"},
+            )
+        return self._client.get(url, headers={"Accept": accept})
+
     def get(self, url: str, params: dict | None = None, accept: str = "application/json") -> FetchedResponse:
         full_url = f"{url}?{urlencode(params, doseq=True)}" if params else url
         redirects = 0
@@ -132,7 +156,7 @@ class SourceHttpClient:
             self._throttle()
             self.request_count += 1
             try:
-                resp = self._client.get(full_url, headers={"Accept": accept})
+                resp = self._get(full_url, accept)
             except httpx.TransportError as exc:
                 if attempt >= self.max_attempts:
                     raise SourceAccessError(f"network error after {attempt} attempts: {exc}", full_url) from exc
@@ -140,9 +164,10 @@ class SourceHttpClient:
                 self.sleep(self._backoff(attempt, None))
                 continue
 
-            if resp.is_redirect and redirects < 3:
+            location = resp.headers.get("location")
+            if resp.is_redirect and location and redirects < 3:
                 redirects += 1
-                full_url = str(resp.next_request.url) if resp.next_request else full_url
+                full_url = urljoin(full_url, location)
                 attempt -= 1
                 continue
             if resp.status_code in RETRYABLE_STATUS:
