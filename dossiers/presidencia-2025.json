@@ -1,0 +1,424 @@
+{
+ "dossier": "presidencia-2025",
+ "as_of": "2025-02-01",
+ "title": "Presidência do Senado 2025",
+ "items": [
+  {
+   "id": "pres2025_contest",
+   "kind": "contest",
+   "payload": {
+    "title": "Eleição para a Presidência do Senado (biênio 2025–2026)",
+    "date": "2025-02-01",
+    "ballot": "secreta, em cédula de papel",
+    "voters": 81,
+    "majority": 41,
+    "result": [
+     {
+      "candidate": "Davi Alcolumbre",
+      "party": "UNIÃO",
+      "uf": "AP",
+      "votes": 73
+     },
+     {
+      "candidate": "Astronauta Marcos Pontes",
+      "party": "PL",
+      "uf": "SP",
+      "votes": 4
+     },
+     {
+      "candidate": "Eduardo Girão",
+      "party": "NOVO",
+      "uf": "CE",
+      "votes": 4
+     }
+    ],
+    "withdrew": [
+     "Marcos do Val (Podemos-ES)",
+     "Soraya Thronicke (Podemos-MS)"
+    ],
+    "individual_votes_official": false,
+    "note": "O voto foi secreto: não existe registro oficial de quem votou em quem. Toda atribuição individual no Politeia é probabilística."
+   },
+   "sources": [
+    {
+     "url": "https://www25.senado.leg.br/web/atividade/sessao-plenaria/-/pauta/449940",
+     "outlet": "Senado Federal — sessão preparatória",
+     "date": "2025-02-01",
+     "kind": "official"
+    },
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2025/02/01/davi-alcolumbre-e-o-novo-presidente-do-senado",
+     "outlet": "Agência Senado",
+     "date": "2025-02-01",
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_psd",
+   "kind": "party_support",
+   "payload": {
+    "party": "PSD",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_pl",
+   "kind": "party_support",
+   "payload": {
+    "party": "PL",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_mdb",
+   "kind": "party_support",
+   "payload": {
+    "party": "MDB",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_pt",
+   "kind": "party_support",
+   "payload": {
+    "party": "PT",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_união",
+   "kind": "party_support",
+   "payload": {
+    "party": "UNIÃO",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_pp",
+   "kind": "party_support",
+   "payload": {
+    "party": "PP",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_psb",
+   "kind": "party_support",
+   "payload": {
+    "party": "PSB",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_republicanos",
+   "kind": "party_support",
+   "payload": {
+    "party": "REPUBLICANOS",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_pdt",
+   "kind": "party_support",
+   "payload": {
+    "party": "PDT",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_psdb",
+   "kind": "party_support",
+   "payload": {
+    "party": "PSDB",
+    "candidate": "Davi Alcolumbre",
+    "support": "declared",
+    "note": "Apoio partidário anunciado."
+   },
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_pode",
+   "kind": "party_support",
+   "payload": {
+    "party": "PODE",
+    "candidate": "Davi Alcolumbre",
+    "support": "split",
+    "note": "Bancada dividida: parte anunciou apoio (4 de 6, segundo o g1 em 30/11/2024)."
+   },
+   "sources": [
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_support_novo",
+   "kind": "party_support",
+   "payload": {
+    "party": "NOVO",
+    "candidate": "Eduardo Girão",
+    "support": "own_candidate",
+    "note": "Candidato próprio do partido."
+   },
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2025/02/01/davi-alcolumbre-e-o-novo-presidente-do-senado",
+     "outlet": "Agência Senado",
+     "date": "2025-02-01",
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "id": "pres2025_model",
+   "kind": "model",
+   "payload": {
+    "method": "Probabilidade a priori por senador (apoio do partido + afinidade + autovoto), condicionada exatamente ao placar oficial 73/4/4 por programação dinâmica.",
+    "candidates": [
+     "Davi Alcolumbre",
+     "Astronauta Marcos Pontes",
+     "Eduardo Girão"
+    ],
+    "candidate_codes": {
+     "Davi Alcolumbre": null,
+     "Astronauta Marcos Pontes": null,
+     "Eduardo Girão": null
+    },
+    "self_vote": 0.9,
+    "support_prior": {
+     "declared": 0.93,
+     "split": 0.75,
+     "own_candidate": 0.35,
+     "none": 0.6
+    },
+    "affinity": {
+     "PL": {
+      "Astronauta Marcos Pontes": 0.65,
+      "Eduardo Girão": 0.35
+     },
+     "NOVO": {
+      "Astronauta Marcos Pontes": 0.25,
+      "Eduardo Girão": 0.75
+     },
+     "default": {
+      "Astronauta Marcos Pontes": 0.5,
+      "Eduardo Girão": 0.5
+     }
+    },
+    "candidate_party_override": {
+     "Astronauta Marcos Pontes": "Concorreu de forma avulsa, contra o apoio declarado do PL a Alcolumbre."
+    },
+    "caveats": [
+     "Os parâmetros são hipóteses explícitas, não medições; mudar um parâmetro muda o resultado.",
+     "Uma probabilidade alta não indica como o senador votou; indica onde o modelo coloca os votos dissidentes dado o placar.",
+     "Declarações públicas individuais com fonte substituem a hipótese partidária para aquele senador."
+    ]
+   },
+   "sources": [
+    {
+     "url": "https://www25.senado.leg.br/web/atividade/sessao-plenaria/-/pauta/449940",
+     "outlet": "Senado Federal — sessão preparatória",
+     "date": "2025-02-01",
+     "kind": "official"
+    },
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2024/11/30/eleicoes-na-camara-e-no-senado-estao-encaminhadas-veja-lista-de-partidos-que-ja-anunciaram-apoio-a-motta-e-alcolumbre.ghtml",
+     "outlet": "g1",
+     "date": "2024-11-30",
+     "kind": "press_report"
+    }
+   ]
+  }
+ ],
+ "claims": [
+  {
+   "id": "cl2025_pontes_avulso",
+   "topic": "presidencia_2025_voto",
+   "subject_label": "Astronauta Marcos Pontes",
+   "position": "Astronauta Marcos Pontes",
+   "statement": "Lançou candidatura avulsa contra a orientação do PL, que apoiava Alcolumbre.",
+   "claim_type": "press_report",
+   "confidence": "high",
+   "sources": [
+    {
+     "url": "https://www.poder360.com.br/poder-congresso/relembre-como-alcolumbre-construiu-sua-candidatura-no-senado/",
+     "outlet": "Poder360",
+     "date": "2025-02-01",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "cl2025_girao_candidato",
+   "topic": "presidencia_2025_voto",
+   "subject_label": "Eduardo Girão",
+   "position": "Eduardo Girão",
+   "statement": "Candidato à Presidência pelo Novo.",
+   "claim_type": "official",
+   "confidence": "high",
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2025/02/01/davi-alcolumbre-e-o-novo-presidente-do-senado",
+     "outlet": "Agência Senado",
+     "date": "2025-02-01",
+     "kind": "official"
+    }
+   ]
+  }
+ ]
+}

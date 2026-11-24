@@ -1,0 +1,369 @@
+{
+ "id": 8360649,
+ "codigoMateria": 155808,
+ "identificacao": "RQS 41/2023",
+ "sigla": "RQS",
+ "descricaoSigla": "Requerimento",
+ "numero": "41",
+ "ano": 2023,
+ "casaIdentificadora": "SF",
+ "siglaEnteIdentificador": "PLEN",
+ "identificacaoExterna": {},
+ "conteudo": {
+  "id": 7509312,
+  "idTipo": 461,
+  "siglaTipo": "DESARQUIVAMENTO_MATERIA",
+  "tipo": "Desarquivamento de matéria ",
+  "ementa": "Desarquivamento das seguintes proposições: PRS 10/2016, PLS 183/2016, PLS 277/2016, PLS 275/2016, PLS 279/2016, PEC 34/2016, PLS 316/2016, PLS 444/2016, PLS 29/2017, PLS 170/2017, PLS 171/2017, PLS 187/2017, PLS 211/2017, PLS 266/2017, PLS 265/2017, PLS 262/2017, PLS 263/2017, PLS 300/2017, PLS 338/2017, PLS 339/2017, PEC 36/2017, PFS 2/2017, PLS 469/2017, PLS 509/2017, PLS 225/2018, PEC 10/2018, PLS 335/2018, PDS 139/2018, PLS 461/2018, PLS 460/2018, PLS 294/2016, PLS 26/2015, PLS 67/2015, PLS 69/2015, PLS 65/2015, PLS 66/2015, PLS 63/2015, PLS 73/2015, PLS 71/2015, PLS 64/2015, PLS 219/2015, PLS 278/2015, PLS 322/2015, PLS 354/2015, PLS 412/2015, PLS 506/2015, PLS 510/2015, PLS 528/2015, PRS 42/2015, PLS 703/2015, PLS 704/2015, PLS 758/2015, PLS 72/2015, PLS 279/2015."
+ },
+ "documento": {
+  "id": 9250359,
+  "siglaTipo": "REQUERIMENTO",
+  "tipo": "Requerimento",
+  "dataApresentacao": "2023-02-02",
+  "dataLeitura": "2023-02-08",
+  "casaLeitura": "SF",
+  "url": "https://legis.senado.gov.br/sdleg-getter/dadosabertos/documento/171558c8-d283-4440-974d-b9e3e98809e5",
+  "autoria": [
+   {
+    "autor": "Romário",
+    "sexo": "M",
+    "siglaTipo": "SENADOR",
+    "descricaoTipo": "SENADOR",
+    "ordem": 1,
+    "outrosAutoresNaoInformados": "Não",
+    "codigoParlamentar": 5322,
+    "uf": "RJ",
+    "siglaPartido": "PL",
+    "partido": "Partido Liberal",
+    "siglaCargo": "SENADOR",
+    "cargo": "Senador",
+    "idEnte": 1,
+    "siglaEnte": "SF",
+    "casaEnte": "SF",
+    "ente": "Senado Federal"
+   },
+   {
+    "autor": "Flávio Bolsonaro",
+    "sexo": "M",
+    "siglaTipo": "SENADOR",
+    "descricaoTipo": "SENADOR",
+    "ordem": 2,
+    "outrosAutoresNaoInformados": "Não",
+    "codigoParlamentar": 5894,
+    "uf": "RJ",
+    "siglaPartido": "PL",
+    "partido": "Partido Liberal",
+    "siglaCargo": "SENADOR",
+    "cargo": "Senador",
+    "idEnte": 1,
+    "siglaEnte": "SF",
+    "casaEnte": "SF",
+    "ente": "Senado Federal"
+   },
+   {
+    "autor": "Eduardo Gomes",
+    "sexo": "M",
+    "siglaTipo": "SENADOR",
+    "descricaoTipo": "SENADOR",
+    "ordem": 3,
+    "outrosAutoresNaoInformados": "Não",
+    "codigoParlamentar": 3777,
+    "uf": "TO",
+    "siglaPartido": "PL",
+    "partido": "Partido Liberal",
+    "siglaCargo": "SENADOR",
+    "cargo": "Senador",
+    "idEnte": 1,
+    "siglaEnte": "SF",
+    "casaEnte": "SF",
+    "ente": "Senado Federal"
+   }
+  ],
+  "resumoAutoria": "Senador Romário (PL/RJ), Senador Flávio Bolsonaro (PL/RJ), Senador Eduardo Gomes (PL/TO), Senador Paulo Paim (PT/RS), Senador Esperidião Amin (PP/SC), Senador Jorge Kajuru (PSB/GO), Senador Wellington Fagundes (PL/MT), Senador Angelo Coronel (PSD/BA), Senadora Damares Alves (REPUBLICANOS/DF), Senador Alan Rick (UNIÃO/AC), Senadora Tereza Cristina (PP/MS), Senador Flávio Arns (PSB/PR), Senador Dr. Hiran (PP/RR), Senadora Daniella Ribeiro (PSD/PB), Senador Eduardo Girão (PODEMOS/CE), Senador Zequinha Marinho (PL/PA), Senadora Mara Gabrilli (PSD/SP), Senador Nelsinho Trad (PSD/MS), Senadora Soraya Thronicke (UNIÃO/MS), Senador Styvenson Valentim (PODEMOS/RN), Senador Plínio Valério (PSDB/AM), Senador Luis Carlos Heinze (PP/RS), Senador Veneziano Vital do Rêgo (MDB/PB), Senador Carlos Viana (PODEMOS/MG), Senador Sergio Moro (UNIÃO/PR), Senador Marcio Bittar (UNIÃO/AC), Senador Izalci Lucas (PSDB/DF), Senador Hamilton Mourão (REPUBLICANOS/RS), Senador Jaime Bagattoli (PL/RO), Senador Chico Rodrigues (PSB/RR), Senador Ciro Nogueira (PP/PI), Senadora Margareth Buzetti (PSD/MT), Senador Carlos Portinho (PL/RJ), Senador Lucas Barreto (PSD/AP), Senador Jorge Seif (PL/SC), Senador Marcelo Castro (MDB/PI), Senador Laércio Oliveira (PP/SE)"
+ },
+ "tramitando": "Não",
+ "dataInicioEfetivo": "2023-02-08",
+ "situacaoAtual": "APROVADA",
+ "siglaSituacaoAtual": "APRVD",
+ "dataSituacaoAtual": "2023-03-15",
+ "autoriaIniciativa": [
+  {
+   "autor": "Romário",
+   "sexo": "M",
+   "siglaTipo": "SENADOR",
+   "descricaoTipo": "SENADOR",
+   "ordem": 1,
+   "outrosAutoresNaoInformados": "Não",
+   "codigoParlamentar": 5322,
+   "uf": "RJ",
+   "siglaPartido": "PL",
+   "partido": "Partido Liberal",
+   "siglaCargo": "SENADOR",
+   "cargo": "Senador",
+   "idEnte": 1,
+   "siglaEnte": "SF",
+   "casaEnte": "SF",
+   "ente": "Senado Federal"
+  },
+  {
+   "autor": "Flávio Bolsonaro",
+   "sexo": "M",
+   "siglaTipo": "SENADOR",
+   "descricaoTipo": "SENADOR",
+   "ordem": 2,
+   "outrosAutoresNaoInformados": "Não",
+   "codigoParlamentar": 5894,
+   "uf": "RJ",
+   "siglaPartido": "PL",
+   "partido": "Partido Liberal",
+   "siglaCargo": "SENADOR",
+   "cargo": "Senador",
+   "idEnte": 1,
+   "siglaEnte": "SF",
+   "casaEnte": "SF",
+   "ente": "Senado Federal"
+  },
+  {
+   "autor": "Eduardo Gomes",
+   "sexo": "M",
+   "siglaTipo": "SENADOR",
+   "descricaoTipo": "SENADOR",
+   "ordem": 3,
+   "outrosAutoresNaoInformados": "Não",
+   "codigoParlamentar": 3777,
+   "uf": "TO",
+   "siglaPartido": "PL",
+   "partido": "Partido Liberal",
+   "siglaCargo": "SENADOR",
+   "cargo": "Senador",
+   "idEnte": 1,
+   "siglaEnte": "SF",
+   "casaEnte": "SF",
+   "ente": "Senado Federal"
+  }
+ ],
+ "comissaoMpv": "{}",
+ "autuacoes": [
+  {
+   "numero": 1,
+   "descricao": "Autuação Principal",
+   "idEnteControleAtual": 55299,
+   "siglaEnteControleAtual": "COARQ",
+   "nomeEnteControleAtual": "Coordenação de Arquivo",
+   "situacoes": [
+    {
+     "idTipo": 175,
+     "sigla": "AGDESP",
+     "descricao": "AGUARDANDO DESPACHO",
+     "inicio": "2023-02-08",
+     "fim": "2023-02-08",
+     "colegiado": {
+      "codigo": 1998,
+      "casa": "SF",
+      "sigla": "PLEN",
+      "nome": "Plenário do Senado Federal"
+     },
+     "enteAdministrativo": {
+      "id": 55312,
+      "casa": "SF",
+      "sigla": "SLSF",
+      "nome": "Secretaria Legislativa do Senado Federal"
+     }
+    },
+    {
+     "idTipo": 175,
+     "sigla": "AGDESP",
+     "descricao": "AGUARDANDO DESPACHO",
+     "inicio": "2023-02-08",
+     "fim": "2023-03-15",
+     "colegiado": {
+      "codigo": 1998,
+      "casa": "SF",
+      "sigla": "PLEN",
+      "nome": "Plenário do Senado Federal"
+     },
+     "enteAdministrativo": {
+      "id": 13594,
+      "casa": "SF",
+      "sigla": "SEADI",
+      "nome": "Secretaria de Atas e Diários"
+     }
+    },
+    {
+     "idTipo": 25,
+     "sigla": "APRVD",
+     "descricao": "APROVADA",
+     "inicio": "2023-03-15",
+     "colegiado": {
+      "codigo": 1998,
+      "casa": "SF",
+      "sigla": "PLEN",
+      "nome": "Plenário do Senado Federal"
+     },
+     "enteAdministrativo": {
+      "id": 13594,
+      "casa": "SF",
+      "sigla": "SEADI",
+      "nome": "Secretaria de Atas e Diários"
+     }
+    }
+   ],
+   "informesLegislativos": [
+    {
+     "id": 2117978,
+     "data": "2023-02-08 18:03:07",
+     "colegiado": {
+      "codigo": 1998,
+      "casa": "SF",
+      "sigla": "PLEN",
+      "nome": "Plenário do Senado Federal"
+     },
+     "enteAdministrativo": {
+      "id": 55312,
+      "casa": "SF",
+      "sigla": "SLSF",
+      "nome": "Secretaria Legislativa do Senado Federal"
+     },
+     "descricao": "Autuado o Requerimento nº 41/2023. O requerimento vai à publicação.",
+     "idSituacaoIniciada": 175,
+     "siglaSituacaoIniciada": "AGDESP",
+     "documentosAssociados": [
+      {
+       "id": 9250359,
+       "tipo": "Requerimento",
+       "siglaTipo": "REQUERIMENTO",
+       "identificacao": "RQS 41/2023",
+       "descricao": "Desarquivamento das seguintes proposições: PRS 10/2016, PLS 183/2016, PLS 277/2016, PLS 275/2016, PLS 279/2016, PEC 34/2016, PLS 316/2016, PLS 444/2016, PLS 29/2017, PLS 170/2017, PLS 171/2017, PLS 187/2017, PLS 211/2017, PLS 266/2017, PLS 265/2017, PLS 262/2017, PLS 263/2017, PLS 300/2017, PLS 338/2017, PLS 339/2017, PEC 36/2017, PFS 2/2017, PLS 469/2017, PLS 509/2017, PLS 225/2018, PEC 10/2018, PLS 335/2018, PDS 139/2018, PLS 461/2018, PLS 460/2018, PLS 294/2016, PLS 26/2015, PLS 67/2015, PLS 69/2015, PLS 65/2015, PLS 66/2015, PLS 63/2015, PLS 73/2015, PLS 71/2015, PLS 64/2015, PLS 219/2015, PLS 278/2015, PLS 322/2015, PLS 354/2015, PLS 412/2015, PLS 506/2015, PLS 510/2015, PLS 528/2015, PRS 42/2015, PLS 703/2015, PLS 704/2015, PLS 758/2015, PLS 72/2015, PLS 279/2015.",
+       "data": "2023-02-02T09:34:37",
+       "autoria": "Senador Romário (PL/RJ), Senador Flávio Bolsonaro (PL/RJ), Senador Eduardo Gomes (PL/TO), Senador Paulo Paim (PT/RS), Senador Esperidião Amin (PP/SC), Senador Jorge Kajuru (PSB/GO), Senador Wellington Fagundes (PL/MT), Senador Angelo Coronel (PSD/BA), Senadora Damares Alves (REPUBLICANOS/DF), Senador Alan Rick (UNIÃO/AC), Senadora Tereza Cristina (PP/MS), Senador Flávio Arns (PSB/PR), Senador Dr. Hiran (PP/RR), Senadora Daniella Ribeiro (PSD/PB), Senador Eduardo Girão (PODEMOS/CE), Senador Zequinha Marinho (PL/PA), Senadora Mara Gabrilli (PSD/SP), Senador Nelsinho Trad (PSD/MS), Senadora Soraya Thronicke (UNIÃO/MS), Senador Styvenson Valentim (PODEMOS/RN), Senador Plínio Valério (PSDB/AM), Senador Luis Carlos Heinze (PP/RS), Senador Veneziano Vital do Rêgo (MDB/PB), Senador Carlos Viana (PODEMOS/MG), Senador Sergio Moro (UNIÃO/PR), Senador Marcio Bittar (UNIÃO/AC), Senador Izalci Lucas (PSDB/DF), Senador Hamilton Mourão (REPUBLICANOS/RS), Senador Jaime Bagattoli (PL/RO), Senador Chico Rodrigues (PSB/RR), Senador Ciro Nogueira (PP/PI), Senadora Margareth Buzetti (PSD/MT), Senador Carlos Portinho (PL/RJ), Senador Lucas Barreto (PSD/AP), Senador Jorge Seif (PL/SC), Senador Marcelo Castro (MDB/PI), Senador Laércio Oliveira (PP/SE)",
+       "url": "https://legis.senado.leg.br/sdleg-getter/dadosabertos/documento/171558c8-d283-4440-974d-b9e3e98809e5"
+      },
+      {
+       "id": 9255615,
+       "tipo": "Avulso inicial da matéria",
+       "siglaTipo": "AVULSO_INICIAL",
+       "identificacao": "Avulso inicial da matéria - SF232804963347",
+       "descricao": "-",
+       "data": "2023-02-08T00:00:00",
+       "autoria": "Senado Federal",
+       "url": "https://legis.senado.leg.br/sdleg-getter/dadosabertos/documento/87eec3eb-9c51-4745-9dec-284c29c2cda8"
+      }
+     ]
+    },
+    {
+     "id": 2118216,
+     "data": "2023-02-10 07:40:56",
+     "colegiado": {
+      "codigo": 1998,
+      "casa": "SF",
+      "sigla": "PLEN",
+      "nome": "Plenário do Senado Federal"
+     },
+     "enteAdministrativo": {
+      "id": 55312,
+      "casa": "SF",
+      "sigla": "SLSF",
+      "nome": "Secretaria Legislativa do Senado Federal"
+     },
+     "descricao": "Recebido requerimento do Senador Carlos Portinho solicitando adição de assinatura à presente matéria.",
+     "documentosAssociados": [
+      {
+       "id": 9257049,
+       "tipo": "Requerimento",
+       "siglaTipo": "REQUERIMENTO",
+       "identificacao": "Requerimento - SF237420144940",
+       "descricao": "Requer adição de assinatura ao requerimento registrado no SEDOL nº SF/23879.12299-24, de autoria do Senador Romário.",
+       "data": "2023-02-10T07:40:40",
+       "autoria": "Senador Carlos Portinho (PL/RJ)",
+       "url": "https://legis.senado.leg.br/sdleg-getter/dadosabertos/documento/4233b11c-bbb3-4b1b-bc44-0d1b077bf896"
+      }
+     ]
+    },
+    {
+     "id": 2118269,
+     "data": "2023-02-10 16:19:59",
+     "colegiado": {
+      "codigo": 1998,
+      "casa": "SF",
+      "sigla": "PLEN",
+      "nome": "Plenário do Senado Federal"
+     },
+     "enteAdministrativo": {
+      "id": 55312,
+      "casa": "SF",
+      "sigla": "SLSF",
+      "nome": "Secretaria Legislativa do Senado Federal"
+     },
+     "descricao": "Recebido requerimento do Senador Lucas Barreto solicitando adição de assinatura à presente matéria.",
+     "documentosAssociados": [
+      {
+       "id": 9257255,
+       "tipo": "Requerimento",
+       "siglaTipo": "REQUERIMENTO",
+       "identificacao": "Requerimento - SF234382056835",
+       "descricao": "Requer adição de assinatura ao requerimento registrado no SEDOL nº SF/23879.12299-24, de autoria do Senador Romário.",
+       "data": "2023-02-10T13:16:04",
+       "autoria": "Senador Lucas Barreto (PSD/AP)",
+       "url": "https://legis.senado.leg.br/sdleg-getter/dadosabertos/documento/08b6c06c-61af-4bd2-9fab-17c55b0389ae"
+      }
+     ]
+    }
+   ],
+   "movimentacoes": [
+    {
+     "id": 9255549,
+     "dataEnvio": "2023-02-08 18:05:32",
+     "enteOrigem": {
+      "id": 55312,
+      "casa": "SF",
+      "sigla": "SLSF",
+      "nome": "Secretaria Legislativa do Senado Federal"
+     },
+     "dataRecebimento": "2023-02-08 18:20:18",
+     "enteDestino": {
+      "id": 13594,
+      "casa": "SF",
+      "sigla": "SEADI",
+      "nome": "Secretaria de Atas e Diários"
+     },
+     "colegiadoDestino": {
+      "codigo": 1998,
+      "casa": "SF",
+      "sigla": "PLEN",
+      "nome": "Plenário do Senado Federal"
+     }
+    },
+    {
+     "id": 9255624,
+     "dataEnvio": "2023-02-08 18:33:11",
+     "enteOrigem": {
+      "id": 13594,
+      "casa": "SF",
+      "sigla": "SEADI",
+      "nome": "Secretaria de Atas e Diários"
+     },
+     "dataRecebimento": "2023-02-09 07:40:07",
+     "enteDestino": {
+      "id": 55312,
+      "casa": "SF",
+      "sigla": "SLSF",
+      "nome": "Secretaria Legislativa do Senado Federal"
+     },
+     "colegiadoDestino": {
+      "codigo": 1998,
+      "casa": "SF",
+      "sigla": "PLEN",
+      "nome": "Plenário do Senado Federal"
+     }
+    }
+   ]
+  }
+ ],
+ "deliberacao": {
+  "data": "2023-03-15",
+  "siglaTipo": "APROVADA_NO_PLENARIO",
+  "tipoDeliberacao": "Aprovada pelo Plenário"
+ },
+ "normaGerada": {}
+}
