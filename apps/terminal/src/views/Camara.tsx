@@ -188,7 +188,7 @@ function Votacoes() {
             <button key={v.id} className={`list-row ${open === v.id ? 'active' : ''}`} onClick={() => v.nominal && setOpen(v.id)}>
               <span className="mono">{fmtDate(v.date)}</span>
               <span className="grow">{v.matter && <b>{v.matter} · </b>}{v.description}</span>
-              {!v.nominal && <span className="kind kind-analysis">simbólica</span>}
+              {!v.nominal && <span className="kind kind-analysis">{v.secret ? 'secreta' : 'simbólica'}</span>}
               <span className="small muted">{v.result}</span>
             </button>
           ))}

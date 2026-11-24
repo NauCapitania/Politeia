@@ -5,7 +5,7 @@ export const CAMARA = 'ins_br_camara'
 
 export type CamaraVote = {
   id: string; date: string | null; description: string | null; matter: string | null; result: string | null
-  totals: Record<string, number>; nominal: boolean | null; proposal_id: string | null
+  totals: Record<string, number>; nominal: boolean | null; secret: boolean; proposal_id: string | null
 }
 export type CamaraBallot = { person_id: string; name: string; party: string | null; uf: string | null; vote: string | null; label: string | null }
 export type CamaraVoteDetail = CamaraVote & { votes: CamaraBallot[] }
@@ -31,7 +31,7 @@ export const useCamaraVotes = (q: string, nominal: boolean | undefined, limit: n
   useQuery({
     queryKey: ['camara-votes', isStatic() ? '' : q, nominal, isStatic() ? 0 : limit],
     queryFn: () => api<CamaraVote[]>('/camara/votacoes', isStatic() ? {} : { q, nominal: nominal === undefined ? undefined : String(nominal), limit }),
-    select: (rows) => rows.filter((v) => matches(q, v.description, v.matter) && (nominal === undefined || !!v.nominal === nominal)).slice(0, limit),
+    select: (rows) => rows.filter((v) => matches(q, v.description, v.matter) && (nominal === undefined || (nominal ? !!v.nominal : !v.nominal && !v.secret))).slice(0, limit),
   })
 
 export const useCamaraVote = (id?: string | null) =>
