@@ -351,7 +351,7 @@ class ChamberConnector(Connector):
                 bidx, blist = ballots.get(vid, (None, None))
                 for b in blist or []:
                     dep = b.get("deputado_") or {}
-                    if not dep.get("id"):
+                    if not dep.get("id") or not b.get("tipoVoto"):
                         continue
                     ev.votes.append(IndividualVoteRecord(
                         person=Identifier(PERSON, str(dep["id"])), name=dep.get("nome") or str(dep["id"]),
@@ -364,6 +364,8 @@ class ChamberConnector(Connector):
                     ev.totals = {"totalVotosSim": tally.get("Sim", 0), "totalVotosNao": tally.get("Não", 0),
                                  "totalVotosAbstencao": tally.get("Abstenção", 0),
                                  "totalVotosObstrucao": tally.get("Obstrução", 0)}
+                elif blist:  # participation without choices: secret ballot
+                    ev.secret = True
                 ev.attributes["nominal"] = bool(ev.votes)
                 batch.vote_events.append(ev)
 
