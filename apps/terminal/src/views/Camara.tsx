@@ -17,7 +17,7 @@ const SYNC = (_scope: string) => 'Confira os filtros e a cobertura desta versão
 export function Camara() {
   const [tab, setTab] = useState<CamaraTab>('composicao')
   const coverage = useCapabilities(CAMARA)
-  const incomplete = coverage.isSuccess && ['members', 'proposals', 'votes', 'committees'].some((scope) => !coverage.data?.some((c) => c.capability === scope && c.status === 'available'))
+  const incomplete = coverage.isSuccess && ['members', 'proposals', 'votes', 'committees'].some((scope) => !coverage.data?.some((c) => c.capability === scope && ['available', 'empty'].includes(c.status)))
   return (
     <div className="view">
       <InstitutionMasthead kind="camara" eyebrow="PODER LEGISLATIVO · REPRESENTAÇÃO DO POVO" title="Câmara dos Deputados" subtitle="Representação, debate e fiscalização. Acompanhe o caminho das propostas." />
