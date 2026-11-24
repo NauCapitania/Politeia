@@ -48,7 +48,7 @@ export function Hemicycle({ comp, width = 640 }: { comp: Composition; width?: nu
             transition={{ duration: 0.35, delay: i * 0.004 }}
             cx={p.x} cy={p.y}
             fill={s.state === 'occupied' ? partyColor(s.party_abbreviation) : 'transparent'}
-            stroke={sel ? '#fff' : s.state === 'occupied' ? 'none' : 'var(--line-strong)'}
+            stroke={sel ? 'var(--fg-0)' : s.state === 'occupied' ? 'none' : 'var(--line-strong)'}
             strokeDasharray={s.state === 'occupied' ? undefined : '2 2'}
             strokeWidth={sel ? 2 : 1}
             onMouseEnter={() => hover(s.person_id)}

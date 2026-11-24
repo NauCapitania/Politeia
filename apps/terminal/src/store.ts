@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type View = 'senado' | 'stf' | 'noticias' | 'sources'
+export type View = 'inicio' | 'senado' | 'stf' | 'noticias' | 'sources'
 export type SenadoTab = 'composicao' | 'votacoes' | 'presidencia2025' | 'presidencia2027' | 'proposicoes' | 'comissoes'
 
 type State = {
@@ -24,7 +24,7 @@ type State = {
 
 export const useStore = create<State>((set) => ({
   institutionId: null,
-  view: 'senado',
+  view: 'inicio',
   senadoTab: 'composicao',
   sidebarCollapsed: readPref('politeia.sidebar') === 'collapsed',
   selectedId: null,

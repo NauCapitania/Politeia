@@ -3,6 +3,8 @@ const PALETTE = [
   '#c98b5b', '#7c8fd6', '#5fbfb0', '#d58fb8', '#9aa65a', '#b07858', '#6c9fd0', '#c4b55e',
 ]
 
+export const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+
 export function partyColor(abbr?: string | null): string {
   if (!abbr) return '#4a5568'
   let h = 0
