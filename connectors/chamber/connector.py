@@ -217,7 +217,9 @@ class ChamberConnector(Connector):
                 leg = int(d.get("idLegislatura") or 57)
                 hidx, hist = histories.get(code, (None, None))
                 hist = sorted((h for h in hist or [] if isinstance(h, dict)), key=lambda h: h.get("dataHora") or "")
-                entries = [h for h in hist if h.get("idLegislatura") == leg and h.get("situacao") == "Exercício"]
+                # Party switches are also recorded as "Exercício" rows; they do not start an exercise.
+                entries = [h for h in hist if h.get("idLegislatura") == leg and h.get("situacao") == "Exercício"
+                           and not (h.get("descricaoStatus") or "").startswith("Alteração de partido")]
                 start = parse_date(entries[-1]["dataHora"]) if entries else None
                 condition = status.get("condicaoEleitoral") or (
                     entries[-1].get("condicaoEleitoral") if entries else None)

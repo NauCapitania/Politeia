@@ -159,3 +159,44 @@ def test_chamber_api_routes(api):
     assert {"name": "Acácio Favacho", "from": "PROS", "to": "MDB", "date": "2022-04-11"}.items() <= trocas[0].items()
     senate_votes = api.get("/v1/votacoes").json()
     assert all(v["id"] not in {x["id"] for x in votes} for v in senate_votes)
+
+
+def _fixture(name):
+    import json
+
+    return json.loads((FIX_DIR / name).read_text(encoding="utf-8"))
+
+
+FIX_DIR = __import__("pathlib").Path(__file__).parent / "fixtures" / "chamber"
+
+
+def test_party_switch_does_not_restart_the_mandate():
+    hist = _fixture("historico_204379.json")
+    hist["dados"].append({**hist["dados"][1], "dataHora": "2024-03-07T10:00", "siglaPartido": "PL",
+                          "descricaoStatus": "Alteração de partido"})
+    c, _ = connector({r"/deputados/204379/historico$": httpx.Response(200, json=hist)})
+    m = next(m for m in c.run("members").mandates if m.person.value == "204379")
+    assert m.start_date == date(2023, 2, 1)
+
+
+def test_vote_windows_include_their_last_day():
+    c, calls = connector()
+    c.run("votes")
+    ranges = [httpx.URL(u).params for u in calls if u.split("?")[0].endswith("/votacoes")]
+    assert ranges and all(p["dataFim"] > p["dataInicio"] for p in ranges)
+    assert ranges[0]["dataFim"] == "2025-12-01"
+
+
+def test_ballots_without_choices_are_a_secret_vote():
+    ballots = _fixture("votos_2524984-37.json")
+    for b in ballots["dados"]:
+        b["tipoVoto"] = None
+    c, _ = connector({r"/votacoes/2524984-37/votos$": httpx.Response(200, json=ballots)})
+    ev = next(e for e in c.run("votes").vote_events if e.source_id == "2524984-37")
+    assert ev.secret and not ev.votes and not ev.attributes["nominal"]
+
+
+def test_failed_roster_skips_the_committee():
+    c, _ = connector({r"/orgaos/2003/membros$": httpx.Response(503)})
+    b = c.run("committees")
+    assert not b.committees and any(i.code == "committee_unavailable" for i in b.issues)
