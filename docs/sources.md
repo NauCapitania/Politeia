@@ -35,9 +35,10 @@ Additional Senate endpoints (verified 2026-11-23):
 ## News — public RSS
 
 Agência Senado, g1 Política, Folha Poder, Estadão Política, Poder360, Gazeta do Povo República, Metrópoles,
-Agência Brasil Política, CartaCapital Política (HTTP 200 on 2026-11-23) plus three Google News RSS searches
-(impeachment de ministro do STF, Banco Master e STF, eleição da Presidência do Senado 2027).
-CNN Brasil, O Globo and R7 feeds tested returned 4xx. Only title, link, date, outlet and a ≤320-char excerpt are stored.
+and Agência Brasil Política, plus Google News RSS searches for impeachment de ministro do STF, Banco Master e STF,
+eleição da Presidência do Senado 2027, and CartaCapital Política (scoped to its politics section because the direct feed
+returns HTTP 403). CNN Brasil, O Globo and R7 feeds tested returned 4xx.
+Only title, link, date, outlet and a ≤320-char excerpt are stored.
 
 ## Connector strategy
 
