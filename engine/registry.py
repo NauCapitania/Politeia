@@ -7,7 +7,6 @@ from pathlib import Path
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from connectors.alepe.connector import AlepeConnector
 from connectors.base.http import SourceHttpClient
 from connectors.base.protocol import Connector
 from connectors.senate.connector import SenateConnector
@@ -15,7 +14,7 @@ from engine.db.models import Institution, SourceSystem
 from engine.settings import get_settings
 
 PACKS_DIR = Path(__file__).resolve().parent.parent / "institution-packs"
-CONNECTORS: dict[str, type[Connector]] = {c.id: c for c in (SenateConnector, AlepeConnector)}
+CONNECTORS: dict[str, type[Connector]] = {c.id: c for c in (SenateConnector,)}
 
 
 @lru_cache

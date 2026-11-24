@@ -18,14 +18,12 @@ def fixture_bytes(rel: str) -> bytes:
 
 
 def official_sources(overrides: dict | None = None):
-    """Recorded responses from the official Senado and ALEPE endpoints, keyed by path."""
+    """Recorded responses from the official Senado endpoints, keyed by path."""
     routes = {
         r"/dadosabertos/senador/lista/atual$": ("senate/senadores_atual.json", "application/json"),
         r"/dadosabertos/senador/5672/filiacoes$": ("senate/filiacoes_5672.json", "application/json"),
         r"/dadosabertos/processo$": ("senate/processos_lista.json", "application/json"),
         r"/dadosabertos/processo/9101538$": ("senate/processo_8360649.json", "application/json"),
-        r"/api/v1/parlamentares/$": ("alepe/parlamentares.json", "application/json"),
-        r"/api/v1/proposicoes/projetos/$": ("alepe/projetos_2026.xml", "application/xml"),
     }
     routes.update(overrides or {})
     calls: list[str] = []
@@ -45,7 +43,7 @@ def official_sources(overrides: dict | None = None):
     return handler, calls
 
 
-def make_client(handler, hosts=("legis.senado.leg.br", "dadosabertos.alepe.pe.gov.br"), **kw) -> SourceHttpClient:
+def make_client(handler, hosts=("legis.senado.leg.br",), **kw) -> SourceHttpClient:
     return SourceHttpClient(list(hosts), max_requests_per_second=1000, transport=httpx.MockTransport(handler),
                             sleep=lambda s: None, **kw)
 
