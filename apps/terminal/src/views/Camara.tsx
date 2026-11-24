@@ -5,6 +5,7 @@ import {
   CAMARA, useCamaraCommittee, useCamaraCommittees, useCamaraComposition, useCamaraSwitches, useCamaraVote, useCamaraVotes,
 } from '../api/camara'
 import { fmtDate, partyColor } from '../format'
+import { InstitutionMasthead } from '../components/InstitutionMasthead'
 import { useStore } from '../store'
 import { Hemicycle } from './Hemicycle'
 import { Proposals } from './Proposals'
@@ -17,9 +18,9 @@ export function Camara() {
   const [tab, setTab] = useState<CamaraTab>('composicao')
   return (
     <div className="view">
-      <h1>Câmara dos Deputados</h1>
+      <InstitutionMasthead kind="camara" eyebrow="PODER LEGISLATIVO · REPRESENTAÇÃO DO POVO" title="Câmara dos Deputados" subtitle="Representação, debate e fiscalização. Acompanhe o caminho das propostas." />
       <p className="lede">513 deputados federais eleitos pelo sistema proporcional em cada UF, para mandatos de quatro anos. A Câmara inicia a maior parte dos projetos de lei, autoriza a abertura de processo contra o presidente da República e faz a tomada de contas do presidente quando elas não são apresentadas no prazo (CF, art. 51). Dados oficiais da API de Dados Abertos da Câmara.</p>
-      <Tabs id="camara-tabs" selectedTabId={tab} onChange={(t) => setTab(t as CamaraTab)} renderActiveTabPanelOnly>
+      <Tabs className="camara-tabs" id="camara-tabs" selectedTabId={tab} onChange={(t) => setTab(t as CamaraTab)} renderActiveTabPanelOnly>
         <Tab id="composicao" title="Composição" panel={<Composicao />} />
         <Tab id="trocas" title="Trocas de partido" panel={<Trocas />} />
         <Tab id="votacoes" title="Votações" panel={<Votacoes />} />
