@@ -17,6 +17,7 @@ const fixture: PartyDossier = {
       { id: 'dem-reg', type: 'registro', date: '2007', from: [], to: ['dem'], title: 'Registro de DEM', summary: 'Registro', sources },
       { id: 'partidos-fusao-uniao', type: 'fusao', date: '2022-02-08', from: ['dem'], to: ['uniao'], title: 'Formação de União',
         summary: 'Fusão', people: ['Pessoa A'], declared: 'Objetivo declarado', analysis: 'Hipótese, não prova', sources },
+      { id: 'uniao-reg', type: 'registro', date: '2022-02-08', from: [], to: ['uniao'], title: 'Registro de União', summary: 'Registro', sources },
     ],
     funding: [
       { id: 'fefc-2020', fund: 'fefc', year: 2020, totalCents: 10000, allocations: [{ partyId: 'dem', cents: 2000 }], note: 'Cotas', sources },
@@ -55,6 +56,29 @@ it('lê o snapshot e diferencia o evento documentado, a declaração e a anális
   expect(within(chronology).getByRole('heading', { name: 'Registro de DEM' })).toBeVisible()
   await userEvent.selectOptions(screen.getByLabelText('Evento'), 'fusao')
   expect(within(graph).queryByRole('button', { name: 'Registro de DEM' })).not.toBeInTheDocument()
+  expect(within(chronology).getByText('1 marco')).toBeVisible()
+})
+
+it('separa os marcadores da fusão e do registro na mesma data', async () => {
+  setup()
+  const graph = await screen.findByRole('region', { name: 'Gráfico de linhagem partidária' })
+  const chronology = screen.getByRole('region', { name: 'Cronologia e evidências' })
+  const merger = within(graph).getByRole('button', { name: 'Formação de União' }).querySelector('circle')!
+  const registration = within(graph).getByRole('button', { name: 'Registro de União' }).querySelector('circle')!
+  const distance = Math.hypot(
+    Number(merger.getAttribute('cx')) - Number(registration.getAttribute('cx')),
+    Number(merger.getAttribute('cy')) - Number(registration.getAttribute('cy')),
+  )
+  expect(distance).toBeGreaterThan(Number(merger.getAttribute('r')) + Number(registration.getAttribute('r')))
+  await userEvent.click(registration)
+  expect(within(chronology).getByRole('heading', { name: 'Registro de União' })).toBeVisible()
+  await userEvent.click(merger)
+  expect(within(chronology).getByRole('heading', { name: 'Formação de União' })).toBeVisible()
+})
+
+it('usa o singular para um único marco histórico no dossiê', async () => {
+  setup({ ...fixture, items: { ...fixture.items, event: fixture.items.event.slice(0, 1) } })
+  expect(await screen.findByText('1 marco histórico')).toBeVisible()
 })
 
 it('mostra cotas e participação por ano, compara a fusão e avisa que o Fundo Partidário é parcial', async () => {
@@ -70,6 +94,24 @@ it('mostra cotas e participação por ano, compara a fusão e avisa que o Fundo 
   expect(within(distributions).getByText('Até outubro')).toBeVisible()
   await userEvent.click(screen.getByRole('button', { name: 'Sites partidários' }))
   expect(screen.getByRole('heading', { name: 'União Brasil' })).toBeVisible()
+})
+
+it('identifica páginas distintas nas fontes do veredito e da auditoria', async () => {
+  const pages = [
+    { url: 'https://novo.org.br/eleitos/', outlet: 'Novo', date: '2026-11-24', kind: 'declaration' },
+    { url: 'https://novo.org.br/estatuto/', outlet: 'Novo', date: '2026-11-24', kind: 'declaration' },
+  ]
+  setup({ ...fixture, items: { ...fixture.items,
+    analysis: [{ id: 'veredito', section: 'sites', title: 'Veredito', text: 'Fontes partidárias', sources: pages }],
+    site: [{ id: 'site-novo', partyId: 'novo', title: 'Novo', text: 'Páginas públicas', sources: pages }],
+  } })
+  await userEvent.click(await screen.findByRole('button', { name: 'Sites partidários' }))
+  expect(screen.getByRole('heading', { name: 'Auditoria de 1 site partidário' })).toBeVisible()
+  for (const title of ['Veredito', 'Novo']) {
+    const article = screen.getByRole('heading', { name: title }).closest('article')!
+    expect(within(article).getByRole('link', { name: /Novo · novo\.org\.br\/eleitos\/ · 24\/11\/2026/ })).toHaveAttribute('href', pages[0].url)
+    expect(within(article).getByRole('link', { name: /Novo · novo\.org\.br\/estatuto\/ · 24\/11\/2026/ })).toHaveAttribute('href', pages[1].url)
+  }
 })
 
 it('explica quando um snapshot ainda não contém o dossiê', async () => {

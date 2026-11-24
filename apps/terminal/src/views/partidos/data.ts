@@ -61,6 +61,9 @@ const monthName = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numer
 export const money = (cents: number) => reais.format(cents / 100)
 export const share = (cents: number, total: number) => percent.format(cents / total)
 export const compactMoney = (cents: number) => `R$ ${compact.format(cents / 100)}`
+export const milestoneCount = (count: number, historical = false) => count === 1
+  ? `1 marco${historical ? ' histórico' : ''}`
+  : `${count} marcos${historical ? ' históricos' : ''}`
 export function dateLabel(date: string) {
   if (date.length === 4) return date
   if (date.length === 7) return monthName.format(new Date(`${date}-01T00:00:00Z`))

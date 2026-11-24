@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { api } from '../api/client'
 import { SrcList } from '../components/SrcList'
-import { dateLabel, type Analysis, type PartyDossier } from './partidos/data'
+import { dateLabel, milestoneCount, type Analysis, type PartyDossier } from './partidos/data'
 import { Funds } from './partidos/Funds'
 import { Lineage } from './partidos/Lineage'
 import './partidos/partidos.css'
@@ -15,7 +15,7 @@ function Note({ item }: { item: Analysis }) {
     <p className="partidos-kicker">{item.section === 'coverage' ? 'Metodologia' : 'Análise e interpretação'}</p>
     <h3>{item.title}</h3>
     <p>{item.text}</p>
-    <SrcList sources={item.sources} />
+    <SrcList sources={item.sources} showPage={item.section === 'sites'} />
   </article>
 }
 
@@ -24,13 +24,14 @@ export function Partidos() {
   const query = useQuery({ queryKey: ['dossier', 'partidos'], queryFn: () => api<PartyDossier | null>('/dossies/partidos') })
   const doc = query.data
   const items = doc?.items
+  const siteCount = items?.site?.length ?? 0
   return <div className="view partidos">
     <header className="partidos-hero">
       <p className="partidos-kicker">Observatório partidário</p>
       <h1>Partidos</h1>
       <p>Da ditadura à configuração atual: acompanhe origens, mudanças de sigla, fusões, federações e a distribuição dos fundos públicos.</p>
-      {doc && <div className="partidos-hero-meta">
-        <span>{items?.event.length} marcos históricos</span><span>Curadoria em {dateLabel(doc.as_of)}</span>
+      {doc && items && <div className="partidos-hero-meta">
+        <span>{milestoneCount(items.event.length, true)}</span><span>Curadoria em {dateLabel(doc.as_of)}</span>
       </div>}
     </header>
     {query.isPending ? <div role="status" aria-label="Carregando dossiê de partidos"><Spinner size={24} /></div> :
@@ -52,10 +53,10 @@ export function Partidos() {
         {panel === 'fontes' && <div className="partidos-stack">
           {items.analysis?.filter(item => item.section === 'sites').map(item => <Note key={item.id} item={item} />)}
           <section className="partidos-panel">
-            <h2>Auditoria de 10 sites partidários</h2>
+            <h2>Auditoria de {siteCount} {siteCount === 1 ? 'site partidário' : 'sites partidários'}</h2>
             <p>Amostra das páginas públicas localizadas; não é uma avaliação da completude ou da atualidade de cada site.</p>
             <div className="partidos-sites">{items.site?.map(site => <article key={site.id}>
-              <h3>{site.title}</h3><p>{site.text}</p><SrcList sources={site.sources} />
+              <h3>{site.title}</h3><p>{site.text}</p><SrcList sources={site.sources} showPage />
             </article>)}</div>
           </section>
         </div>}

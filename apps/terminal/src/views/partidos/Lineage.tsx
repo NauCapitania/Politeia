@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react'
 import { SrcList } from '../../components/SrcList'
-import { dateLabel, eventTypes, type LineageEvent, type Party } from './data'
+import { dateLabel, eventTypes, milestoneCount, type LineageEvent, type Party } from './data'
 
 const firstYear = 1964
-const lane = 35
+const markerSpacing = 18
 const xStart = 154
 const touches = (e: LineageEvent, id: string) => e.from.includes(id) || e.to.includes(id)
 const isEdge = (e: LineageEvent) => e.from.length > 0 && e.to.length > 0 && e.type !== 'contexto'
 const ends = (e: LineageEvent) => ['fusao', 'incorporacao', 'renomeacao', 'extincao'].includes(e.type)
 const activates = (e: LineageEvent) => e.type !== 'contexto' && e.type !== 'registro'
+const markerParty = (e: LineageEvent) => e.to[0] ?? e.from[0] ?? ''
 
 function family(focus: string, events: LineageEvent[]) {
   const related = new Set([focus])
@@ -61,10 +62,26 @@ export function Lineage({ parties, events, asOf }: { parties: Party[]; events: L
     return { id, start: start ? Math.min(yearOf(start.date), yearOf(observed.date)) : undefined, end: end && yearOf(end.date) }
   }).sort((a, b) => (a.start ?? endYear) - (b.start ?? endYear) ||
     a.id.localeCompare(b.id))
-  const yOf = new Map(rows.map((row, i) => [row.id, (i + 1) * lane + 10]))
+  const markerGroups = new Map<string, LineageEvent[]>()
+  for (const event of visibleEvents) {
+    const key = `${markerParty(event)}:${yearOf(event.date)}`
+    const group = markerGroups.get(key)
+    if (group) group.push(event)
+    else markerGroups.set(key, [event])
+  }
+  const markerOffsets = new Map<string, number>()
+  let maxGroupSize = 1
+  for (const group of markerGroups.values()) {
+    maxGroupSize = Math.max(maxGroupSize, group.length)
+    group.forEach((event, index) => markerOffsets.set(event.id, (index - (group.length - 1) / 2) * markerSpacing))
+  }
+  const lane = Math.max(35, maxGroupSize * markerSpacing)
+  const contextRows = visibleEvents.some(event => !markerParty(event)) ? 1 : 0
+  const rowY = (index: number) => (index + 1) * lane + 10
+  const yOf = new Map(rows.map((row, i) => [row.id, rowY(i + contextRows)]))
   const xOf = (year: number) => xStart + (year - firstYear) * 12.5
   const width = xOf(endYear) + 24
-  const height = Math.max(100, (rows.length + 1) * lane + 10)
+  const height = Math.max(100, rowY(rows.length + contextRows))
   const ticks = [1964, 1970, 1980, 1990, 2000, 2010, 2020, endYear - 1].filter((year, i, years) =>
     year < endYear && years.indexOf(year) === i)
 
@@ -112,8 +129,8 @@ export function Lineage({ parties, events, asOf }: { parties: Party[]; events: L
                 y1={Math.min(...ys)} y2={Math.max(...ys)} />
             })}
             {visibleEvents.map(event => {
-              const y = yOf.get(event.to[0] ?? event.from[0]) ?? 30
-              const x = xOf(yearOf(event.date)) + (event.type === 'registro' ? 5 : 0)
+              const y = (yOf.get(markerParty(event)) ?? rowY(0)) + (markerOffsets.get(event.id) ?? 0)
+              const x = xOf(yearOf(event.date))
               const active = selected?.id === event.id
               return <g key={event.id} className={`partidos-svg-button partidos-point ${cssKind(event)}`} role="button"
                 aria-label={event.title} aria-pressed={active} tabIndex={0}
@@ -130,7 +147,7 @@ export function Lineage({ parties, events, asOf }: { parties: Party[]; events: L
       </section>
       <section className="partidos-panel partidos-event-grid" aria-label="Cronologia e evidências">
         <div>
-          <h2>Cronologia <small>{visibleEvents.length} marcos</small></h2>
+          <h2>Cronologia <small>{milestoneCount(visibleEvents.length)}</small></h2>
           <div className="partidos-event-list">
             {[...visibleEvents].reverse().map(event => <button key={event.id} type="button"
               className={cssKind(event)} aria-pressed={selected?.id === event.id} onClick={() => setSelectedId(event.id)}>
