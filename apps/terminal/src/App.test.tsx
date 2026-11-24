@@ -81,6 +81,10 @@ describe('Espaço de trabalho', () => {
     await userEvent.type(input, 'abrir notícias{Enter}')
     await waitFor(() => expect(screen.queryByRole('textbox', { name: 'Comando do terminal' })).not.toBeInTheDocument())
     expect(useStore.getState().view).toBe('noticias')
+    await userEvent.click(screen.getByRole('button', { name: 'Abrir terminal local' }))
+    const reopened = screen.getByRole('textbox', { name: 'Comando do terminal' })
+    await userEvent.type(reopened, '{ArrowUp}')
+    expect(reopened).toHaveValue('abrir notícias')
   })
 
   it('recolhe pastas sem alterar o espaço de trabalho atual', async () => {

@@ -71,7 +71,7 @@ export default function App() {
       </motion.section>}</AnimatePresence>
       <StatusBar onCommand={() => setCommandOpen(true)} />
       {commandOpen && <CommandPalette onClose={() => setCommandOpen(false)} />}
-      {terminalOpen && <LocalTerminal onClose={() => setTerminalOpen(false)} />}
+      <LocalTerminal isOpen={terminalOpen} onClose={() => setTerminalOpen(false)} />
     </div></MotionConfig>
   )
 }
