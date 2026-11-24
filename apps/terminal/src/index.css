@@ -593,7 +593,7 @@ kbd { font: 9px var(--mono); padding: 2px 4px; border: 1px solid var(--line-stro
   .agente-launcher, .agente-launcher.com-evidencias {
     position: static; grid-row: 3; grid-column: 1; justify-content: center;
     border-radius: 0; border-width: 1px 0 0; background: var(--bg-1);
-    box-shadow: none; backdrop-filter: none;
+    box-shadow: none; backdrop-filter: none; transform: none !important;
   }
   .agente-launcher kbd { display: none; }
   .agente-ampliar { display: none; }
