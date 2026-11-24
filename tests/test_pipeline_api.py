@@ -21,7 +21,7 @@ from engine.db import models as M
 from engine.db.session import get_session
 from engine.dossiers import load_dossiers
 from engine.ingestion.replay import replay_proposals
-from engine.ingestion.sync import store_raw, sync_source
+from engine.ingestion.sync import Persistor, store_raw, sync_source
 from engine.registry import bootstrap, build_connector
 from scripts.export_snapshot import export_snapshot
 from tests.conftest import TEST_DB, make_client, official_sources
@@ -351,3 +351,32 @@ def test_replay_proposals_reuses_original_evidence_without_claiming_a_fresh_fetc
     status = api.get("/v1/ingestion/status", params={"institution": "ins_br_senado"}).json()
     assert status["runs"][0]["stats"]["mode"] == "replay"
     assert api.get("/v1/institutions/ins_br_senado").json()["last_ingested_at"] == before
+
+    with factory() as s:
+        proposal = s.scalar(select(M.Proposal).where(M.Proposal.source_id == "9125400"))
+        author = s.scalar(select(M.ProposalAuthor).where(M.ProposalAuthor.proposal_id == proposal.id))
+        person_id = author.person_id
+        prop_id, author_id = proposal.id, author.id
+
+    persist = Persistor.persist_proposals
+
+    def after_live_update(persistor, batch, evidence):
+        with factory() as s:
+            proposal = s.get(M.Proposal, prop_id)
+            proposal.status = "Newer live status"
+            proposal.last_observed_at = finished
+            author = s.get(M.ProposalAuthor, author_id)
+            author.person_id = None
+            author.resolution = "unresolved"
+            author.attributes = author.attributes | {"unresolved_reason": "person_not_ingested"}
+            s.commit()
+        persist(persistor, batch, evidence)
+
+    monkeypatch.setattr(Persistor, "persist_proposals", after_live_update)
+    retry = replay_proposals(factory, proposal_ids=[9125400])
+    assert retry["stats"]["proposals_replay_skipped_newer"] == retry["stats"]["authors_linked"] == 1
+    with factory() as s:
+        proposal = s.get(M.Proposal, prop_id)
+        author = s.get(M.ProposalAuthor, author_id)
+        assert (proposal.status, proposal.last_observed_at) == ("Newer live status", finished)
+        assert (author.person_id, author.resolution) == (person_id, "official_id")

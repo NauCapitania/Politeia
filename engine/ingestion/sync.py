@@ -5,12 +5,12 @@ import uuid
 from collections.abc import Callable
 from datetime import UTC, datetime
 
-from sqlalchemy import func, or_, select, text, update
+from sqlalchemy import and_, func, or_, select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session, sessionmaker
 
 from connectors.base.http import SourceAccessError
-from connectors.base.protocol import Batch, Identifier, Ref
+from connectors.base.protocol import AuthorRecord, Batch, Identifier, Ref
 from engine.capabilities.compute import recompute_capabilities
 from engine.db.models import (
     Committee,
@@ -334,20 +334,53 @@ class Persistor:
         self._count("news", persist_news(self.s, self.source, self.raw_ids, batch))
 
     # ---------------------------------------------------------------- proposals
+    def _link_missing_replayed_authors(self, proposal_id: str, authors: list[AuthorRecord],
+                                      detail: RawRecord, detail_ref: Ref) -> None:
+        for author in authors:
+            if not author.person or author.kind != "member" or author.resolution != "official_id" or author.name == "?":
+                continue
+            saved = self.s.scalar(select(ProposalAuthor).join(RelationshipEvidence, and_(
+                RelationshipEvidence.relationship_kind == "proposal_author",
+                RelationshipEvidence.relationship_id == ProposalAuthor.id,
+                RelationshipEvidence.raw_record_id == detail.id,
+            )).where(
+                ProposalAuthor.proposal_id == proposal_id, ProposalAuthor.ordinal == author.ordinal,
+                ProposalAuthor.person_id.is_(None), ProposalAuthor.author_name == author.name,
+                ProposalAuthor.author_kind == author.kind,
+                ProposalAuthor.attributes["source_code"].as_string() == author.person.value,
+            ))
+            if saved is None:
+                continue
+            created = self.lookup("person", author.person) is None
+            saved.person_id = self.ensure_person(author.person, author.name, detail)
+            if created:
+                self.evidence("person", saved.person_id, detail_ref)
+            saved.resolution = author.resolution
+            saved.attributes = {key: value for key, value in saved.attributes.items() if key != "unresolved_reason"}
+            self._count("authors_linked")
+
     def persist_proposals(self, batch: Batch, evidence: list[RawRecord] | None = None) -> None:
         inst = self.source.institution_id
         for p in batch.proposals:
             list_record = evidence[p.ref.raw] if evidence is not None else None
             detail_ref = p.extra_refs[0] if p.extra_refs else p.ref
-            existing = self.s.scalar(select(Proposal.id).where(
-                Proposal.source_system_id == self.source.id, Proposal.source_id == p.source_id))
+            query = select(Proposal.id, Proposal.last_observed_at).where(
+                Proposal.source_system_id == self.source.id, Proposal.source_id == p.source_id)
+            if list_record is not None:
+                query = query.with_for_update()
+            existing = self.s.execute(query).one_or_none()
+            if existing and list_record and existing.last_observed_at > list_record.last_seen_at:
+                if p.extra_refs:
+                    self._link_missing_replayed_authors(existing.id, p.authors, evidence[detail_ref.raw], detail_ref)
+                self._count("proposals_replay_skipped_newer")
+                continue
             values = dict(institution_id=inst, source_system_id=self.source.id, source_id=p.source_id,
                           type_code=p.type_code, type_name=p.type_name, number=p.number, year=p.year,
                           identifier=p.identifier, title=p.title, ementa=p.ementa, introduced_on=p.introduced_on,
                           status=p.status, status_date=p.status_date, in_progress=p.in_progress,
                           official_url=p.official_url, attributes=p.attributes, last_observed_at=self.now)
             if existing:
-                prop_id = existing
+                prop_id = existing.id
                 if list_record:
                     values.pop("last_observed_at")
                 self.s.execute(update(Proposal).where(Proposal.id == prop_id).values(**values))
