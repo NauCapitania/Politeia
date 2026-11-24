@@ -61,7 +61,6 @@
         "feeds.folha.uol.com.br",
         "g1.globo.com",
         "news.google.com",
-        "www.cartacapital.com.br",
         "www.estadao.com.br",
         "www.gazetadopovo.com.br",
         "www.metropoles.com",
@@ -115,7 +114,8 @@
           {
             "id": "cartacapital_politica",
             "outlet": "CartaCapital",
-            "url": "https://www.cartacapital.com.br/politica/feed/"
+            "aggregator": true,
+            "url": "https://news.google.com/rss/search?q=site%3Acartacapital.com.br%2Fpolitica%2F&hl=pt-BR&gl=BR&ceid=BR%3Apt-419"
           },
           {
             "id": "gnews_impeachment_stf",

@@ -21,7 +21,7 @@ Princípios:
 | Presidência 2025 | Placar oficial 73/4/4, apoio partidário × cadeiras, probabilidade estimada por senador com justificativa | Dossiê curado + modelo |
 | Presidência 2027 | Candidatos potenciais, posição sobre impeachment, cenários de votos (intervalos), composições projetadas divergentes | Dossiê curado |
 | STF e caso Master | 11 cadeiras (10 ministros + vaga de Barroso), status dos relatórios da PF, prazo da PGR, quem decide o quê, rito do impeachment, linha do tempo | Dossiê curado + RSS |
-| Notícias | Agência Senado, g1, Folha, Estadão, Poder360, Gazeta do Povo, Metrópoles, Agência Brasil, CartaCapital e buscas do Google Notícias | RSS |
+| Notícias | Agência Senado, g1, Folha, Estadão, Poder360, Gazeta do Povo, Metrópoles, Agência Brasil e buscas do Google Notícias (incluindo CartaCapital Política) | RSS |
 
 ### Voto secreto de 2025
 

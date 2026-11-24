@@ -76,7 +76,8 @@ class NewsConnector(Connector):
                     continue
                 seen.add(link)
                 outlet = feed["outlet"]
-                if feed.get("aggregator"):
+                aggregated = feed.get("aggregator")
+                if aggregated:
                     outlet = _text(item, "source") or outlet
                     title = re.sub(rf"\s+-\s+{re.escape(outlet)}$", "", title)
                 published = None
@@ -85,7 +86,7 @@ class NewsConnector(Connector):
                         published = parsedate_to_datetime(pub)
                     except (TypeError, ValueError):
                         published = None
-                excerpt = clean_excerpt(_text(item, "description"))
+                excerpt = None if aggregated else clean_excerpt(_text(item, "description"))
                 batch.news.append(NewsRecord(
                     url=link, title=html.unescape(title), outlet=outlet, feed=feed["id"],
                     ref=Ref(idx, f"$.rss.channel.item[{i}]"), excerpt=excerpt, published_at=published,
