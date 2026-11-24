@@ -201,6 +201,24 @@ async function generateWithFallback(deps: AgentDeps, state: { model: number }, s
   }
 }
 
+const tally = (items: Record<string, unknown>[], key: string) =>
+  Object.fromEntries(Object.entries(items.reduce<Record<string, number>>((acc, item) => {
+    const k = String(item[key] ?? 'sem informação')
+    acc[k] = (acc[k] ?? 0) + 1
+    return acc
+  }, {})).sort((a, b) => b[1] - a[1]))
+
+export function summarize(text: string) {
+  try {
+    const seats = (JSON.parse(text) as { seats?: unknown }).seats
+    if (!Array.isArray(seats) || !seats.length) return null
+    const items = seats as Record<string, unknown>[]
+    return { total: items.length, por_partido: tally(items, 'party'), por_uf: tally(items, 'uf'), por_participacao: tally(items, 'participation') }
+  } catch {
+    return null
+  }
+}
+
 export function page(text: string, inicio = 0) {
   const start = Math.max(0, Math.min(text.length, Math.floor(inicio) || 0))
   const end = start + MAX_TOOL_CHARS
@@ -215,7 +233,9 @@ async function runTool(deps: AgentDeps, call: NonNullable<Part['functionCall']>,
     emit({ tipo: 'passo', texto: `Lendo ${path}` })
     if (!DATA_PATH.test(path) || path.includes('..')) return { erro: 'Caminho inválido.' }
     const body = await deps.readData(path)
-    return body === null ? { erro: `Arquivo ${path} não existe no snapshot.` } : page(body, Number(args.inicio ?? 0))
+    if (body === null) return { erro: `Arquivo ${path} não existe no snapshot.` }
+    const resumo = Number(args.inicio ?? 0) ? null : summarize(body)
+    return { ...(resumo ? { resumo } : {}), ...page(body, Number(args.inicio ?? 0)) }
   }
   if (call.name === 'buscar_noticias') {
     const query = String(args.consulta ?? '').slice(0, 200)

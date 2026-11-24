@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { page, parseNewsRss, runAgent, validChart, validNetwork, type AgentEvent } from './core'
+import { page, summarize, parseNewsRss, runAgent, validChart, validNetwork, type AgentEvent } from './core'
 
 const reply = (parts: unknown[]) => new Response(JSON.stringify({ candidates: [{ content: { role: 'model', parts } }] }))
 
@@ -86,5 +86,14 @@ describe('page', () => {
   it('pizza mantém só uma série', () => {
     const c = validChart({ tipo: 'pizza', titulo: 'P', rotulos: ['a', 'b'], series: [{ nome: 's1', valores: [1, 2] }, { nome: 's2', valores: [3, 4] }] })
     expect(c?.series).toHaveLength(1)
+  })
+})
+
+describe('summarize', () => {
+  it('conta cadeiras por partido', () => {
+    const r = summarize(JSON.stringify({ seats: [{ party: 'PL', uf: 'SP' }, { party: 'PL', uf: 'RJ' }, { party: 'PT', uf: 'SP' }] }))
+    expect(r?.total).toBe(3)
+    expect(r?.por_partido).toEqual({ PL: 2, PT: 1 })
+    expect(summarize('{"a":1}')).toBeNull()
   })
 })
