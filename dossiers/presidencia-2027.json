@@ -1,6 +1,6 @@
 {
  "dossier": "presidencia-2027",
- "as_of": "2026-11-23",
+ "as_of": "2026-11-25",
  "title": "Presidência do Senado 2027",
  "items": [
   {
@@ -11,7 +11,7 @@
     "date": "2027-02-01",
     "voters": 81,
     "majority": 41,
-    "note": "Disputa ainda não oficializada; candidaturas e contagens abaixo são de imprensa e declarações."
+    "note": "Disputa ainda não oficializada; candidaturas e contagens abaixo são de imprensa e declarações. A Folha ouviu quatro aliados de Davi Alcolumbre que relataram um plano para invalidar cédulas exibidas antes de serem depositadas; Alcolumbre afirmou que não há definição. Rogério Marinho defende que os senadores mostrem suas cédulas."
    },
    "sources": [
     {
@@ -24,6 +24,12 @@
      "url": "https://oglobo.globo.com/blogs/bela-megale/post/2026/11/o-placar-da-disputa-pelo-senado-entre-alcolumbre-e-marinho-que-circula-entre-ministros-do-stf.ghtml",
      "outlet": "O Globo (Bela Megale)",
      "date": "2026-11-23",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www1.folha.uol.com.br/poder/2026/11/alcolumbre-ameaca-anular-voto-do-senador-que-quebrar-sigilo-de-cedula-na-eleicao-do-senado.shtml",
+     "outlet": "Folha de S.Paulo (Raphael Di Cunto)",
+     "date": "2026-11-24",
      "kind": "press_report"
     }
    ]
@@ -87,7 +93,7 @@
     "name": "Tereza Cristina",
     "party": "PP",
     "uf": "MS",
-    "status": "citada como alternativa; possível candidatura única da oposição com Marinho (imprensa)",
+    "status": "pré-candidata da oposição (imprensa); segundo Marinho, ambos acordaram que apenas o nome mais competitivo deve disputar",
     "impeachment_stance": "sem_declaracao",
     "impeachment_note": "Nenhuma declaração pública sobre o tema nas fontes consultadas."
    },
@@ -96,6 +102,12 @@
      "url": "https://www.cnnbrasil.com.br/politica/eleicao-senado-alcolumbre-marinho-tereza-peso-governo-tabu/",
      "outlet": "CNN Brasil",
      "date": "2026-11-11",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www1.folha.uol.com.br/blogs/brasilia-hoje/2026/11/em-campanha-alcolumbre-recebe-bancada-feminina-e-marinho-convida-colegas-para-aniversario.shtml",
+     "outlet": "Folha de S.Paulo (Thaísa Oliveira)",
+     "date": "2026-11-24",
      "kind": "press_report"
     }
    ]
