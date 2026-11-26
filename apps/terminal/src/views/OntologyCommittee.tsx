@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useCommittee } from '../api/client'
 import { useCamaraCommittee, type CamaraCommitteeMember } from '../api/camara'
-import { fmtDate } from '../format'
 
 // Ontology holdings intentionally contain only committee leaders. Load the complete
 // current roster on demand from the existing API (also exported in static snapshots).
@@ -24,7 +23,6 @@ export function CommitteeMembers({ id, camara }: { id: string; camara: boolean }
       {filtered.slice(page * 12, (page + 1) * 12).map((m, i) => <article className="atlas-person" key={`${m.person_id}-${m.seat_kind}-${i}`}>
         <strong>{m.name}</strong>
         <p>{[m.role?.toLocaleLowerCase('pt-BR'), m.seat_kind, m.party, m.uf].filter(Boolean).join(' · ')}</p>
-        {m.since && <small>Início registrado na comissão: {fmtDate(m.since)}</small>}
       </article>)}
       {filtered.length > 12 && <div className="atlas-pager"><button disabled={!page} onClick={() => setPage(page - 1)}>Anterior</button><span>{page * 12 + 1}–{Math.min((page + 1) * 12, filtered.length)}</span><button disabled={(page + 1) * 12 >= filtered.length} onClick={() => setPage(page + 1)}>Próxima</button></div>}
     </>}

@@ -53,7 +53,7 @@ describe('Mapa da União', () => {
     expect(screen.queryByText('Nenhum ocupante encontrado nesta camada. Isso não significa cargo vago.')).not.toBeInTheDocument()
     expect(vi.mocked(fetch).mock.calls.some(([url]) => String(url) === `/v1/${camara ? 'camara/' : ''}comissoes/com_teste`)).toBe(true)
   })
-  it('distingue a data do mandato do início do exercício atual', async () => {
+  it('não interpreta datas heterogêneas da origem como início no cargo', async () => {
     const data = structuredClone(ontology)
     data.holdings[0].origin = 'mandate'
     vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(data))))
@@ -61,8 +61,7 @@ describe('Mapa da União', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Explorar Senado Federal' }))
     const detail = within(screen.getByRole('complementary'))
     await userEvent.click(detail.getByRole('button', { name: /Davi Alcolumbre/ }))
-    expect(detail.getByText(/Início do mandato:/)).toBeInTheDocument()
-    expect(detail.queryByText(/Em exercício desde/)).not.toBeInTheDocument()
+    expect(detail.queryByText(/Início do mandato:|Em exercício desde/)).not.toBeInTheDocument()
   })
   it('separa três poderes das instituições autônomas e mostra os tribunais superiores', async () => {
     renderMap()
