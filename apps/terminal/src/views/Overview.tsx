@@ -71,7 +71,7 @@ function Atlas({ data }: { data: Ontology }) {
       data.bodies.filter((b) => b.power_id === p.id && b.origin === 'curated').forEach((b, i) => nodes.push({ id: b.id, name: b.name, short: b.acronym ?? '', kind: 'Órgão', power: p.id, x: 300 + i * 400, y: 1030, detail: 'Instituição autônoma' }))
     })
   } else {
-    nodes.push({ id: focus, name: title, short: office ? 'Cargo' : body?.acronym ?? power?.name.slice(0, 3) ?? '', kind: office ? 'Cargo' : body ? 'Órgão' : 'Poder', power: focusedPower, x: 500, y: 445, detail: 'Você está aqui' })
+    nodes.push({ id: focus, name: title, short: office ? 'Cargo' : body?.acronym ?? power?.name.slice(0, 3) ?? '', kind: office ? 'Cargo' : body ? 'Órgão' : power?.constitutional ? 'Poder constitucional' : 'Instituições autônomas', power: focusedPower, x: 500, y: 445, detail: 'Você está aqui' })
     const ids = new Set([...(office?.body_id ? [office.body_id] : body?.parent_id ? [body.parent_id] : []), ...children.map((b) => b.id), ...(!office ? offices.map((o) => o.id) : [])])
     competences.forEach((c) => { const a = competenceBody(data, c, 'holder'); const b = competenceBody(data, c, 'target'); if (a && a !== body?.id) ids.add(a); if (b && b !== body?.id) ids.add(b) })
     // A selected connection must keep both endpoints, even in a crowded layer.

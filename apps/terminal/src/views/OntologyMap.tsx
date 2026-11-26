@@ -1,4 +1,4 @@
-import { useId, useState, type CSSProperties } from 'react'
+import { useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import type { Competence } from '../api/ontology'
 import './constellation.css'
 
@@ -12,6 +12,12 @@ export function OntologyMap({ nodes, edges, focus, analysisIds, selectedCompeten
   const [edgeHover, setEdgeHover] = useState<string | null>(null)
   const [zoom, setZoom] = useState(1)
   const arrowId = useId()
+  const scrollRef = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const viewport = scrollRef.current
+    const canvas = viewport?.firstElementChild as HTMLElement | null
+    if (viewport && canvas) viewport.scrollLeft = Math.max(0, (canvas.clientWidth - viewport.clientWidth) / 2)
+  }, [focus])
   const height = focus === 'uniao' ? 1120 : 910
   const byId = new Map(nodes.map((n) => [n.id, n]))
   const activeEdges = edges.filter((e) => e.competence && (e.a === hovered || e.b === hovered || e.id === edgeHover || e.id === selectedCompetence))
@@ -20,7 +26,7 @@ export function OntologyMap({ nodes, edges, focus, analysisIds, selectedCompeten
   const radius = (n: MapNode) => n.id === 'uniao' ? 56 : n.kind === 'Poder constitucional' || n.kind === 'Agrupamento de leitura' ? 46 : n.id === focus ? 52 : 30
   return <div className="constellation">
     <div className="constellation-tools" aria-label="Controles do mapa"><button aria-label="Aproximar mapa" disabled={zoom >= 1.6} onClick={() => setZoom(Math.min(1.6, zoom + .2))}>+</button><button aria-label="Afastar mapa" disabled={zoom <= .8} onClick={() => setZoom(Math.max(.8, zoom - .2))}>−</button><button onClick={() => setZoom(1)}>Ajustar</button></div>
-    <div className="atlas-map-scroll"><div className="constellation-canvas" style={{ width: `${zoom * 100}%`, aspectRatio: `1000/${height}` }}>
+    <div className="atlas-map-scroll" ref={scrollRef}><div className="constellation-canvas" style={{ width: `${zoom * 100}%`, aspectRatio: `1000/${height}` }}>
       <svg viewBox={`0 0 1000 ${height}`} className="constellation-lines" aria-hidden="true"><defs><radialGradient id={`${arrowId}-glow`}><stop offset="0%" stopColor="var(--accent)" stopOpacity=".09" /><stop offset="100%" stopColor="var(--accent)" stopOpacity="0" /></radialGradient><marker id={arrowId} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="context-stroke" /></marker></defs>
         <circle cx="500" cy="445" r="420" fill={`url(#${arrowId}-glow)`} />
         {[130, 255, 390].map((r) => <circle key={r} cx="500" cy="445" r={r} className="constellation-orbit" />)}
