@@ -8,7 +8,7 @@ export type Competence = { id: string; holder_body_id: string | null; holder_off
 export type Ontology = {
   powers: Power[]; bodies: Body[]; offices: Office[]; competences: Competence[];
   legal_bases: { id: string; norm: string; provision: string | null; url: string }[];
-  holdings: { id: string; person_id: string; person_name: string | null; office_id: string; body_id: string | null; party: string | null; represented_unit: string | null; nominated_by: string | null; since: string | null; sources?: Src[] }[];
+  holdings: { id: string; person_id: string; person_name: string | null; office_id: string; body_id: string | null; party: string | null; represented_unit: string | null; nominated_by: string | null; since: string | null; origin?: string; sources?: Src[] }[];
   analyses: { id: string; title: string; entities: { entity_kind: string; entity_id: string; role: string }[] }[];
 }
 export const useOntology = () => useQuery({ queryKey: ['ontology'], queryFn: () => api<Ontology>('/ontologia') })

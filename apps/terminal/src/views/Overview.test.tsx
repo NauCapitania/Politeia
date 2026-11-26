@@ -16,7 +16,7 @@ describe('Mapa da União', () => {
     const data = structuredClone(ontology)
     data.competences.push(
       { ...data.competences[0], id: 'indica_stf', verb: 'Indicar', holder_body_id: 'bod_presidencia' },
-      { ...data.competences[0], id: 'relacao_senado', holder_body_id: 'bod_presidencia', target_office_id: 'off_pres_senado' },
+      { ...data.competences[0], id: 'relacao_senado', verb: 'Relacionar', holder_body_id: 'bod_presidencia', target_office_id: 'off_pres_senado' },
     )
     vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(data))))
     renderMap()
@@ -39,6 +39,17 @@ describe('Mapa da União', () => {
     await userEvent.click(within(screen.getByRole('complementary')).getByRole('button', { name: /Indicar/ }))
     expect(screen.getByRole('button', { name: 'Explorar Supremo Tribunal Federal' })).toBeInTheDocument()
     expect(document.querySelector('[data-competence-id="indica_stf"] .constellation-edge-hit')).toBeInTheDocument()
+  })
+  it('distingue a data do mandato do início do exercício atual', async () => {
+    const data = structuredClone(ontology)
+    data.holdings[0].origin = 'mandate'
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(data))))
+    renderMap()
+    await userEvent.click(await screen.findByRole('button', { name: 'Explorar Senado Federal' }))
+    const detail = within(screen.getByRole('complementary'))
+    await userEvent.click(detail.getByRole('button', { name: /Davi Alcolumbre/ }))
+    expect(detail.getByText(/Início do mandato:/)).toBeInTheDocument()
+    expect(detail.queryByText(/Em exercício desde/)).not.toBeInTheDocument()
   })
   it('separa três poderes das instituições autônomas e mostra os tribunais superiores', async () => {
     renderMap()
