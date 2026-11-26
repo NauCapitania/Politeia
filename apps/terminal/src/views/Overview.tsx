@@ -45,14 +45,14 @@ function Atlas({ data }: { data: Ontology }) {
   const analysis = mode === 'grafo' ? data.analyses.find((a) => a.id === lens) : undefined
   const analysisIds = new Set(analysis?.entities.flatMap((e) => [e.entity_id, data.offices.find((o) => o.id === e.entity_id)?.body_id ?? '']) ?? [])
   const activeCompetences = data.competences.filter((c) => !analysis || analysisIds.has(c.id))
-  const selected = data.competences.find((c) => c.id === selectedCompetence)
+  const selected = mode === 'grafo' ? data.competences.find((c) => c.id === selectedCompetence) : undefined
   const scopedCompetences = office ? data.competences.filter((c) => c.holder_office_id === focus || c.target_office_id === focus) : body ? data.competences.filter((c) => competenceBody(data, c, 'holder') === body.id || competenceBody(data, c, 'target') === body.id) : power ? activeCompetences.filter((c) => data.bodies.some((b) => b.power_id === power.id && b.id === competenceBody(data, c, 'holder'))) : activeCompetences
   const competences = selected ? [selected, ...(body || office ? scopedCompetences.filter((c) => c.id !== selected.id) : [])] : scopedCompetences
   const children = data.bodies.filter((b) => power ? b.power_id === power.id && (!b.parent_id || data.bodies.find((p) => p.id === b.parent_id)?.power_id !== power.id) : b.parent_id === focus)
   const offices = data.offices.filter((o) => o.body_id === body?.id)
   const holdings = data.holdings.filter((h) => (office ? h.office_id === focus : h.body_id === body?.id) && (h.person_name ?? '').toLocaleLowerCase('pt-BR').includes(personSearch.toLocaleLowerCase('pt-BR')))
   function go(id: string) { setFocus(id); setPersonSearch(''); setSearch(''); setPage(0); setPersonId(null); setSelectedCompetence(null); setBehavior(false) }
-  function activateMode(next: 'estrutura' | 'grafo') { setMode(next); if (next === 'estrutura') setSelectedCompetence(null) }
+  function activateMode(next: 'estrutura' | 'grafo') { setMode(next) }
   function selectCompetence(id: string | null) { setSelectedCompetence(id); if (id) { setMode('grafo'); setLens('competencias') } }
   const title = office?.name ?? body?.name ?? power?.name ?? 'União'
   const legal = data.legal_bases.find((b) => b.id === (office?.legal_basis_id ?? body?.legal_basis_id))

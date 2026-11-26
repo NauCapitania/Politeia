@@ -103,6 +103,20 @@ describe('Estrutura e Grafo da União', () => {
     expect(screen.getByRole('button', { name: 'Explorar União' })).toHaveAttribute('aria-current', 'true')
   })
 
+  it('preserva a conexão ao alternar abas sem reintroduzir o inspetor inicial da União', async () => {
+    renderStructure()
+    await userEvent.click(await screen.findByRole('tab', { name: 'Grafo' }))
+    await userEvent.click(screen.getByText('Competências no grafo (1)'))
+    await userEvent.click(screen.getByRole('button', { name: 'Processar e julgar Ministros do STF' }))
+    await userEvent.click(screen.getByRole('tab', { name: 'Estrutura' }))
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Grafo' }))
+    expect(within(screen.getByRole('complementary')).getByText('Quórum: 54 senadores')).toBeInTheDocument()
+    await userEvent.click(screen.getByText('Competências no grafo (1)'))
+    expect(screen.getByRole('button', { name: 'Processar e julgar Ministros do STF' })).toHaveAttribute('aria-pressed', 'true')
+    expect(document.querySelector('[data-competence-id="cmp_julga"]')).toHaveClass('lit')
+  })
+
   it('permite trocar as duas abas por teclado', async () => {
     renderStructure()
     await userEvent.click(await screen.findByRole('tab', { name: 'Estrutura' }))
