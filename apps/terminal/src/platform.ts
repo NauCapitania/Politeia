@@ -3,7 +3,7 @@ import type { View } from './store'
 
 // Shared navigation contract. Institutions are independent of thematic analyses.
 export const SPACES: { view: View; label: string; aliases?: string[]; icon: IconName; group: 'Instituições' | 'Biblioteca' | null }[] = [
-  { view: 'inicio', label: 'Central de situação', icon: 'control', group: null },
+  { view: 'inicio', label: 'Mapa da União', icon: 'graph', group: null },
   { view: 'analises', label: 'Análises', icon: 'projects', group: null },
   { view: 'congresso', label: 'Congresso Nacional', icon: 'office', group: 'Instituições' },
   { view: 'senado', label: 'Senado Federal', icon: 'layout-circle', group: 'Instituições' },

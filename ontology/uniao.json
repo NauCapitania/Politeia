@@ -32,10 +32,10 @@
    "ordinal": 3
   },
   {
-   "id": "pow_controle",
-   "name": "Controle e Justiça",
+   "id": "grp_funcoes_justica",
+   "name": "Funções essenciais à Justiça",
    "constitutional": false,
-   "description": "Agrupamento de leitura do Politeia, não um quarto poder: Ministério Público, Tribunal de Contas, polícia judiciária e controle interno.",
+   "description": "Ministério Público e Defensoria Pública, instituições autônomas previstas no capítulo IV do título IV da Constituição. Não constituem um poder. A Advocacia Pública também integra esse capítulo e aparece no Executivo por seu vínculo administrativo.",
    "ordinal": 4
   }
  ],
@@ -47,6 +47,14 @@
   }
  ],
  "legal_bases": [
+  {"id":"cf_art134","norm":"Constituição Federal de 1988","provision":"art. 134","url":"https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art134"},
+  {"id":"cf_art103b","norm":"Constituição Federal de 1988","provision":"art. 103-B","url":"https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art103b"},
+  {"id":"cf_art104","norm":"Constituição Federal de 1988","provision":"art. 104","url":"https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art104"},
+  {"id":"cf_art105","norm":"Constituição Federal de 1988","provision":"art. 105","url":"https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art105"},
+  {"id":"cf_art111a","norm":"Constituição Federal de 1988","provision":"art. 111-A","url":"https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art111a"},
+  {"id":"cf_art119","norm":"Constituição Federal de 1988","provision":"art. 119","url":"https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art119"},
+  {"id":"cf_art123","norm":"Constituição Federal de 1988","provision":"art. 123","url":"https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art123"},
+  {"id":"cf_art124","norm":"Constituição Federal de 1988","provision":"art. 124","url":"https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art124"},
   {
    "id": "cf_art2",
    "norm": "Constituição Federal de 1988",
@@ -241,6 +249,12 @@
   }
  ],
  "bodies": [
+  {"id":"bod_dpu","name":"Defensoria Pública da União","acronym":"DPU","body_type":"defensoria","power":"grp_funcoes_justica","legal_basis":"cf_art134","description":"Instituição autônoma responsável pela orientação jurídica e defesa integral e gratuita dos necessitados, no âmbito federal. Ocupantes ainda não carregados nesta base.","url":"https://www.dpu.def.br"},
+  {"id":"bod_stj","name":"Superior Tribunal de Justiça","acronym":"STJ","body_type":"tribunal","power":"pow_judiciario","seats":33,"legal_basis":"cf_art104","description":"Uniformiza a interpretação da lei federal por meio do recurso especial. Composição constitucional mínima de 33 ministros; ocupantes ainda não carregados nesta base.","url":"https://www.stj.jus.br"},
+  {"id":"bod_tse","name":"Tribunal Superior Eleitoral","acronym":"TSE","body_type":"tribunal","power":"pow_judiciario","seats":7,"legal_basis":"cf_art119","description":"Órgão superior da Justiça Eleitoral. Composição constitucional mínima de sete membros: três do STF, dois do STJ e dois advogados nomeados pelo Presidente da República; ocupantes ainda não carregados nesta base.","url":"https://www.tse.jus.br"},
+  {"id":"bod_tst","name":"Tribunal Superior do Trabalho","acronym":"TST","body_type":"tribunal","power":"pow_judiciario","seats":27,"legal_basis":"cf_art111a","description":"Órgão superior da Justiça do Trabalho, com 27 ministros nomeados pelo Presidente da República após aprovação do Senado; ocupantes ainda não carregados nesta base.","url":"https://www.tst.jus.br"},
+  {"id":"bod_stm","name":"Superior Tribunal Militar","acronym":"STM","body_type":"tribunal","power":"pow_judiciario","seats":15,"legal_basis":"cf_art123","description":"Órgão superior da Justiça Militar da União, com 15 ministros vitalícios: dez militares e cinco civis; ocupantes ainda não carregados nesta base.","url":"https://www.stm.jus.br"},
+  {"id":"bod_cnj","name":"Conselho Nacional de Justiça","acronym":"CNJ","body_type":"conselho","power":"pow_judiciario","seats":15,"legal_basis":"cf_art103b","description":"Controle administrativo, financeiro e disciplinar do Judiciário. Tem 15 membros e não é tribunal recursal; ocupantes ainda não carregados nesta base.","url":"https://www.cnj.jus.br"},
   {
    "id": "bod_congresso",
    "name": "Congresso Nacional",
@@ -323,7 +337,7 @@
    "name": "Procuradoria-Geral da República",
    "acronym": "PGR",
    "body_type": "ministerio_publico",
-   "power": "pow_controle",
+   "power": "grp_funcoes_justica",
    "legal_basis": "cf_art128",
    "description": "Chefia o Ministério Público da União; titular da ação penal contra autoridades com foro no STF.",
    "url": "https://www.mpf.mp.br/pgr"
@@ -333,10 +347,10 @@
    "name": "Tribunal de Contas da União",
    "acronym": "TCU",
    "body_type": "tribunal_contas",
-   "power": "pow_controle",
+   "power": "pow_legislativo",
    "seats": 9,
    "legal_basis": "cf_art71",
-   "description": "Auxilia o Congresso no controle externo das contas públicas.",
+   "description": "Órgão autônomo que auxilia o Congresso no controle externo das contas públicas. Exibido junto ao Legislativo, sem subordinação hierárquica ao Congresso.",
    "url": "https://portal.tcu.gov.br"
   },
   {
@@ -344,7 +358,7 @@
    "name": "Controladoria-Geral da União",
    "acronym": "CGU",
    "body_type": "controle_interno",
-   "power": "pow_controle",
+   "power": "pow_executivo",
    "parent": "bod_presidencia",
    "legal_basis": "lei14600",
    "siorg_acronym": "CGU",
@@ -355,7 +369,7 @@
    "name": "Advocacia-Geral da União",
    "acronym": "AGU",
    "body_type": "advocacia_publica",
-   "power": "pow_controle",
+   "power": "pow_executivo",
    "parent": "bod_presidencia",
    "legal_basis": "cf_art131",
    "siorg_acronym": "AGU",
@@ -366,7 +380,7 @@
    "name": "Polícia Federal",
    "acronym": "PF",
    "body_type": "policia",
-   "power": "pow_controle",
+   "power": "pow_executivo",
    "parent": "siorg:MJSP",
    "legal_basis": "cf_art144",
    "siorg_acronym": "PF",
@@ -387,6 +401,9 @@
   }
  ],
  "offices": [
+  {"id":"off_ministro_stj","body":"bod_stj","name":"Ministro do STJ","seats":33,"provision":"nominated_and_approved","legal_basis":"cf_art104","description":"Composição constitucional mínima de 33 ministros. Nomeação pelo Presidente após aprovação por maioria absoluta do Senado."},
+  {"id":"off_ministro_tst","body":"bod_tst","name":"Ministro do TST","seats":27,"provision":"nominated_and_approved","legal_basis":"cf_art111a"},
+  {"id":"off_ministro_stm","body":"bod_stm","name":"Ministro do STM","seats":15,"provision":"nominated_and_approved","legal_basis":"cf_art123"},
   {
    "id": "off_senador",
    "body": "bod_senado",
@@ -516,6 +533,18 @@
   }
  ],
  "competences": [
+  {"id":"cmp_pr_nomeia_stj","holder_office":"off_pres_republica","verb":"Nomear, após aprovação do Senado","target_office":"off_ministro_stj","target_label":"Ministros do STJ","legal_basis":"cf_art104","provision":"parágrafo único"},
+  {"id":"cmp_senado_aprova_stj","holder_body":"bod_senado","verb":"Aprovar por maioria absoluta","target_office":"off_ministro_stj","target_label":"Indicações para ministro do STJ","legal_basis":"cf_art104","provision":"parágrafo único"},
+  {"id":"cmp_pr_nomeia_tst","holder_office":"off_pres_republica","verb":"Nomear, após aprovação do Senado","target_office":"off_ministro_tst","target_label":"Ministros do TST","legal_basis":"cf_art111a"},
+  {"id":"cmp_senado_aprova_tst","holder_body":"bod_senado","verb":"Aprovar por maioria absoluta","target_office":"off_ministro_tst","target_label":"Indicações para ministro do TST","legal_basis":"cf_art111a"},
+  {"id":"cmp_pr_nomeia_stm","holder_office":"off_pres_republica","verb":"Nomear, após aprovação do Senado","target_office":"off_ministro_stm","target_label":"Ministros do STM","legal_basis":"cf_art123"},
+  {"id":"cmp_senado_aprova_stm","holder_body":"bod_senado","verb":"Aprovar indicação","target_office":"off_ministro_stm","target_label":"Indicações para ministro do STM","legal_basis":"cf_art123"},
+  {"id":"cmp_stf_elege_tse","holder_body":"bod_stf","verb":"Eleger três de seus ministros","target_body":"bod_tse","target_label":"Três membros do TSE escolhidos pelo STF em votação secreta","legal_basis":"cf_art119","provision":"inciso I, alínea a"},
+  {"id":"cmp_stj_elege_tse","holder_body":"bod_stj","verb":"Eleger dois de seus ministros","target_body":"bod_tse","target_label":"Dois membros do TSE escolhidos pelo STJ em votação secreta","legal_basis":"cf_art119","provision":"inciso I, alínea b"},
+  {"id":"cmp_pr_nomeia_tse","holder_office":"off_pres_republica","verb":"Nomear dois advogados","target_body":"bod_tse","target_label":"Dois membros do TSE, dentre seis advogados indicados pelo STF","legal_basis":"cf_art119","provision":"inciso II"},
+  {"id":"cmp_stf_preside_cnj","holder_office":"off_pres_stf","verb":"Presidir","target_body":"bod_cnj","target_label":"Conselho Nacional de Justiça","legal_basis":"cf_art103b","provision":"§ 1º"},
+  {"id":"cmp_stj_recurso_especial","holder_body":"bod_stj","verb":"Julgar em recurso especial","target_label":"Causas decididas por TRFs ou tribunais estaduais nas hipóteses constitucionais de aplicação da lei federal","legal_basis":"cf_art105","provision":"inciso III"},
+  {"id":"cmp_stm_julga","holder_body":"bod_stm","verb":"Processar e julgar","target_label":"Crimes militares definidos em lei, no âmbito da Justiça Militar da União","legal_basis":"cf_art124"},
   {
    "id": "cmp_pres_senado_despacha_impeachment",
    "holder_office": "off_pres_senado",
