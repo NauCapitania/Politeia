@@ -56,11 +56,13 @@ describe('Mapa da União', () => {
   it('não interpreta datas heterogêneas da origem como início no cargo', async () => {
     const data = structuredClone(ontology)
     data.holdings[0].origin = 'mandate'
+    data.holdings[0].sources = [{ kind: 'official', outlet: 'Senado Federal', url: 'https://www25.senado.leg.br/web/senadores/' }]
     vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(data))))
     renderMap()
     await userEvent.click(await screen.findByRole('button', { name: 'Explorar Senado Federal' }))
     const detail = within(screen.getByRole('complementary'))
     await userEvent.click(detail.getByRole('button', { name: /Davi Alcolumbre/ }))
+    expect(detail.getByRole('link', { name: /Senado Federal/ })).toBeInTheDocument()
     expect(detail.queryByText(/Início do mandato:|Em exercício desde/)).not.toBeInTheDocument()
   })
   it('separa três poderes das instituições autônomas e mostra os tribunais superiores', async () => {

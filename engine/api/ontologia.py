@@ -116,7 +116,7 @@ def ontology_overview(s: Session) -> dict:
         "holdings": [
             _row(h, "mandate_id", "committee_membership_id") | {
                 "person_name": persons.get(h.person_id), "party": party.get(h.person_id),
-                **({"sources": holding_sources[h.id]} if h.origin in ("dossier", "ontology_file") else {})}
+                "sources": holding_sources[h.id]}
             for h in holdings if h.office_id != COMMITTEE_MEMBER],
         "seats_by_body": [{"office_id": o, "body_id": b, "holders": n} for (o, b), n in sorted(held.items(),
                                                                                              key=str)],

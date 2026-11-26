@@ -152,6 +152,7 @@ def test_api_exposes_the_map(api):
     flow = sorted((c["flow_order"], c["verb"]) for c in d["competences"] if c["flow"] == "nomeacao_ministro_stf")
     assert [verb for _, verb in flow][-1] == "Nomear"
     assert all(h["office_id"] != "off_membro_comissao" for h in d["holdings"])
+    assert all(h["sources"] for h in d["holdings"] if h["origin"] == "mandate")
     master = next(p for p in d["proceedings"] if p["id"] == "prc_master_relatorios_pf")
     assert master["deadlines"][0]["due_on"] == "2026-12-08" and master["news"][0]["url"].endswith("pgr-relatorios")
     assert all(st["sources"] for st in master["steps"] if st["status"] == "done")
