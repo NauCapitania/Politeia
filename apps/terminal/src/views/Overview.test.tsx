@@ -45,14 +45,19 @@ describe('Mapa da União', () => {
     expect(screen.getByRole('button', { name: 'Explorar Supremo Tribunal Federal' })).toBeInTheDocument()
     expect(document.querySelector('[data-competence-id="indica_stf"] .constellation-edge-hit')).toBeInTheDocument()
   })
-  it.each([false, true])('carrega a composição completa da comissão (Câmara: %s)', async (camara) => {
+  it.each([[false, false], [true, false], [false, true], [true, true]])('carrega a composição completa da comissão (Câmara: %s, cargo: %s)', async (camara, memberOffice) => {
     const data = structuredClone(ontology)
     data.bodies.push({ ...data.bodies[0], id: 'bod_com_teste', name: 'Comissão de teste', parent_id: camara ? 'bod_camara' : 'bod_senado', committee_id: 'com_teste' })
+    data.offices.push({ ...data.offices[0], id: 'off_membro_comissao', name: 'Membro de comissão', body_id: null })
     vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(url.endsWith('/comissoes/com_teste') ? { members: [{ person_id: 'per_novo', name: 'Integrante sem cargo de direção', role: null, seat_kind: 'suplente', party: 'PV', uf: 'SP', since: null }] } : data))))
     await renderMap()
     await screen.findByRole('button', { name: 'Explorar Senado Federal' })
-    await userEvent.type(screen.getByRole('textbox', { name: 'Buscar órgão ou cargo' }), 'Comissão de teste')
+    await userEvent.type(screen.getByRole('textbox', { name: 'Buscar órgão ou cargo' }), memberOffice ? 'Membro de comissão' : 'Comissão de teste')
     await userEvent.click(within(screen.getByLabelText('Resultados da busca')).getByRole('button'))
+    if (memberOffice) {
+      expect(screen.queryByText('Nenhum ocupante encontrado nesta camada. Isso não significa cargo vago.')).not.toBeInTheDocument()
+      await userEvent.click(within(screen.getByRole('complementary')).getByRole('button', { name: /Comissão de teste/ }))
+    }
     expect(await screen.findByText('Integrante sem cargo de direção')).toBeInTheDocument()
     expect(screen.queryByText('Nenhum ocupante encontrado nesta camada. Isso não significa cargo vago.')).not.toBeInTheDocument()
     expect(vi.mocked(fetch).mock.calls.some(([url]) => String(url) === `/v1/${camara ? 'camara/' : ''}comissoes/com_teste`)).toBe(true)
