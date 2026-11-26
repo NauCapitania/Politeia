@@ -117,6 +117,19 @@ describe('Estrutura e Grafo da União', () => {
     expect(document.querySelector('[data-competence-id="cmp_julga"]')).toHaveClass('lit')
   })
 
+  it('marca cargos encontrados sem inventar órgão ou poder para um vínculo ausente', async () => {
+    const data = structuredClone(ontology)
+    data.offices.push({ ...data.offices[0], id: 'off_ministro_estado', name: 'Ministro de Estado', body_id: null })
+    renderStructure(data)
+    await screen.findByRole('tab', { name: 'Estrutura' })
+    await userEvent.type(screen.getByRole('textbox', { name: 'Buscar órgão ou cargo' }), 'Ministro de Estado')
+    await userEvent.click(within(screen.getByLabelText('Resultados da busca')).getByRole('button'))
+    const office = within(screen.getByRole('region', { name: 'Cargos sem órgão específico' })).getByRole('button', { name: 'Explorar Ministro de Estado' })
+    expect(office).toHaveAttribute('aria-current', 'true')
+    expect(office.closest('.structure-power')).toBeNull()
+    expect(within(screen.getByRole('complementary')).getByRole('heading', { name: 'Ministro de Estado' })).toBeInTheDocument()
+  })
+
   it('permite trocar as duas abas por teclado', async () => {
     renderStructure()
     await userEvent.click(await screen.findByRole('tab', { name: 'Estrutura' }))

@@ -22,6 +22,7 @@ export function OntologyStructure({ data, focus, onExplore }: Props) {
     current = data.bodies.find((b) => b.id === current!.parent_id)
   }
   const roots = (powerId: string) => ordered(data.bodies.filter((b) => b.power_id === powerId && !data.bodies.some((p) => p.id === b.parent_id && p.power_id === powerId)))
+  const unassignedOffices = data.offices.filter((o) => !data.bodies.some((b) => b.id === o.body_id))
   return <div className="structure">
     <header className="structure-union"><span>ESTRUTURA FEDERAL</span><h2>União</h2><p>Selecione um órgão para consultar cargos, ocupantes e competências.</p></header>
     <div className="structure-powers" aria-label="Três poderes constitucionais">
@@ -34,6 +35,7 @@ export function OntologyStructure({ data, focus, onExplore }: Props) {
       <header><h3>{p.name}</h3><p>Instituições autônomas. Não constituem um quarto poder.</p></header>
       <ul className="structure-roots">{roots(p.id).map((b) => <Branch key={b.id} body={b} data={data} focus={focus} path={path} depth={0} onExplore={onExplore} />)}</ul>
     </section>)}
+    {!!unassignedOffices.length && <section className="structure-unassigned" aria-label="Cargos sem órgão específico"><h3>Cargos</h3><p>Sem órgão específico associado na base.</p><ul className="structure-offices">{unassignedOffices.map((o) => <li key={o.id}><button aria-label={`Explorar ${o.name}`} aria-current={focus === o.id ? 'true' : undefined} onClick={() => onExplore(o.id)}>{o.name}<small>Cargo · {o.holders} {o.holders === 1 ? 'ocupante' : 'ocupantes'}</small></button></li>)}</ul></section>}
     <p className="structure-note">As ramificações seguem os vínculos da base. O TCU é agrupado no Legislativo para leitura, sem subordinação ao Congresso.</p>
   </div>
 }

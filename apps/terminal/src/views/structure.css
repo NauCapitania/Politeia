@@ -38,6 +38,10 @@
 .structure-autonomous header p,.structure-note { color:var(--fg-3); font:10px/1.8 var(--sans); }
 .structure-autonomous>.structure-roots { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px; }
 .structure-note { margin:26px 18px 0; padding-top:16px; border-top:1px solid var(--line); }
+.structure-unassigned { --branch-color:var(--accent); border-top:1px dashed var(--line-strong); margin:24px 18px 0; padding-top:20px; }
+.structure-unassigned h3 { font-size:17px; }
+.structure-unassigned p { color:var(--fg-3); font:10px/1.8 var(--sans); }
+.structure-unassigned>.structure-offices { margin:8px 0 0; }
 .atlas-panel[hidden] { display:none; }
 .atlas-workspace.without-inspector { grid-template-columns:minmax(0,1fr); }
 .atlas-graph-filters { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin:-4px 0 18px; }
