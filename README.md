@@ -91,7 +91,8 @@ cp .env.example .env
 uv sync
 uv run alembic upgrade head
 uv run python -m engine.cli sync                   # escopos suportados de todas as instituições registradas
-uv run python -m engine.cli dossiers               # dossiês curados + ligação de notícias
+uv run python -m engine.cli dossiers               # dossiês curados + ligação de notícias + ontologia
+uv run python -m engine.cli ontology               # só reconstrói a ontologia da União (state, process, behavior)
 uv run uvicorn engine.api.app:app --port 8000      # OpenAPI em http://localhost:8000/docs
 
 cd apps/terminal && npm install && npm run dev     # http://localhost:5173 (proxy /v1 -> :8000)

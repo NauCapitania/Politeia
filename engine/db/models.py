@@ -8,6 +8,9 @@ Schemas:
 - evidence: links from derived facts to the raw records that support them
 - media: news items from public feeds and the entities they mention
 - analysis: curated dossiers and claims (declarations, press reports, analyses) with sources
+- state: ontology of the State (federative units, powers, bodies, offices, competences, legal bases)
+- process: proceedings that exercise competences (participants, steps, deadlines)
+- behavior: links observed from recorded behavior (open roll-call agreement)
 """
 
 import uuid
@@ -18,6 +21,7 @@ from sqlalchemy import (
     Boolean,
     Date,
     DateTime,
+    Float,
     ForeignKey,
     Index,
     Integer,
@@ -39,7 +43,8 @@ NAMING = {
     "pk": "pk_%(table_name)s",
 }
 
-SCHEMAS = ("registry", "ingestion", "core", "legislative", "evidence", "media", "analysis")
+SCHEMAS = ("registry", "ingestion", "core", "legislative", "evidence", "media", "analysis", "state", "process",
+           "behavior")
 
 
 class Base(DeclarativeBase):
@@ -615,3 +620,320 @@ class Claim(Base):
     stated_on: Mapped[date | None] = mapped_column(Date)
     sources: Mapped[list] = mapped_column(JSONB, default=list)
     attributes: Mapped[dict] = mapped_column(JSONB, default=dict)
+
+
+# --------------------------------------------------------------------------- ontology (projection rebuilt by
+# engine.ontology from the tables above, the dossiers and ontology/uniao.json; never the only copy of a fact)
+
+
+def _id(length: int = 96) -> Mapped[str]:
+    return mapped_column(String(length), primary_key=True)
+
+
+class FederativeUnit(Base):
+    __tablename__ = "federative_units"
+    __table_args__ = {"schema": "state"}
+
+    id: Mapped[str] = _id()
+    kind: Mapped[str] = mapped_column(String(16))  # uniao | estado | df | municipio
+    name: Mapped[str] = mapped_column(Text)
+
+
+class Power(Base):
+    __tablename__ = "powers"
+    __table_args__ = {"schema": "state"}
+
+    id: Mapped[str] = _id()
+    name: Mapped[str] = mapped_column(Text)
+    constitutional: Mapped[bool] = mapped_column(Boolean)
+    description: Mapped[str] = mapped_column(Text)
+    ordinal: Mapped[int] = mapped_column(Integer)
+
+
+class LegalBasis(Base):
+    __tablename__ = "legal_bases"
+    __table_args__ = {"schema": "state"}
+
+    id: Mapped[str] = _id()
+    norm: Mapped[str] = mapped_column(Text)
+    provision: Mapped[str | None] = mapped_column(Text)
+    url: Mapped[str] = mapped_column(Text)
+
+
+class Body(Base):
+    """Órgão: chamber, committee, board, ministry, agency, court, prosecution, police."""
+
+    __tablename__ = "bodies"
+    __table_args__ = {"schema": "state"}
+
+    id: Mapped[str] = _id()
+    name: Mapped[str] = mapped_column(Text)
+    acronym: Mapped[str | None] = mapped_column(Text)
+    body_type: Mapped[str] = mapped_column(String(32))
+    power_id: Mapped[str] = mapped_column(ForeignKey("state.powers.id"), index=True)
+    federative_unit_id: Mapped[str] = mapped_column(ForeignKey("state.federative_units.id"))
+    parent_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"), index=True)
+    seats: Mapped[int | None] = mapped_column(Integer)
+    description: Mapped[str | None] = mapped_column(Text)
+    legal_basis_id: Mapped[str | None] = mapped_column(ForeignKey("state.legal_bases.id"))
+    institution_id: Mapped[str | None] = mapped_column(ForeignKey("registry.institutions.id"))
+    committee_id: Mapped[str | None] = mapped_column(ForeignKey("core.committees.id"))
+    executive_body_id: Mapped[str | None] = mapped_column(ForeignKey("core.executive_bodies.id"))
+    origin: Mapped[str] = mapped_column(String(16))  # curated | committee | siorg
+    url: Mapped[str | None] = mapped_column(Text)
+
+
+class Office(Base):
+    """Cargo: a position in a body, with how it is filled."""
+
+    __tablename__ = "offices"
+    __table_args__ = {"schema": "state"}
+
+    id: Mapped[str] = _id()
+    body_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"), index=True)
+    name: Mapped[str] = mapped_column(Text)
+    seats: Mapped[int | None] = mapped_column(Integer)
+    term_years: Mapped[int | None] = mapped_column(Integer)
+    # direct_election | elected_by_peers | nominated_and_approved | free_appointment | party_indication
+    provision: Mapped[str] = mapped_column(String(32))
+    description: Mapped[str | None] = mapped_column(Text)
+    legal_basis_id: Mapped[str | None] = mapped_column(ForeignKey("state.legal_bases.id"))
+
+
+class Competence(Base):
+    """What a body or office may do to whom, under which legal basis; flows chain steps (indicate, approve)."""
+
+    __tablename__ = "competences"
+    __table_args__ = {"schema": "state"}
+
+    id: Mapped[str] = _id()
+    holder_body_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"), index=True)
+    holder_office_id: Mapped[str | None] = mapped_column(ForeignKey("state.offices.id"), index=True)
+    verb: Mapped[str] = mapped_column(Text)
+    target_body_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"))
+    target_office_id: Mapped[str | None] = mapped_column(ForeignKey("state.offices.id"))
+    target_label: Mapped[str] = mapped_column(Text)
+    quorum: Mapped[str | None] = mapped_column(Text)
+    exclusive: Mapped[bool] = mapped_column(Boolean)
+    flow: Mapped[str | None] = mapped_column(String(64))
+    flow_order: Mapped[int | None] = mapped_column(Integer)
+    legal_basis_id: Mapped[str] = mapped_column(ForeignKey("state.legal_bases.id"))
+    provision: Mapped[str | None] = mapped_column(Text)
+    description: Mapped[str | None] = mapped_column(Text)
+
+
+class Legislature(Base):
+    __tablename__ = "legislatures"
+    __table_args__ = {"schema": "core"}
+
+    number: Mapped[int] = mapped_column(Integer, primary_key=True)
+    starts_on: Mapped[date] = mapped_column(Date)
+    ends_on: Mapped[date] = mapped_column(Date)
+
+
+class PersonName(Base):
+    __tablename__ = "person_names"
+    __table_args__ = {"schema": "core"}
+
+    person_id: Mapped[str] = mapped_column(ForeignKey("core.persons.id", ondelete="CASCADE"), primary_key=True)
+    name: Mapped[str] = mapped_column(Text, primary_key=True)
+    kind: Mapped[str] = mapped_column(String(16))  # civil | parliamentary | alias
+    origin: Mapped[str] = mapped_column(String(32))
+
+
+class Organization(Base):
+    """Party, federation, bloc or company appearing in a case."""
+
+    __tablename__ = "organizations"
+    __table_args__ = {"schema": "core"}
+
+    id: Mapped[str] = _id()
+    kind: Mapped[str] = mapped_column(String(16))  # partido | federacao | bloco | empresa
+    abbreviation: Mapped[str | None] = mapped_column(Text)
+    name: Mapped[str | None] = mapped_column(Text)
+    party_id: Mapped[str | None] = mapped_column(ForeignKey("core.parties.id"))
+
+
+class OrganizationLink(Base):
+    __tablename__ = "organization_links"
+    __table_args__ = {"schema": "core"}
+
+    organization_id: Mapped[str] = mapped_column(ForeignKey("core.organizations.id"), primary_key=True)
+    part_of_id: Mapped[str] = mapped_column(ForeignKey("core.organizations.id"), primary_key=True)
+    kind: Mapped[str] = mapped_column(String(16))
+
+
+class Affiliation(Base):
+    """The one current party of a person, chosen from the party memberships each source lists."""
+
+    __tablename__ = "affiliations"
+    __table_args__ = {"schema": "core"}
+
+    person_id: Mapped[str] = mapped_column(ForeignKey("core.persons.id"), primary_key=True)
+    organization_id: Mapped[str] = mapped_column(ForeignKey("core.organizations.id"), index=True)
+    since: Mapped[date | None] = mapped_column(Date)
+    party_membership_id: Mapped[str | None] = mapped_column(ForeignKey("core.party_memberships.id"))
+    basis: Mapped[str] = mapped_column(String(32))
+
+
+class OfficeHolding(Base):
+    """Ocupação de cargo: who holds which office now, how they got there and who nominated them."""
+
+    __tablename__ = "office_holdings"
+    __table_args__ = (Index("ix_office_holdings_office_body", "office_id", "body_id"), {"schema": "core"})
+
+    id: Mapped[str] = _id()
+    person_id: Mapped[str] = mapped_column(ForeignKey("core.persons.id"), index=True)
+    office_id: Mapped[str] = mapped_column(ForeignKey("state.offices.id"))
+    body_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"))
+    provision: Mapped[str] = mapped_column(String(32))
+    nominated_by: Mapped[str | None] = mapped_column(Text)
+    represented_unit: Mapped[str | None] = mapped_column(Text)
+    seat_kind: Mapped[str] = mapped_column(String(32))  # holder | substitute_in_exercise | suplente | interim
+    since: Mapped[date | None] = mapped_column(Date)
+    mandate_id: Mapped[str | None] = mapped_column(ForeignKey("core.mandates.id"))
+    committee_membership_id: Mapped[str | None] = mapped_column(ForeignKey("core.committee_memberships.id"))
+    origin: Mapped[str] = mapped_column(String(32))
+
+
+class Proceeding(Base):
+    """A live process: a competence being exercised (PF reports, impeachment, internal election)."""
+
+    __tablename__ = "proceedings"
+    __table_args__ = {"schema": "process"}
+
+    id: Mapped[str] = _id()
+    kind: Mapped[str] = mapped_column(String(32))
+    title: Mapped[str] = mapped_column(Text)
+    body_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"))
+    competence_id: Mapped[str | None] = mapped_column(ForeignKey("state.competences.id"))
+    status: Mapped[str] = mapped_column(Text)
+    summary: Mapped[str | None] = mapped_column(Text)
+    dossier: Mapped[str | None] = mapped_column(String(64))
+
+
+class Participant(Base):
+    __tablename__ = "participants"
+    __table_args__ = {"schema": "process"}
+
+    id: Mapped[str] = _id()
+    proceeding_id: Mapped[str] = mapped_column(ForeignKey("process.proceedings.id", ondelete="CASCADE"), index=True)
+    person_id: Mapped[str | None] = mapped_column(ForeignKey("core.persons.id"))
+    body_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"))
+    organization_id: Mapped[str | None] = mapped_column(ForeignKey("core.organizations.id"))
+    label: Mapped[str] = mapped_column(Text)
+    role: Mapped[str] = mapped_column(String(32))
+    detail: Mapped[str | None] = mapped_column(Text)
+    epistemic_status: Mapped[str] = mapped_column(String(16))  # official | declaration | press_report | analysis
+
+
+class Step(Base):
+    __tablename__ = "steps"
+    __table_args__ = {"schema": "process"}
+
+    id: Mapped[str] = _id()
+    proceeding_id: Mapped[str] = mapped_column(ForeignKey("process.proceedings.id", ondelete="CASCADE"), index=True)
+    ordinal: Mapped[int] = mapped_column(Integer)
+    title: Mapped[str | None] = mapped_column(Text)
+    text: Mapped[str] = mapped_column(Text)
+    happened_on: Mapped[date | None] = mapped_column(Date)
+    date_label: Mapped[str | None] = mapped_column(Text)  # date as the source gives it (e.g. "2026-01")
+    status: Mapped[str] = mapped_column(String(32))  # done | pending | possible
+    decided_by_body_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"))
+
+
+class Deadline(Base):
+    __tablename__ = "deadlines"
+    __table_args__ = {"schema": "process"}
+
+    id: Mapped[str] = _id()
+    proceeding_id: Mapped[str] = mapped_column(ForeignKey("process.proceedings.id", ondelete="CASCADE"), index=True)
+    due_on: Mapped[date] = mapped_column(Date)
+    basis: Mapped[str] = mapped_column(String(32))  # legal | regimental | politeia_estimate | scheduled
+    note: Mapped[str | None] = mapped_column(Text)
+
+
+class ObservedLink(Base):
+    """Agreement between two members over open roll calls where both cast Sim/Não/Abstenção/Obstrução."""
+
+    __tablename__ = "observed_links"
+    __table_args__ = {"schema": "behavior"}
+
+    institution_id: Mapped[str] = mapped_column(ForeignKey("registry.institutions.id"), primary_key=True)
+    person_a_id: Mapped[str] = mapped_column(ForeignKey("core.persons.id"), primary_key=True)
+    person_b_id: Mapped[str] = mapped_column(ForeignKey("core.persons.id"), primary_key=True)
+    kind: Mapped[str] = mapped_column(String(32), primary_key=True)
+    shared: Mapped[int] = mapped_column(Integer)
+    agreements: Mapped[int] = mapped_column(Integer)
+    weight: Mapped[float] = mapped_column(Float)
+    window_start: Mapped[date | None] = mapped_column(Date)
+    window_end: Mapped[date | None] = mapped_column(Date)
+
+
+class Analysis(Base):
+    __tablename__ = "analyses"
+    __table_args__ = {"schema": "analysis"}
+
+    id: Mapped[str] = _id()
+    title: Mapped[str] = mapped_column(Text)
+    dossier: Mapped[str] = mapped_column(String(64))
+    questions: Mapped[list] = mapped_column(JSONB, default=list)
+    as_of: Mapped[date | None] = mapped_column(Date)
+
+
+class AnalysisEntity(Base):
+    __tablename__ = "analysis_entities"
+    __table_args__ = {"schema": "analysis"}
+
+    analysis_id: Mapped[str] = mapped_column(ForeignKey("analysis.analyses.id", ondelete="CASCADE"),
+                                             primary_key=True)
+    entity_kind: Mapped[str] = mapped_column(String(32), primary_key=True)
+    entity_id: Mapped[str] = mapped_column(String(96), primary_key=True)
+    role: Mapped[str] = mapped_column(Text)
+
+
+class Estimate(Base):
+    """Scenario ranges and probabilities: always inference, never stored as fact."""
+
+    __tablename__ = "estimates"
+    __table_args__ = {"schema": "analysis"}
+
+    id: Mapped[str] = _id()
+    analysis_id: Mapped[str] = mapped_column(ForeignKey("analysis.analyses.id", ondelete="CASCADE"), index=True)
+    scenario: Mapped[str] = mapped_column(Text)
+    subject_label: Mapped[str] = mapped_column(Text)
+    low: Mapped[int | None] = mapped_column(Integer)
+    high: Mapped[int | None] = mapped_column(Integer)
+    basis: Mapped[str | None] = mapped_column(Text)
+    method: Mapped[str] = mapped_column(Text)
+    label: Mapped[str] = mapped_column(String(16), default="inferência")
+
+
+class NewsLink(Base):
+    """News attached to a proceeding or analysis instead of a person card."""
+
+    __tablename__ = "news_links"
+    __table_args__ = (Index("ix_news_links_target", "target_kind", "target_id"), {"schema": "media"})
+
+    news_item_id: Mapped[str] = mapped_column(ForeignKey("media.news_items.id", ondelete="CASCADE"),
+                                              primary_key=True)
+    target_kind: Mapped[str] = mapped_column(String(16), primary_key=True)  # proceeding | analysis
+    target_id: Mapped[str] = mapped_column(String(96), primary_key=True)
+    topic: Mapped[str] = mapped_column(String(64))
+
+
+class FactSource(Base):
+    """Every ontology row points to at least one source: a raw record, a dossier source or a legal text."""
+
+    __tablename__ = "fact_sources"
+    __table_args__ = (Index("ix_fact_sources_row", "table_name", "row_id"), {"schema": "evidence"})
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    table_name: Mapped[str] = mapped_column(String(64))
+    row_id: Mapped[str] = mapped_column(String(192))
+    source_kind: Mapped[str] = mapped_column(String(16))  # official | declaration | press_report | analysis
+    raw_record_id: Mapped[uuid.UUID | None] = mapped_column(ForeignKey("ingestion.raw_records.id"))
+    url: Mapped[str | None] = mapped_column(Text)
+    outlet: Mapped[str | None] = mapped_column(Text)
+    published_on: Mapped[date | None] = mapped_column(Date)
+    generated_by: Mapped[str] = mapped_column(String(32))  # connector | dossier | ontology_file

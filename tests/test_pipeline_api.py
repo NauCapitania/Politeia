@@ -142,6 +142,8 @@ def test_snapshot_exports_without_stf_dossier(api, tmp_path):
 
     assert json.loads((tmp_path / "dossies/stf-caso-master.json").read_text(encoding="utf-8")) is None
     assert (tmp_path / "meta.json").is_file()
+    assert set(json.loads((tmp_path / "ontologia.json").read_text(encoding="utf-8"))) >= {"powers", "competences"}
+    assert (tmp_path / "ontologia/ligacoes/ins_br_senado.json").is_file()
 
 
 def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory, tmp_path, monkeypatch):

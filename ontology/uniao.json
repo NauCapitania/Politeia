@@ -1,0 +1,987 @@
+{
+ "ontology": "uniao",
+ "as_of": "2026-11-25",
+ "note": "Mapa curado do Estado da União. Toda competência e todo cargo apontam para a norma que os cria; ocupantes e órgãos de comissões e do SIORG vêm do banco.",
+ "federative_units": [
+  {
+   "id": "fu_uniao",
+   "kind": "uniao",
+   "name": "União"
+  }
+ ],
+ "powers": [
+  {
+   "id": "pow_legislativo",
+   "name": "Legislativo",
+   "constitutional": true,
+   "description": "Faz as leis e fiscaliza o Executivo (CF, art. 44).",
+   "ordinal": 1
+  },
+  {
+   "id": "pow_executivo",
+   "name": "Executivo",
+   "constitutional": true,
+   "description": "Governa e administra; exercido pelo Presidente com os Ministros (CF, art. 76).",
+   "ordinal": 2
+  },
+  {
+   "id": "pow_judiciario",
+   "name": "Judiciário",
+   "constitutional": true,
+   "description": "Julga conflitos e guarda a Constituição (CF, art. 92).",
+   "ordinal": 3
+  },
+  {
+   "id": "pow_controle",
+   "name": "Controle e Justiça",
+   "constitutional": false,
+   "description": "Agrupamento de leitura do Politeia, não um quarto poder: Ministério Público, Tribunal de Contas, polícia judiciária e controle interno.",
+   "ordinal": 4
+  }
+ ],
+ "legislatures": [
+  {
+   "number": 57,
+   "starts_on": "2023-02-01",
+   "ends_on": "2027-01-31"
+  }
+ ],
+ "legal_bases": [
+  {
+   "id": "cf_art2",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 2",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art2"
+  },
+  {
+   "id": "cf_art18",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 18",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art18"
+  },
+  {
+   "id": "cf_art44",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 44",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art44"
+  },
+  {
+   "id": "cf_art45",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 45",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art45"
+  },
+  {
+   "id": "cf_art46",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 46",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art46"
+  },
+  {
+   "id": "cf_art51",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 51",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art51"
+  },
+  {
+   "id": "cf_art52",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 52",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art52"
+  },
+  {
+   "id": "cf_art57",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 57",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art57"
+  },
+  {
+   "id": "cf_art58",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 58",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art58"
+  },
+  {
+   "id": "cf_art62",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 62",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art62"
+  },
+  {
+   "id": "cf_art66",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 66",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art66"
+  },
+  {
+   "id": "cf_art71",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 71",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art71"
+  },
+  {
+   "id": "cf_art76",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 76",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art76"
+  },
+  {
+   "id": "cf_art77",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 77",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art77"
+  },
+  {
+   "id": "cf_art84",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 84",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art84"
+  },
+  {
+   "id": "cf_art87",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 87",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art87"
+  },
+  {
+   "id": "cf_art92",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 92",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art92"
+  },
+  {
+   "id": "cf_art101",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 101",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art101"
+  },
+  {
+   "id": "cf_art102",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 102",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art102"
+  },
+  {
+   "id": "cf_art127",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 127",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art127"
+  },
+  {
+   "id": "cf_art128",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 128",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art128"
+  },
+  {
+   "id": "cf_art129",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 129",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art129"
+  },
+  {
+   "id": "cf_art144",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 144",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art144"
+  },
+  {
+   "id": "cf_art164",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 164",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art164"
+  },
+  {
+   "id": "lei1079",
+   "norm": "Lei nº 1.079/1950 (crimes de responsabilidade)",
+   "provision": null,
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm"
+  },
+  {
+   "id": "lei6024",
+   "norm": "Lei nº 6.024/1974 (intervenção e liquidação extrajudicial)",
+   "provision": null,
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l6024.htm"
+  },
+  {
+   "id": "lc179",
+   "norm": "Lei Complementar nº 179/2021 (autonomia do Banco Central)",
+   "provision": null,
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp179.htm"
+  },
+  {
+   "id": "lei14600",
+   "norm": "Lei nº 14.600/2023 (organização da Presidência e dos Ministérios)",
+   "provision": null,
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14600.htm"
+  },
+  {
+   "id": "risf",
+   "norm": "Regimento Interno do Senado Federal",
+   "provision": null,
+   "url": "https://www25.senado.leg.br/web/atividade/regimento-interno"
+  },
+  {
+   "id": "ricd",
+   "norm": "Regimento Interno da Câmara dos Deputados",
+   "provision": null,
+   "url": "https://www2.camara.leg.br/atividade-legislativa/legislacao/regimento-interno-da-camara-dos-deputados"
+  },
+  {
+   "id": "ristf",
+   "norm": "Regimento Interno do Supremo Tribunal Federal",
+   "provision": null,
+   "url": "https://portal.stf.jus.br/textos/verTexto.asp?servico=legislacaoRegimentoInterno"
+  },
+  {
+   "id": "cf_art131",
+   "norm": "Constituição Federal de 1988",
+   "provision": "art. 131",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm#art131"
+  }
+ ],
+ "bodies": [
+  {
+   "id": "bod_congresso",
+   "name": "Congresso Nacional",
+   "acronym": "CN",
+   "body_type": "congresso",
+   "power": "pow_legislativo",
+   "legal_basis": "cf_art44",
+   "description": "Poder Legislativo da União, bicameral: Câmara dos Deputados e Senado Federal.",
+   "url": "https://www.congressonacional.leg.br"
+  },
+  {
+   "id": "bod_senado",
+   "name": "Senado Federal",
+   "acronym": "SF",
+   "body_type": "casa_legislativa",
+   "power": "pow_legislativo",
+   "parent": "bod_congresso",
+   "seats": 81,
+   "legal_basis": "cf_art46",
+   "institution": "ins_br_senado",
+   "description": "Representa os estados e o DF: três senadores por unidade, mandato de oito anos."
+  },
+  {
+   "id": "bod_camara",
+   "name": "Câmara dos Deputados",
+   "acronym": "CD",
+   "body_type": "casa_legislativa",
+   "power": "pow_legislativo",
+   "parent": "bod_congresso",
+   "seats": 513,
+   "legal_basis": "cf_art45",
+   "institution": "ins_br_camara",
+   "description": "Representa o povo, com deputados eleitos pelo sistema proporcional para mandato de quatro anos."
+  },
+  {
+   "id": "bod_mesa_senado",
+   "name": "Mesa do Senado Federal",
+   "body_type": "mesa",
+   "power": "pow_legislativo",
+   "parent": "bod_senado",
+   "seats": 7,
+   "legal_basis": "cf_art57",
+   "description": "Dirige os trabalhos do Senado; eleita pelos senadores para mandato de dois anos."
+  },
+  {
+   "id": "bod_mesa_camara",
+   "name": "Mesa da Câmara dos Deputados",
+   "body_type": "mesa",
+   "power": "pow_legislativo",
+   "parent": "bod_camara",
+   "seats": 7,
+   "legal_basis": "cf_art57",
+   "description": "Dirige os trabalhos da Câmara; eleita pelos deputados para mandato de dois anos."
+  },
+  {
+   "id": "bod_presidencia",
+   "name": "Presidência da República",
+   "acronym": "PR",
+   "body_type": "chefia_executivo",
+   "power": "pow_executivo",
+   "legal_basis": "cf_art76",
+   "institution": "ins_br_executivo",
+   "description": "O Presidente exerce o Poder Executivo, auxiliado pelos Ministros de Estado.",
+   "url": "https://www.gov.br/planalto",
+   "siorg_acronym": "PR"
+  },
+  {
+   "id": "bod_stf",
+   "name": "Supremo Tribunal Federal",
+   "acronym": "STF",
+   "body_type": "tribunal",
+   "power": "pow_judiciario",
+   "seats": 11,
+   "legal_basis": "cf_art101",
+   "description": "Guarda da Constituição; onze ministros indicados pelo Presidente e aprovados pelo Senado.",
+   "url": "https://portal.stf.jus.br"
+  },
+  {
+   "id": "bod_pgr",
+   "name": "Procuradoria-Geral da República",
+   "acronym": "PGR",
+   "body_type": "ministerio_publico",
+   "power": "pow_controle",
+   "legal_basis": "cf_art128",
+   "description": "Chefia o Ministério Público da União; titular da ação penal contra autoridades com foro no STF.",
+   "url": "https://www.mpf.mp.br/pgr"
+  },
+  {
+   "id": "bod_tcu",
+   "name": "Tribunal de Contas da União",
+   "acronym": "TCU",
+   "body_type": "tribunal_contas",
+   "power": "pow_controle",
+   "seats": 9,
+   "legal_basis": "cf_art71",
+   "description": "Auxilia o Congresso no controle externo das contas públicas.",
+   "url": "https://portal.tcu.gov.br"
+  },
+  {
+   "id": "bod_cgu",
+   "name": "Controladoria-Geral da União",
+   "acronym": "CGU",
+   "body_type": "controle_interno",
+   "power": "pow_controle",
+   "parent": "bod_presidencia",
+   "legal_basis": "lei14600",
+   "siorg_acronym": "CGU",
+   "description": "Controle interno, correição e transparência do Executivo federal."
+  },
+  {
+   "id": "bod_agu",
+   "name": "Advocacia-Geral da União",
+   "acronym": "AGU",
+   "body_type": "advocacia_publica",
+   "power": "pow_controle",
+   "parent": "bod_presidencia",
+   "legal_basis": "cf_art131",
+   "siorg_acronym": "AGU",
+   "description": "Representa a União judicial e extrajudicialmente."
+  },
+  {
+   "id": "bod_pf",
+   "name": "Polícia Federal",
+   "acronym": "PF",
+   "body_type": "policia",
+   "power": "pow_controle",
+   "parent": "siorg:MJSP",
+   "legal_basis": "cf_art144",
+   "siorg_acronym": "PF",
+   "description": "Polícia judiciária da União, ligada ao Ministério da Justiça e Segurança Pública.",
+   "url": "https://www.gov.br/pf"
+  },
+  {
+   "id": "bod_bc",
+   "name": "Banco Central do Brasil",
+   "acronym": "BCB",
+   "body_type": "autarquia",
+   "power": "pow_executivo",
+   "parent": "bod_presidencia",
+   "legal_basis": "lc179",
+   "siorg_acronym": "BCB",
+   "description": "Autarquia de natureza especial, com autonomia; regula e supervisiona o sistema financeiro.",
+   "url": "https://www.bcb.gov.br"
+  }
+ ],
+ "offices": [
+  {
+   "id": "off_senador",
+   "body": "bod_senado",
+   "name": "Senador",
+   "seats": 81,
+   "term_years": 8,
+   "provision": "direct_election",
+   "legal_basis": "cf_art46"
+  },
+  {
+   "id": "off_deputado",
+   "body": "bod_camara",
+   "name": "Deputado federal",
+   "seats": 513,
+   "term_years": 4,
+   "provision": "direct_election",
+   "legal_basis": "cf_art45"
+  },
+  {
+   "id": "off_pres_senado",
+   "body": "bod_mesa_senado",
+   "name": "Presidente do Senado Federal",
+   "seats": 1,
+   "term_years": 2,
+   "provision": "elected_by_peers",
+   "legal_basis": "cf_art57",
+   "description": "Preside o Congresso Nacional e despacha as denúncias por crime de responsabilidade contra ministros do STF e o PGR."
+  },
+  {
+   "id": "off_pres_camara",
+   "body": "bod_mesa_camara",
+   "name": "Presidente da Câmara dos Deputados",
+   "seats": 1,
+   "term_years": 2,
+   "provision": "elected_by_peers",
+   "legal_basis": "cf_art57",
+   "description": "Despacha as denúncias por crime de responsabilidade contra o Presidente da República."
+  },
+  {
+   "id": "off_pres_republica",
+   "body": "bod_presidencia",
+   "name": "Presidente da República",
+   "seats": 1,
+   "term_years": 4,
+   "provision": "direct_election",
+   "legal_basis": "cf_art76"
+  },
+  {
+   "id": "off_vice",
+   "body": "bod_presidencia",
+   "name": "Vice-Presidente da República",
+   "seats": 1,
+   "term_years": 4,
+   "provision": "direct_election",
+   "legal_basis": "cf_art77"
+  },
+  {
+   "id": "off_ministro_estado",
+   "name": "Ministro de Estado",
+   "provision": "free_appointment",
+   "legal_basis": "cf_art87",
+   "description": "Escolhido e exonerado livremente pelo Presidente; dirige um ministério ou órgão com status de ministério."
+  },
+  {
+   "id": "off_ministro_stf",
+   "body": "bod_stf",
+   "name": "Ministro do STF",
+   "seats": 11,
+   "provision": "nominated_and_approved",
+   "legal_basis": "cf_art101",
+   "description": "Vitalício até os 75 anos; indicado pelo Presidente e aprovado pela maioria absoluta do Senado."
+  },
+  {
+   "id": "off_pres_stf",
+   "body": "bod_stf",
+   "name": "Presidente do STF",
+   "seats": 1,
+   "term_years": 2,
+   "provision": "elected_by_peers",
+   "legal_basis": "ristf"
+  },
+  {
+   "id": "off_vice_stf",
+   "body": "bod_stf",
+   "name": "Vice-presidente do STF",
+   "seats": 1,
+   "term_years": 2,
+   "provision": "elected_by_peers",
+   "legal_basis": "ristf"
+  },
+  {
+   "id": "off_pgr",
+   "body": "bod_pgr",
+   "name": "Procurador-Geral da República",
+   "seats": 1,
+   "term_years": 2,
+   "provision": "nominated_and_approved",
+   "legal_basis": "cf_art128"
+  },
+  {
+   "id": "off_pres_bc",
+   "body": "bod_bc",
+   "name": "Presidente do Banco Central",
+   "seats": 1,
+   "term_years": 4,
+   "provision": "nominated_and_approved",
+   "legal_basis": "lc179"
+  },
+  {
+   "id": "off_pres_comissao",
+   "name": "Presidente de comissão",
+   "provision": "elected_by_peers",
+   "legal_basis": "cf_art58"
+  },
+  {
+   "id": "off_vice_comissao",
+   "name": "Vice-presidente de comissão",
+   "provision": "elected_by_peers",
+   "legal_basis": "cf_art58"
+  },
+  {
+   "id": "off_membro_comissao",
+   "name": "Membro de comissão",
+   "provision": "party_indication",
+   "legal_basis": "cf_art58",
+   "description": "Indicado pelo líder do partido ou bloco, respeitada a proporcionalidade."
+  }
+ ],
+ "competences": [
+  {
+   "id": "cmp_pres_senado_despacha_impeachment",
+   "holder_office": "off_pres_senado",
+   "verb": "Receber e despachar (admitir ou não)",
+   "target_office": "off_ministro_stf",
+   "target_label": "Denúncia por crime de responsabilidade contra ministro do STF",
+   "exclusive": true,
+   "flow": "impeachment_ministro_stf",
+   "flow_order": 1,
+   "legal_basis": "lei1079",
+   "provision": "arts. 41 a 44",
+   "description": "Sem o despacho do Presidente do Senado a denúncia não segue para a comissão especial."
+  },
+  {
+   "id": "cmp_senado_julga_ministro_stf",
+   "holder_body": "bod_senado",
+   "verb": "Processar e julgar",
+   "target_office": "off_ministro_stf",
+   "target_label": "Ministros do STF e o PGR nos crimes de responsabilidade",
+   "quorum": "2/3 dos senadores (54) para condenar",
+   "exclusive": true,
+   "flow": "impeachment_ministro_stf",
+   "flow_order": 2,
+   "legal_basis": "cf_art52",
+   "provision": "inciso II"
+  },
+  {
+   "id": "cmp_senado_julga_pgr",
+   "holder_body": "bod_senado",
+   "verb": "Processar e julgar",
+   "target_office": "off_pgr",
+   "target_label": "PGR nos crimes de responsabilidade",
+   "quorum": "2/3 dos senadores (54) para condenar",
+   "exclusive": true,
+   "legal_basis": "cf_art52",
+   "provision": "inciso II"
+  },
+  {
+   "id": "cmp_senadores_elegem_presidente",
+   "holder_office": "off_senador",
+   "verb": "Eleger",
+   "target_office": "off_pres_senado",
+   "target_label": "Presidente do Senado (biênio)",
+   "quorum": "Maioria absoluta (41) em voto secreto",
+   "exclusive": true,
+   "legal_basis": "cf_art57",
+   "provision": "§ 4º; RISF art. 60",
+   "description": "Eleição interna da Mesa, por voto secreto, para mandato de dois anos vedada a recondução na mesma legislatura."
+  },
+  {
+   "id": "cmp_pr_indica_ministro_stf",
+   "holder_office": "off_pres_republica",
+   "verb": "Indicar",
+   "target_office": "off_ministro_stf",
+   "target_label": "Ministro do STF",
+   "exclusive": true,
+   "flow": "nomeacao_ministro_stf",
+   "flow_order": 1,
+   "legal_basis": "cf_art84",
+   "provision": "inciso XIV"
+  },
+  {
+   "id": "cmp_senado_aprova_ministro_stf",
+   "holder_body": "bod_senado",
+   "verb": "Aprovar (sabatina na CCJ e votação secreta em plenário)",
+   "target_office": "off_ministro_stf",
+   "target_label": "Indicado a ministro do STF",
+   "quorum": "Maioria absoluta (41)",
+   "exclusive": true,
+   "flow": "nomeacao_ministro_stf",
+   "flow_order": 2,
+   "legal_basis": "cf_art52",
+   "provision": "inciso III, a"
+  },
+  {
+   "id": "cmp_pr_nomeia_ministro_stf",
+   "holder_office": "off_pres_republica",
+   "verb": "Nomear",
+   "target_office": "off_ministro_stf",
+   "target_label": "Ministro do STF, após aprovação do Senado",
+   "exclusive": true,
+   "flow": "nomeacao_ministro_stf",
+   "flow_order": 3,
+   "legal_basis": "cf_art84",
+   "provision": "inciso XIV"
+  },
+  {
+   "id": "cmp_pr_indica_pgr",
+   "holder_office": "off_pres_republica",
+   "verb": "Indicar",
+   "target_office": "off_pgr",
+   "target_label": "Procurador-Geral da República",
+   "exclusive": true,
+   "flow": "nomeacao_pgr",
+   "flow_order": 1,
+   "legal_basis": "cf_art128",
+   "provision": "§ 1º"
+  },
+  {
+   "id": "cmp_senado_aprova_pgr",
+   "holder_body": "bod_senado",
+   "verb": "Aprovar",
+   "target_office": "off_pgr",
+   "target_label": "Indicado a PGR",
+   "quorum": "Maioria absoluta (41)",
+   "exclusive": true,
+   "flow": "nomeacao_pgr",
+   "flow_order": 2,
+   "legal_basis": "cf_art52",
+   "provision": "inciso III, e"
+  },
+  {
+   "id": "cmp_pr_nomeia_pgr",
+   "holder_office": "off_pres_republica",
+   "verb": "Nomear",
+   "target_office": "off_pgr",
+   "target_label": "Procurador-Geral da República, após aprovação do Senado",
+   "exclusive": true,
+   "flow": "nomeacao_pgr",
+   "flow_order": 3,
+   "legal_basis": "cf_art128",
+   "provision": "§ 1º"
+  },
+  {
+   "id": "cmp_senado_aprova_bc",
+   "holder_body": "bod_senado",
+   "verb": "Aprovar",
+   "target_office": "off_pres_bc",
+   "target_label": "Presidente e diretores do Banco Central",
+   "quorum": "Maioria simples, voto secreto",
+   "exclusive": true,
+   "legal_basis": "cf_art52",
+   "provision": "inciso III, d"
+  },
+  {
+   "id": "cmp_pgr_denuncia_ministro_stf",
+   "holder_office": "off_pgr",
+   "verb": "Promover a ação penal (pedir arquivamento, diligências, inquérito ou oferecer denúncia)",
+   "target_office": "off_ministro_stf",
+   "target_label": "Ministros do STF em crime comum",
+   "exclusive": true,
+   "flow": "crime_comum_ministro_stf",
+   "flow_order": 1,
+   "legal_basis": "cf_art129",
+   "provision": "inciso I"
+  },
+  {
+   "id": "cmp_stf_julga_crime_comum",
+   "holder_body": "bod_stf",
+   "verb": "Processar e julgar",
+   "target_office": "off_ministro_stf",
+   "target_label": "Presidente, Vice, congressistas, seus próprios ministros e o PGR em crime comum",
+   "exclusive": true,
+   "flow": "crime_comum_ministro_stf",
+   "flow_order": 2,
+   "legal_basis": "cf_art102",
+   "provision": "inciso I, b"
+  },
+  {
+   "id": "cmp_pf_investiga",
+   "holder_body": "bod_pf",
+   "verb": "Investigar (polícia judiciária da União)",
+   "target_label": "Infrações penais contra bens e interesses da União",
+   "exclusive": true,
+   "legal_basis": "cf_art144",
+   "provision": "§ 1º"
+  },
+  {
+   "id": "cmp_pres_stf_preside_impeachment",
+   "holder_office": "off_pres_stf",
+   "verb": "Presidir",
+   "target_body": "bod_senado",
+   "target_label": "Julgamento de crime de responsabilidade do Presidente da República no Senado",
+   "exclusive": true,
+   "legal_basis": "cf_art52",
+   "provision": "parágrafo único"
+  },
+  {
+   "id": "cmp_camara_autoriza_processo",
+   "holder_body": "bod_camara",
+   "verb": "Autorizar a instauração de processo",
+   "target_office": "off_pres_republica",
+   "target_label": "Presidente, Vice-Presidente e Ministros de Estado",
+   "quorum": "2/3 dos deputados (342)",
+   "exclusive": true,
+   "legal_basis": "cf_art51",
+   "provision": "inciso I"
+  },
+  {
+   "id": "cmp_senado_julga_presidente",
+   "holder_body": "bod_senado",
+   "verb": "Processar e julgar",
+   "target_office": "off_pres_republica",
+   "target_label": "Presidente e Vice-Presidente nos crimes de responsabilidade",
+   "quorum": "2/3 dos senadores (54) para condenar",
+   "exclusive": true,
+   "legal_basis": "cf_art52",
+   "provision": "inciso I"
+  },
+  {
+   "id": "cmp_pr_nomeia_ministros",
+   "holder_office": "off_pres_republica",
+   "verb": "Nomear e exonerar",
+   "target_office": "off_ministro_estado",
+   "target_label": "Ministros de Estado",
+   "exclusive": true,
+   "legal_basis": "cf_art84",
+   "provision": "inciso I"
+  },
+  {
+   "id": "cmp_pr_edita_mp",
+   "holder_office": "off_pres_republica",
+   "verb": "Editar",
+   "target_body": "bod_congresso",
+   "target_label": "Medida provisória com força de lei",
+   "exclusive": true,
+   "legal_basis": "cf_art62",
+   "provision": "caput"
+  },
+  {
+   "id": "cmp_congresso_derruba_veto",
+   "holder_body": "bod_congresso",
+   "verb": "Derrubar",
+   "target_office": "off_pres_republica",
+   "target_label": "Veto presidencial",
+   "quorum": "Maioria absoluta de deputados (257) e de senadores (41)",
+   "exclusive": true,
+   "legal_basis": "cf_art66",
+   "provision": "§ 4º"
+  },
+  {
+   "id": "cmp_congresso_cpi",
+   "holder_body": "bod_congresso",
+   "verb": "Investigar fato determinado (CPI)",
+   "target_label": "Fato determinado, com poderes de investigação próprios das autoridades judiciais",
+   "quorum": "Requerimento de 1/3 da Casa",
+   "exclusive": false,
+   "legal_basis": "cf_art58",
+   "provision": "§ 3º"
+  },
+  {
+   "id": "cmp_tcu_julga_contas",
+   "holder_body": "bod_tcu",
+   "verb": "Dar parecer e julgar contas",
+   "target_office": "off_pres_republica",
+   "target_label": "Contas do Presidente (parecer) e dos administradores de recursos públicos",
+   "exclusive": true,
+   "legal_basis": "cf_art71",
+   "provision": "incisos I e II"
+  },
+  {
+   "id": "cmp_bc_liquida",
+   "holder_body": "bod_bc",
+   "verb": "Decretar liquidação extrajudicial",
+   "target_label": "Instituições financeiras",
+   "exclusive": true,
+   "legal_basis": "lei6024",
+   "provision": "art. 15"
+  }
+ ],
+ "organizations": [
+  {
+   "id": "org_banco_master",
+   "kind": "empresa",
+   "abbreviation": "Master",
+   "name": "Banco Master S.A."
+  },
+  {
+   "id": "org_brb",
+   "kind": "empresa",
+   "abbreviation": "BRB",
+   "name": "BRB – Banco de Brasília S.A."
+  }
+ ],
+ "holdings": [
+  {
+   "person": "Davi Alcolumbre",
+   "office": "off_pres_senado",
+   "since": "2025-02-01",
+   "sources": [
+    {
+     "url": "https://www12.senado.leg.br/noticias/materias/2025/02/01/davi-alcolumbre-e-eleito-presidente-do-senado",
+     "outlet": "Agência Senado",
+     "date": "2025-02-01",
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "person": "Hugo Motta",
+   "office": "off_pres_camara",
+   "since": "2025-02-01",
+   "sources": [
+    {
+     "url": "https://www.camara.leg.br/noticias/1131216-hugo-motta-e-eleito-presidente-da-camara-dos-deputados",
+     "outlet": "Agência Câmara",
+     "date": "2025-02-01",
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "person": "Paulo Gonet",
+   "full_name": "Paulo Gustavo Gonet Branco",
+   "office": "off_pgr",
+   "since": "2023-12-18",
+   "nominated_by": "Luiz Inácio Lula da Silva",
+   "sources": [
+    {
+     "url": "https://www.mpf.mp.br/pgr/institucional/procurador-geral-da-republica",
+     "outlet": "MPF",
+     "date": null,
+     "kind": "official"
+    }
+   ]
+  },
+  {
+   "person": "Gabriel Galípolo",
+   "office": "off_pres_bc",
+   "since": "2025-01-01",
+   "nominated_by": "Luiz Inácio Lula da Silva",
+   "sources": [
+    {
+     "url": "https://www.bcb.gov.br/acessoinformacao/diretoria",
+     "outlet": "Banco Central do Brasil",
+     "date": null,
+     "kind": "official"
+    }
+   ]
+  }
+ ],
+ "analyses": [
+  {
+   "id": "ana_caso_master",
+   "title": "Caso Master",
+   "dossier": "stf-caso-master",
+   "questions": [
+    "O que a PGR fará com os relatórios da PF sobre ministros do STF?",
+    "Algum pedido de impeachment de ministro do STF vai andar no Senado?"
+   ],
+   "news_topics": [
+    "caso_master",
+    "pgr",
+    "impeachment_stf"
+   ],
+   "entities": [
+    [
+     "body",
+     "bod_stf",
+     "tribunal dos ministros citados"
+    ],
+    [
+     "body",
+     "bod_pgr",
+     "analisa os relatórios da PF"
+    ],
+    [
+     "body",
+     "bod_pf",
+     "autora dos relatórios"
+    ],
+    [
+     "body",
+     "bod_bc",
+     "liquidou o Banco Master"
+    ],
+    [
+     "body",
+     "bod_senado",
+     "julga impeachment de ministro do STF"
+    ],
+    [
+     "office",
+     "off_ministro_stf",
+     "cargo dos citados"
+    ],
+    [
+     "office",
+     "off_pgr",
+     "decide o caminho criminal"
+    ],
+    [
+     "office",
+     "off_pres_senado",
+     "admite ou trava o impeachment"
+    ],
+    [
+     "competence",
+     "cmp_pgr_denuncia_ministro_stf",
+     "caminho criminal"
+    ],
+    [
+     "competence",
+     "cmp_stf_julga_crime_comum",
+     "caminho criminal"
+    ],
+    [
+     "competence",
+     "cmp_pres_senado_despacha_impeachment",
+     "caminho do impeachment"
+    ],
+    [
+     "competence",
+     "cmp_senado_julga_ministro_stf",
+     "caminho do impeachment"
+    ],
+    [
+     "competence",
+     "cmp_pf_investiga",
+     "investigação"
+    ],
+    [
+     "competence",
+     "cmp_bc_liquida",
+     "origem do caso"
+    ],
+    [
+     "organization",
+     "org_banco_master",
+     "empresa do caso"
+    ],
+    [
+     "organization",
+     "org_brb",
+     "empresa do caso"
+    ]
+   ]
+  },
+  {
+   "id": "ana_presidencia_2027",
+   "title": "Presidência do Senado 2027",
+   "dossier": "presidencia-2027",
+   "questions": [
+    "Quem será eleito Presidente do Senado em 01/02/2027?",
+    "O eleito dará andamento a pedidos de impeachment de ministros do STF?"
+   ],
+   "news_topics": [
+    "presidencia_senado"
+   ],
+   "entities": [
+    [
+     "body",
+     "bod_senado",
+     "colégio eleitoral"
+    ],
+    [
+     "office",
+     "off_pres_senado",
+     "cargo em disputa"
+    ],
+    [
+     "competence",
+     "cmp_senadores_elegem_presidente",
+     "eleição"
+    ],
+    [
+     "competence",
+     "cmp_pres_senado_despacha_impeachment",
+     "por que importa"
+    ],
+    [
+     "office",
+     "off_senador",
+     "eleitores"
+    ]
+   ]
+  }
+ ]
+}

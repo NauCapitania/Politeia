@@ -12,6 +12,7 @@ from engine.api import schemas as S
 from engine.api.camara import router as camara_router
 from engine.api.executivo import router as executivo_router
 from engine.api.monitor import router as monitor_router
+from engine.api.ontologia import router as ontologia_router
 from engine.db.models import Institution
 from engine.db.session import get_session
 from engine.registry import load_packs
@@ -22,6 +23,7 @@ app = FastAPI(title="Politeia Engine API", version="0.1.0",
 app.include_router(monitor_router)
 app.include_router(camara_router)
 app.include_router(executivo_router)
+app.include_router(ontologia_router)
 app.add_middleware(CORSMiddleware, allow_origins=get_settings().cors_origins.split(","), allow_methods=["GET"],
                    allow_headers=["*"])
 
