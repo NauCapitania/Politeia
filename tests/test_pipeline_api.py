@@ -200,6 +200,10 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
                                outlet="Exemplo", url="https://news.google.com/rss/articles/abc",
                                title="Justiça mantém prisão de Vorcaro",
                                published_at=datetime(2026, 11, 18, tzinfo=UTC), topics=["caso_master"]))
+        person_id = session.scalar(select(M.Mandate.person_id).where(M.Mandate.institution_id == "ins_br_senado"))
+        session.flush()
+        session.add(M.NewsMention(news_item_id="nws_senado", entity_kind="person", entity_id=person_id,
+                                  matched_text="Senador de teste", method="exact_name", confidence="high"))
         session.commit()
     now = datetime(2026, 11, 24, 1, 30, tzinfo=ZoneInfo("UTC"))
     export_snapshot(api, tmp_path, now)
@@ -210,6 +214,9 @@ def test_snapshot_exports_frontend_data_and_public_source_excerpts(api, factory,
     assert [n["id"] for n in api.get("/v1/noticias", params={"limit": 1}).json()] == ["nws_senado"]
     assert [n["id"] for n in read("noticias")] == ["nws_senado", "nws_secao", "nws_categoria", "nws_master"]
     assert [n["id"] for n in read("noticias/senado")] == ["nws_senado"]
+    assert read("noticias/senado")[0]["mentions"][0]["id"] == person_id
+    assert "news" not in read(f"senadores/{person_id}")
+    assert "news" not in api.get(f"/v1/senadores/{person_id}").json()
     assert [n["id"] for n in read("noticias/caso_master")] == ["nws_master"]
     with factory() as session:
         assert session.get(M.NewsItem, "nws_esporte") is not None

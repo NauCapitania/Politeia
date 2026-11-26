@@ -82,7 +82,7 @@ export function MasterAnalysis() {
               {sel.master_report && <p><Tag minimal style={{ background: REPORT[sel.master_report.status].color }}>{REPORT[sel.master_report.status].label}</Tag> <span className="small">{sel.master_report.label}</span></p>}
               {sel.plenary_2026_09_15 && <p className="small">Sessão de 15/09/2026 (questão de ordem): votou pela <b>{sel.plenary_2026_09_15}</b></p>}
               <ul className="small">{(sel.notes ?? []).map((n: string) => <li key={n}>{n}</li>)}</ul>
-              <SrcList sources={sel.sources} />
+              <SrcList sources={sel.sources} hidePress />
             </div>
           )}
         </div>

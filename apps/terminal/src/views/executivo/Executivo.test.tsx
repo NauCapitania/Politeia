@@ -60,6 +60,7 @@ describe('Poder Executivo', () => {
     const detail = screen.getByTestId('exe-detail')
     expect(within(detail).getByRole('heading', { name: 'Ministério da Fazenda' })).toBeInTheDocument()
     expect(within(detail).getByText(/Fernando Haddad/)).toBeInTheDocument()
+    expect(within(detail).queryByRole('link', { name: /G1/ })).not.toBeInTheDocument()
     expect(within(detail).getByText('Competências de Ministério da Fazenda')).toBeInTheDocument()
     expect(within(detail).getByText(/Receita Exemplar/)).toBeInTheDocument()
     await userEvent.type(screen.getByPlaceholderText(/Filtrar/), 'Múcio')

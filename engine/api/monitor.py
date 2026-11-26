@@ -78,9 +78,6 @@ def senador(person_id: str, s: DB):
         IndividualVote.person_id == person_id).group_by(IndividualVote.vote_code)).all())
     speeches = s.scalars(select(Speech).where(Speech.person_id == person_id)
                          .order_by(Speech.delivered_on.desc()).limit(30)).all()
-    news = s.scalars(select(NewsItem).join(NewsMention, NewsMention.news_item_id == NewsItem.id).where(
-        NewsMention.entity_kind == "person", NewsMention.entity_id == person_id)
-        .order_by(NewsItem.published_at.desc().nulls_last()).limit(30)).all()
     claims = s.scalars(select(Claim).where(Claim.subject_id == person_id)).all()
     committees = s.execute(select(Committee, CommitteeMembership).join(
         CommitteeMembership, CommitteeMembership.committee_id == Committee.id).where(
@@ -105,7 +102,7 @@ def senador(person_id: str, s: DB):
                    "party_at_vote": v.party_abbreviation} for e, v in votes],
         "speeches": [{"id": x.id, "date": x.delivered_on, "kind": x.kind, "summary": x.summary, "url": x.url}
                      for x in speeches],
-        "news": _news(news), "claims": [_claim(c) for c in claims],
+        "claims": [_claim(c) for c in claims],
         "committees": [{"id": c.id, "abbreviation": c.abbreviation, "name": c.name, "seat_kind": m.seat_kind,
                         "role": m.role} for c, m in committees],
     }

@@ -27,7 +27,7 @@ export function Presidencia2027() {
             <div className="small muted">{k.status}</div>
             <p><b>Impeachment de ministro do STF:</b> {STANCE[k.impeachment_stance] ?? k.impeachment_stance}</p>
             <p className="small">{k.impeachment_note}</p>
-            <SrcList sources={k.sources} />
+            <SrcList sources={k.sources} hidePress />
           </div>
         ))}
       </div>

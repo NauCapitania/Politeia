@@ -43,7 +43,6 @@ function Detail({ body }: { body: Body }) {
           <span className="party-dot" style={{ background: partyColor(t.party) }} />
           {t.profile_url ? <a href={t.profile_url} target="_blank" rel="noreferrer">{t.name}</a> : t.name}
           {t.interim ? ' (interino/a)' : ''} <span className="muted small">{t.party ?? 'sem partido'}{t.uf ? `/${t.uf}` : ''} · {fmtDate(t.start)} – {t.end ? fmtDate(t.end) : 'em exercício'}</span>
-          {t.refs.length > 0 && <div><SrcList sources={t.refs.map((r) => ({ url: r.url, outlet: r.outlet ?? 'Referência', date: r.date, kind: 'press_report' }))} /></div>}
         </div>
       )) : <p className="small muted">Nenhum titular na lista do gabinete.</p>}
       {body.competence && (<><h4>Competências (SIORG)</h4><div className="exe-competence">{body.competence}</div></>)}
@@ -102,7 +101,7 @@ export function Executivo() {
               <div className="insp-kind">{o.role}</div>
               <h3><span className="party-dot" style={{ background: partyColor(o.party) }} />{o.name} <span className="muted small">{o.party} · desde {fmtDate(o.since)}</span></h3>
               <p className="small">{o.rule}</p>
-              <SrcList sources={o.sources} />
+              <SrcList sources={o.sources} hidePress />
             </div>
           ))}
         </div>

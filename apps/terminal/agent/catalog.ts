@@ -3,7 +3,7 @@ export const DATA_CATALOG = `Arquivos JSON do snapshot do Politeia (use em ler_d
 - /senado/composicao/{AAAA-MM-DD}: as 81 cadeiras naquela data (person_id, nome, UF, partido, titular/suplente). Use uma data de /meta.
 - /senado/composicao/2027: cadeiras em disputa em 2026 e composição projetada para 2027.
 - /senado/mudancas: trocas de partido, posses de suplentes e saídas, com datas.
-- /senadores/{person_id}: perfil completo (mandatos, filiações, votos, discursos, notícias, posições com fonte).
+- /senadores/{person_id}: perfil completo (mandatos, filiações, votos, discursos, posições com fonte).
 - /entities/{id}, /entities/{id}/relationships, /entities/{id}/timeline: entidade, relações datadas e linha do tempo (pessoas, partidos, proposições).
 - /votacoes: votações nominais do plenário desde 2025; /votacoes/{id}: voto a voto.
 - /presidencia/2025: eleição de 2025 (placar oficial e probabilidades inferidas por senador no voto secreto).
