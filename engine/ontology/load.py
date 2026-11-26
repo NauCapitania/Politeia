@@ -9,12 +9,11 @@ tables; the only rows it adds outside the projection are persons for office hold
 
 import json
 import re
-import uuid
 from collections import defaultdict
 from datetime import date
 from pathlib import Path
 
-from sqlalchemy import delete, func, insert, select, text
+from sqlalchemy import delete, insert, select, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
@@ -236,11 +235,14 @@ class _Loader:
 
     def holdings(self) -> None:
         held: dict[str, list[str]] = defaultdict(list)
+        # The listing most recently seen supports the current holding; older ones may show the seat vacant.
         mandate_evidence = dict(self.s.execute(
-            select(M.RelationshipEvidence.relationship_id,
-                   func.min(M.RelationshipEvidence.raw_record_id.cast(M.Text)))
+            select(M.RelationshipEvidence.relationship_id, M.RelationshipEvidence.raw_record_id)
+            .join(M.RawRecord, M.RawRecord.id == M.RelationshipEvidence.raw_record_id)
             .where(M.RelationshipEvidence.relationship_kind == "mandate")
-            .group_by(M.RelationshipEvidence.relationship_id)).all())
+            .distinct(M.RelationshipEvidence.relationship_id)
+            .order_by(M.RelationshipEvidence.relationship_id, M.RawRecord.last_seen_at.desc(),
+                      M.RelationshipEvidence.observed_at.desc())).all())
         self.minister_party: dict[str, str] = {}
         profile = dict(self.s.execute(select(M.Person.id, M.Person.profile_url)).all())
         mandates = self.s.scalars(select(M.Mandate).where(M.Mandate.institution_id.in_(FEDERAL),
@@ -262,7 +264,7 @@ class _Loader:
             held[m.person_id].append(hid)
             if m.source_system_id in OFFICIAL_SOURCES:
                 raw = mandate_evidence.get(m.id)
-                self.fact("core.office_holdings", hid, raw_record_id=uuid.UUID(raw) if raw else None,
+                self.fact("core.office_holdings", hid, raw_record_id=raw,
                           url=profile.get(m.person_id), outlet=m.source_system_id)
             else:
                 refs = (m.attributes or {}).get("refs") or []
