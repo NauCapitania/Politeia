@@ -837,6 +837,7 @@ class Step(Base):
     title: Mapped[str | None] = mapped_column(Text)
     text: Mapped[str] = mapped_column(Text)
     happened_on: Mapped[date | None] = mapped_column(Date)
+    date_label: Mapped[str | None] = mapped_column(Text)  # date as the source gives it (e.g. "2026-01")
     status: Mapped[str] = mapped_column(String(32))  # done | pending | possible
     decided_by_body_id: Mapped[str | None] = mapped_column(ForeignKey("state.bodies.id"))
 
