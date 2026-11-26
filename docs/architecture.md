@@ -38,7 +38,21 @@ redirecionamentos), limite de requisições por segundo do pack, até 4 tentativ
 | `ingestion` | execuções, raw records (únicos por fonte + URL + hash), problemas de validação |
 | `core` | pessoas, identificadores externos, partidos, mandatos, filiações, comissões |
 | `legislative` | proposições, autores, relatores, eventos |
-| `evidence` | ligação entidade/relação ⇄ raw record + caminho (JSONPath/XPath) |
+| `evidence` | ligação entidade/relação ⇄ raw record + caminho (JSONPath/XPath); `fact_sources` da ontologia |
+| `state` | ontologia do Estado: ente federativo, poderes, órgãos, cargos, competências, bases legais |
+| `process` | processos vivos (relatórios da PF, impeachment, eleição interna), participantes, etapas, prazos |
+| `behavior` | ligações observadas: concordância em votações nominais abertas |
+
+### Ontologia da União
+
+`engine/ontology/load.py` reconstrói, numa transação, a projeção da ontologia a partir das tabelas coletadas, dos
+dossiês e do mapa curado `ontology/uniao.json` (poderes, órgãos de topo, cargos, competências com artigo e quórum).
+As tabelas de origem não são alteradas: mandatos viram `core.office_holdings`, partidos viram `core.organizations`,
+filiações vigentes viram `core.affiliations`, comissões e SIORG viram `state.bodies`, e os dossiês viram processos,
+análises e estimativas (sempre rotuladas como inferência). Notícias se ligam a processos e análises
+(`media.news_links`), não a pessoas. “Controle e Justiça” é agrupamento de leitura, não poder constitucional.
+Rode `python -m engine.cli ontology` (o comando `dossiers` também reconstrói a ontologia); a API expõe
+`/v1/ontologia` e `/v1/ontologia/ligacoes/{instituição}`, exportados no snapshot.
 
 - IDs canônicos opacos (`per_…`, `man_…`, `pty_…`, `prp_…`) nunca derivados de nomes; IDs da fonte ficam em
   `core.external_identifiers` com `quality` (`official` ou `name-derived`).

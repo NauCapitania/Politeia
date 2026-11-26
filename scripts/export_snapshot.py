@@ -234,6 +234,10 @@ def _export_snapshot(api: TestClient, output: Path, now: datetime, executor: Thr
     save("dossies/partidos", optional=True)
     save("dossies/poder-executivo", optional=True)
     save("executivo")
+    save("ontologia")
+    for institution_id in (INSTITUTION, CAMARA):
+        if any(inst["id"] == institution_id for inst in institutions):
+            save(f"ontologia/ligacoes/{institution_id}")
     committees = save("comissoes")
     votes = save("votacoes", limit=2000)
     details = (f"{route}/{row['id']}" for route, rows in (("comissoes", committees), ("votacoes", votes))

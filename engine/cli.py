@@ -1,4 +1,4 @@
-"""politeia CLI: `python -m engine.cli bootstrap | sync [--institution ID] [--scope members] | dossiers`."""
+"""politeia CLI: `python -m engine.cli bootstrap | sync [--institution ID] [--scope members] | dossiers | ontology`."""
 
 import argparse
 import json
@@ -12,6 +12,7 @@ from engine.db.session import session_factory
 from engine.dossiers import load_dossiers
 from engine.ingestion.replay import replay_proposals
 from engine.ingestion.sync import sync_source
+from engine.ontology.load import load_ontology
 from engine.registry import CONNECTORS, bootstrap
 
 
@@ -19,7 +20,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(prog="politeia")
     sub = parser.add_subparsers(dest="cmd", required=True)
     sub.add_parser("bootstrap", help="register institution packs")
-    sub.add_parser("dossiers", help="load curated, source-cited dossiers and relink news mentions")
+    sub.add_parser("dossiers", help="load curated, source-cited dossiers, relink news and rebuild the ontology")
+    sub.add_parser("ontology", help="rebuild the ontology projection (state, process, behavior) from the database")
     sync = sub.add_parser("sync", help="ingest from official sources")
     sync.add_argument("--institution", action="append", help="institution id (default: all)")
     sync.add_argument("--scope", action="append", help="composition | members | votes | speeches | proposals | news")
@@ -50,6 +52,12 @@ def main() -> None:
 
             stats = load_dossiers(s)
             stats["news_mentions"] = relink_all(s)
+            stats["ontology"] = load_ontology(s)
+            s.commit()
+            print(json.dumps(stats, ensure_ascii=False))
+            return
+        if args.cmd == "ontology":
+            stats = load_ontology(s)
             s.commit()
             print(json.dumps(stats, ensure_ascii=False))
             return
