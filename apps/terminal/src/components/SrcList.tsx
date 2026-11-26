@@ -12,12 +12,16 @@ export function SrcList({ sources, showPage = false, hidePress = false }: { sour
   if (!visible?.length) return null
   return (
     <span className="src-list">
-      {visible.map((s, i) => (
-        <a key={i} className={showPage ? 'src-chip src-chip-page' : 'src-chip'} href={s.url} target="_blank" rel="noreferrer" title={s.url}>
+      {visible.map((s, i) => {
+        const content = <>
           <span className={`kind kind-${s.kind}`}>{KIND[s.kind] ?? s.kind}</span>
-          {s.outlet}{showPage ? ` · ${pageLabel(s.url)}` : ''}{s.date ? ` · ${s.date.split('-').reverse().join('/')}` : ''}
-        </a>
-      ))}
+          {s.outlet}{showPage && s.url ? ` · ${pageLabel(s.url)}` : ''}{s.date ? ` · ${s.date.split('-').reverse().join('/')}` : ''}
+        </>
+        const className = showPage ? 'src-chip src-chip-page' : 'src-chip'
+        return s.url
+          ? <a key={i} className={className} href={s.url} target="_blank" rel="noreferrer" title={s.url}>{content}</a>
+          : <span key={i} className={className} title="Fonte registrada; link não informado.">{content}</span>
+      })}
     </span>
   )
 }
