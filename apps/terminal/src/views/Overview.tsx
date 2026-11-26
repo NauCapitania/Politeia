@@ -111,7 +111,7 @@ function Atlas({ data }: { data: Ontology }) {
       if (from && to && from !== to && nodeById.has(from) && nodeById.has(to)) edges.push({ id: c.id, a: from, b: to, competence: c })
     })
   }
-  const matches = search.trim() ? [...data.bodies, ...data.offices].filter((n) => n.name.toLocaleLowerCase('pt-BR').includes(search.trim().toLocaleLowerCase('pt-BR'))).slice(0, 20) : []
+  const matches = search.trim() ? [...data.bodies, ...data.offices].filter((n) => `${n.name} ${'acronym' in n ? n.acronym ?? '' : ''}`.toLocaleLowerCase('pt-BR').includes(search.trim().toLocaleLowerCase('pt-BR'))).slice(0, 20) : []
   const links = [...(observed.data?.links ?? [])].filter((l) => !personId || l.a === personId || l.b === personId).sort((a, b) => b.weight - a.weight || b.shared - a.shared).slice(0, 10)
   const personName = (id: string) => data.holdings.find((h) => h.person_id === id)?.person_name ?? 'Pessoa sem nome na base'
   const showInspector = !!(body || office || selected)

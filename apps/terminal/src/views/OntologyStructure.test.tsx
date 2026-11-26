@@ -50,15 +50,15 @@ describe('Estrutura e Grafo da União', () => {
     expect(within(screen.getByRole('complementary')).getByRole('heading', { name: 'Ministro do STF' })).toBeInTheDocument()
   })
 
-  it('revela o caminho de uma busca mesmo fora dos primeiros órgãos visíveis', async () => {
+  it.each(['Polícia Federal', 'pf'])('revela o caminho de uma busca por nome/sigla fora dos primeiros órgãos (%s)', async (query) => {
     const data = structuredClone(ontology)
     data.bodies.push(...Array.from({ length: 8 }, (_, i) => ({ ...data.bodies[0], id: `extra_${i}`, name: `Órgão ${i}`, power_id: 'pow_executivo', parent_id: 'bod_presidencia', origin: 'imported' })),
       { ...data.bodies[0], id: 'justica', name: 'Z Ministério da Justiça', power_id: 'pow_executivo', parent_id: 'bod_presidencia', origin: 'imported' },
-      { ...data.bodies[0], id: 'pf', name: 'Polícia Federal', power_id: 'pow_executivo', parent_id: 'justica' })
+      { ...data.bodies[0], id: 'pf', name: 'Polícia Federal', acronym: 'PF', power_id: 'pow_executivo', parent_id: 'justica' })
     renderStructure(data)
     await screen.findByRole('tab', { name: 'Estrutura' })
     expect(screen.queryByRole('button', { name: 'Explorar Polícia Federal' })).not.toBeInTheDocument()
-    await userEvent.type(screen.getByRole('textbox', { name: 'Buscar órgão ou cargo' }), 'Polícia Federal')
+    await userEvent.type(screen.getByRole('textbox', { name: 'Buscar órgão ou cargo' }), query)
     await userEvent.click(within(screen.getByLabelText('Resultados da busca')).getByRole('button'))
     const tree = within(screen.getByRole('tabpanel', { name: 'Estrutura' }))
     expect(tree.getByRole('button', { name: 'Explorar Polícia Federal' })).toHaveAttribute('aria-current', 'true')
