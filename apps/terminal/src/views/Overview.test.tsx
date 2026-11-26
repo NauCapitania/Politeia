@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Overview } from './Overview'
@@ -12,6 +12,34 @@ beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn(async (url: string) => new Response(JSON.stringify(url.includes('/ligacoes/') ? { note: 'Votações abertas', links: [{ a: 'per_1', b: 'per_2', weight: 0.8, shared: 25 }] } : ontology), { headers: { 'Content-Type': 'application/json' } })))
 })
 describe('Mapa da União', () => {
+  it('mantém a norma de uma conexão selecionada entre vizinhos no inspetor', async () => {
+    const data = structuredClone(ontology)
+    data.competences.push(
+      { ...data.competences[0], id: 'indica_stf', verb: 'Indicar', holder_body_id: 'bod_presidencia' },
+      { ...data.competences[0], id: 'relacao_senado', holder_body_id: 'bod_presidencia', target_office_id: 'off_pres_senado' },
+    )
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(data))))
+    renderMap()
+    await userEvent.click(await screen.findByRole('button', { name: 'Explorar Presidência da República' }))
+    const detail = within(screen.getByRole('complementary'))
+    expect(detail.queryByRole('button', { name: /Processar e julgar/ })).not.toBeInTheDocument()
+    fireEvent.click(document.querySelector('[data-competence-id="cmp_julga"] .constellation-edge-hit')!)
+    expect(detail.getByRole('button', { name: /Processar e julgar/ })).toHaveAttribute('aria-pressed', 'true')
+    expect(detail.getByText('Quórum: 54 senadores')).toBeInTheDocument()
+    expect(detail.getAllByRole('link', { name: /Constituição Federal/ }).some((a) => a.getAttribute('href') === data.legal_bases[0].url)).toBe(true)
+  })
+  it('prioriza os destinos selecionados numa camada com mais de dez vizinhos', async () => {
+    const data = structuredClone(ontology)
+    data.offices.push(...Array.from({ length: 11 }, (_, i) => ({ ...data.offices[0], id: `cargo_${i}`, name: `Cargo ${i}`, body_id: 'bod_presidencia' })))
+    data.competences.push({ ...data.competences[0], id: 'indica_stf', verb: 'Indicar', holder_body_id: 'bod_presidencia' })
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(data))))
+    renderMap()
+    await userEvent.click(await screen.findByRole('button', { name: 'Explorar Presidência da República' }))
+    expect(screen.queryByRole('button', { name: 'Explorar Supremo Tribunal Federal' })).not.toBeInTheDocument()
+    await userEvent.click(within(screen.getByRole('complementary')).getByRole('button', { name: /Indicar/ }))
+    expect(screen.getByRole('button', { name: 'Explorar Supremo Tribunal Federal' })).toBeInTheDocument()
+    expect(document.querySelector('[data-competence-id="indica_stf"] .constellation-edge-hit')).toBeInTheDocument()
+  })
   it('separa três poderes das instituições autônomas e mostra os tribunais superiores', async () => {
     renderMap()
     const group = await screen.findByRole('button', { name: 'Explorar Funções essenciais à Justiça' })

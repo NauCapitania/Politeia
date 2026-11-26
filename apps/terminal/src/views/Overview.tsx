@@ -41,14 +41,15 @@ function Atlas({ data }: { data: Ontology }) {
   const analysis = data.analyses.find((a) => a.id === lens)
   const analysisIds = new Set(analysis?.entities.flatMap((e) => [e.entity_id, data.offices.find((o) => o.id === e.entity_id)?.body_id ?? '']) ?? [])
   const activeCompetences = data.competences.filter((c) => !analysis || analysisIds.has(c.id))
-  const competences = office ? data.competences.filter((c) => c.holder_office_id === focus || c.target_office_id === focus) : body ? data.competences.filter((c) => competenceBody(data, c, 'holder') === body.id || competenceBody(data, c, 'target') === body.id) : power ? activeCompetences.filter((c) => data.bodies.some((b) => b.power_id === power.id && b.id === competenceBody(data, c, 'holder'))) : activeCompetences
+  const selected = data.competences.find((c) => c.id === selectedCompetence)
+  const scopedCompetences = office ? data.competences.filter((c) => c.holder_office_id === focus || c.target_office_id === focus) : body ? data.competences.filter((c) => competenceBody(data, c, 'holder') === body.id || competenceBody(data, c, 'target') === body.id) : power ? activeCompetences.filter((c) => data.bodies.some((b) => b.power_id === power.id && b.id === competenceBody(data, c, 'holder'))) : activeCompetences
+  const competences = selected ? [selected, ...scopedCompetences.filter((c) => c.id !== selected.id)] : scopedCompetences
   const children = data.bodies.filter((b) => power ? b.power_id === power.id && (!b.parent_id || data.bodies.find((p) => p.id === b.parent_id)?.power_id !== power.id) : b.parent_id === focus)
   const offices = data.offices.filter((o) => o.body_id === body?.id)
   const holdings = data.holdings.filter((h) => (office ? h.office_id === focus : h.body_id === body?.id) && (h.person_name ?? '').toLocaleLowerCase('pt-BR').includes(personSearch.toLocaleLowerCase('pt-BR')))
   function go(id: string) { setFocus(id); setPersonSearch(''); setSearch(''); setPage(0); setPersonId(null); setSelectedCompetence(null); setBehavior(false) }
   const title = office?.name ?? body?.name ?? power?.name ?? 'União'
   const legal = data.legal_bases.find((b) => b.id === (office?.legal_basis_id ?? body?.legal_basis_id))
-  const selected = data.competences.find((c) => c.id === selectedCompetence)
   const focusedPower = body?.power_id ?? power?.id ?? ''
   const nodes: MapNode[] = []
   if (focus === 'uniao') {
@@ -72,7 +73,9 @@ function Atlas({ data }: { data: Ontology }) {
     nodes.push({ id: focus, name: title, short: office ? 'Cargo' : body?.acronym ?? power?.name.slice(0, 3) ?? '', kind: office ? 'Cargo' : body ? 'Órgão' : 'Poder', power: focusedPower, x: 500, y: 445, detail: 'Você está aqui' })
     const ids = new Set([...(office?.body_id ? [office.body_id] : body?.parent_id ? [body.parent_id] : []), ...children.map((b) => b.id), ...(!office ? offices.map((o) => o.id) : [])])
     competences.forEach((c) => { const a = competenceBody(data, c, 'holder'); const b = competenceBody(data, c, 'target'); if (a && a !== body?.id) ids.add(a); if (b && b !== body?.id) ids.add(b) })
-    const neighbors = [...ids].filter((id) => id !== focus).slice(0, 10)
+    // A selected connection must keep both endpoints, even in a crowded layer.
+    const endpoints = selected ? [competenceBody(data, selected, 'holder'), competenceBody(data, selected, 'target')].filter((id): id is string => !!id) : []
+    const neighbors = [...new Set([...endpoints, ...ids])].filter((id) => id !== focus).slice(0, 10)
     neighbors.forEach((id, i) => {
       const b = data.bodies.find((b) => b.id === id); const o = data.offices.find((o) => o.id === id)
       const a = -Math.PI / 2 + i * Math.PI * 2 / neighbors.length

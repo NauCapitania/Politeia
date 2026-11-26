@@ -36,7 +36,7 @@ export function OntologyMap({ nodes, edges, focus, analysisIds, selectedCompeten
           const end = { x: b.x + (cx - b.x) / bd * (radius(b) + 5), y: b.y + (cy - b.y) / bd * (radius(b) + 5) }
           const d = `M${start.x},${start.y}Q${cx},${cy} ${end.x},${end.y}`
           const lit = activeEdges.includes(e)
-          return <g key={`${e.competence ? 'c' : 's'}${e.id}`} style={{ '--edge-color': COLORS[a.power] ?? 'var(--accent)' } as CSSProperties} className={`constellation-edge ${e.competence ? 'competence' : 'structure'} ${lit ? 'lit' : ''} ${hovered && !lit ? 'muted' : ''}`}>
+          return <g key={`${e.competence ? 'c' : 's'}${e.id}`} data-competence-id={e.competence?.id} style={{ '--edge-color': COLORS[a.power] ?? 'var(--accent)' } as CSSProperties} className={`constellation-edge ${e.competence ? 'competence' : 'structure'} ${lit ? 'lit' : ''} ${hovered && !lit ? 'muted' : ''}`}>
             <path d={d} markerEnd={e.competence ? `url(#${arrowId})` : undefined} />
             {e.competence && <path d={d} className="constellation-edge-hit" onMouseEnter={() => setEdgeHover(e.id)} onMouseLeave={() => setEdgeHover(null)} onClick={() => onCompetence(e.id)} />}
           </g>
