@@ -20,6 +20,7 @@ export function OntologyMap({ nodes, edges, focus, analysisIds, selectedCompeten
   }, [focus])
   const height = focus === 'uniao' ? 1120 : 910
   const byId = new Map(nodes.map((n) => [n.id, n]))
+  const connections = edges.flatMap((e) => e.competence && byId.has(e.a) && byId.has(e.b) ? [e.competence] : [])
   const activeEdges = edges.filter((e) => e.competence && (e.a === hovered || e.b === hovered || e.id === edgeHover || e.id === selectedCompetence))
   const highlight = new Set([hovered, ...activeEdges.flatMap((e) => [e.a, e.b])])
   const showLabel = edges.find((e) => e.id === (edgeHover ?? selectedCompetence))?.competence
@@ -56,5 +57,6 @@ export function OntologyMap({ nodes, edges, focus, analysisIds, selectedCompeten
       })}
     </div></div>
     <div className="constellation-readout" aria-live="polite">{showLabel ? <><span>COMPETÊNCIA LEGAL</span><b>{showLabel.verb}</b><p>{showLabel.target_label}</p></> : hovered && byId.has(hovered) ? <><span>{byId.get(hovered)!.kind}</span><b>{byId.get(hovered)!.name}</b><p>{byId.get(hovered)!.detail}</p></> : <><span>RELAÇÕES INSTITUCIONAIS</span><p>Passe por uma instituição para destacar seus vínculos.<br />Clique em uma linha para consultar a competência.</p></>}</div>
+    {!!connections.length && <details className="constellation-connections"><summary>Competências no grafo ({connections.length})</summary><ul>{connections.map((c) => <li key={c.id}><button aria-pressed={selectedCompetence === c.id} onFocus={() => setEdgeHover(c.id)} onBlur={() => setEdgeHover(null)} onClick={() => onCompetence(c.id)}><strong>{c.verb}</strong><span>{c.target_label}</span></button></li>)}</ul></details>}
   </div>
 }

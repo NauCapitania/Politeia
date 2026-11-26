@@ -91,6 +91,18 @@ describe('Estrutura e Grafo da União', () => {
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
   })
 
+  it('abre uma conexão legal por teclado sem sair da visão União no Grafo', async () => {
+    renderStructure()
+    await userEvent.click(await screen.findByRole('tab', { name: 'Grafo' }))
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+    await userEvent.click(screen.getByText('Competências no grafo (1)'))
+    await userEvent.tab()
+    expect(screen.getByRole('button', { name: 'Processar e julgar Ministros do STF' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    expect(within(screen.getByRole('complementary')).getByText('Quórum: 54 senadores')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Explorar União' })).toHaveAttribute('aria-current', 'true')
+  })
+
   it('permite trocar as duas abas por teclado', async () => {
     renderStructure()
     await userEvent.click(await screen.findByRole('tab', { name: 'Estrutura' }))

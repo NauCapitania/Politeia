@@ -37,6 +37,13 @@
 .constellation-readout b { display:block; font-size:13px; margin-top:8px; color:var(--fg-0); font-weight:500; }
 .constellation-readout p { font-size:11px; line-height:1.6; margin:6px 0 0; }
 .constellation-node:focus-visible,.constellation-tools button:focus-visible { outline:2px solid var(--accent); }
+.constellation-connections { border-top:1px solid var(--line); padding:16px 18px; font:11px/1.6 var(--sans); }
+.constellation-connections summary { color:var(--fg-2); cursor:pointer; }
+.constellation-connections ul { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr)); gap:8px; list-style:none; padding:0; margin:16px 0 0; }
+.constellation-connections button { display:flex; flex-direction:column; gap:4px; text-align:left; width:100%; padding:10px; background:var(--bg-1); color:var(--fg-1); border:1px solid var(--line); border-radius:4px; font:11px/1.6 var(--sans); cursor:pointer; }
+.constellation-connections button span { color:var(--fg-3); }
+.constellation-connections button[aria-pressed="true"] { border-color:var(--accent); }
+.constellation-connections button:focus-visible,.constellation-connections summary:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
 @media(min-width:1600px) { .constellation-readout { top:25px; left:25px; } }
 @media(max-width:1150px) { .constellation-readout { max-width:170px; } .constellation-readout p { font-size:10px; } }
 @media(max-width:650px) { .constellation-readout { position:relative; top:0; left:0; padding:12px 16px; max-width:none; border-top:1px solid var(--line); min-height:95px; } }
