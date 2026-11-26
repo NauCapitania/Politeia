@@ -87,6 +87,11 @@ describe('Estrutura e Grafo da União', () => {
     expect(screen.getByRole('tab', { name: 'Grafo' })).toHaveAttribute('aria-selected', 'true')
     expect(screen.getByRole('button', { name: 'Competências' })).toHaveAttribute('aria-pressed', 'true')
     expect(within(screen.getByRole('complementary')).getByText('Quórum: 54 senadores')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('tab', { name: 'Estrutura' }))
+    expect(within(screen.getByRole('complementary')).getByRole('button', { name: /Processar e julgar/ })).toHaveAttribute('aria-pressed', 'false')
+    await userEvent.click(within(screen.getByRole('complementary')).getByRole('button', { name: /Processar e julgar/ }))
+    expect(screen.getByRole('tab', { name: 'Grafo' })).toHaveAttribute('aria-selected', 'true')
+    expect(within(screen.getByRole('complementary')).getByRole('button', { name: /Processar e julgar/ })).toHaveAttribute('aria-pressed', 'true')
     await userEvent.click(screen.getByRole('button', { name: 'União' }))
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
   })
@@ -128,6 +133,21 @@ describe('Estrutura e Grafo da União', () => {
     expect(office).toHaveAttribute('aria-current', 'true')
     expect(office.closest('.structure-power')).toBeNull()
     expect(within(screen.getByRole('complementary')).getByRole('heading', { name: 'Ministro de Estado' })).toBeInTheDocument()
+  })
+
+  it('desmarca a conexão pelo mesmo controle e restaura as outras linhas do Grafo', async () => {
+    const data = structuredClone(ontology)
+    data.competences.push({ ...data.competences[0], id: 'cmp_outra', verb: 'Outra competência' })
+    renderStructure(data)
+    await userEvent.click(await screen.findByRole('tab', { name: 'Grafo' }))
+    await userEvent.click(screen.getByText('Competências no grafo (2)'))
+    await userEvent.click(screen.getByRole('button', { name: 'Processar e julgar Ministros do STF' }))
+    expect(screen.getByText('Competências no grafo (1)')).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Processar e julgar Ministros do STF' }))
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Processar e julgar Ministros do STF' })).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('button', { name: 'Outra competência Ministros do STF' })).toBeInTheDocument()
+    expect(document.querySelectorAll('[data-competence-id]')).toHaveLength(2)
   })
 
   it('permite trocar as duas abas por teclado', async () => {
