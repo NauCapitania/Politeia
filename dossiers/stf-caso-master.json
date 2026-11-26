@@ -1,6 +1,6 @@
 {
  "dossier": "stf-caso-master",
- "as_of": "2026-11-24",
+ "as_of": "2026-11-26",
  "title": "STF e caso Banco Master",
  "disclaimer": "Menção em relatório ou reportagem não é prova de ilícito. O Politeia distingue fato oficial, cobertura jornalística, alegação e análise.",
  "items": [
@@ -115,6 +115,7 @@
     "notes": [
      "Foi o primeiro relator do caso Master no STF (distribuição em 28/11/2025) e deixou a relatoria em fevereiro de 2026, após a PF apontar suspeição (Folha).",
      "Reportagens relatam sociedade de empresa da família com o resort Tayayá, que teve participação vendida a fundo ligado a Fabiano Zettel, cunhado de Vorcaro; o ministro nega ter recebido recursos de Vorcaro (O Globo/Folha).",
+     "Segundo o g1, o relatório da PF entregue a Fachin não incluiu as negociações entre Toffoli e Vorcaro sobre o resort: «Tayayá» não foi usado como palavra-chave na busca. A reportagem não estabelece irregularidade.",
      "Declarou-se impedido na sessão de 15/09/2026."
     ]
    },
@@ -135,6 +136,12 @@
      "url": "https://c-level.folha.uol.com.br/financas/2026/11/veja-cronologia-do-caso-master-da-negociacao-com-o-brb-ao-indiciamento-de-vorcaro.shtml",
      "outlet": "Folha de S.Paulo (C-Level)",
      "date": "2026-11-17",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://g1.globo.com/politica/noticia/2026/11/25/relatorio-da-pf-entregue-a-fachin-nao-inclui-caso-tayaya-veja-o-que-pesa-contra-ministros-e-ficou-de-fora.ghtml",
+     "outlet": "g1",
+     "date": "2026-11-25",
      "kind": "press_report"
     },
     {
@@ -539,7 +546,7 @@
     "received_on": "2026-11-23",
     "deadline_days": 15,
     "deadline_estimate": "2026-12-08",
-    "deadline_note": "A PGR ainda não anunciou data para se manifestar, segundo a CNN Brasil. A contagem em dias corridos do prazo administrativo é uma estimativa do Politeia; o descumprimento não gera sanção automática.",
+    "deadline_note": "A PGR ainda não anunciou data para se manifestar, segundo a CNN Brasil. A Itatiaia informa que o prazo de 15 dias dado por Fachin é impróprio: o descumprimento não gera sanção automática. A data de 8 de dezembro é uma estimativa do Politeia em dias corridos.",
     "responsible": "Paulo Gonet, o vice-PGR Hindemburgo Chateaubriand e outros dois subprocuradores, segundo a CNN Brasil",
     "possible_outcomes": [
      {
@@ -572,6 +579,12 @@
     {
      "url": "https://www.cnnbrasil.com.br/politica/pgr-evita-cravar-prazo-sobre-relatorios-do-caso-master/",
      "outlet": "CNN Brasil",
+     "date": "2026-11-23",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.itatiaia.com.br/politica/pgr-recebe-quatro-relatorios-da-pf-sobre-ministros-do-stf-no-caso-master/",
+     "outlet": "Itatiaia",
      "date": "2026-11-23",
      "kind": "press_report"
     }
@@ -942,7 +955,7 @@
    "kind": "timeline_event",
    "payload": {
     "date": "2026-11-23",
-    "text": "PGR recebe os 4 relatórios (Moraes, Nunes Marques, Toffoli, Mendonça); prazo administrativo de 15 dias.",
+    "text": "PGR recebe os quatro relatórios da PF (Moraes, Toffoli, Kassio Nunes Marques e André Mendonça). Segundo a Itatiaia, o prazo de 15 dias dado por Fachin é impróprio e não gera sanção automática se for excedido.",
     "status": "official_reported",
     "track": "stf"
    },
@@ -957,6 +970,12 @@
      "url": "https://www.cnnbrasil.com.br/politica/pgr-analisara-so-4-dos-10-relatorios-da-pf-sobre-ministros-do-stf-entenda/",
      "outlet": "CNN Brasil",
      "date": "2026-11-19",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.itatiaia.com.br/politica/pgr-recebe-quatro-relatorios-da-pf-sobre-ministros-do-stf-no-caso-master/",
+     "outlet": "Itatiaia",
+     "date": "2026-11-23",
      "kind": "press_report"
     }
    ]
@@ -1012,6 +1031,24 @@
      "outlet": "CNN Brasil",
      "date": "2026-11-23",
      "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_23",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-25",
+    "text": "O diretor-geral da PF, Andrei Rodrigues, disse à Folha que a PGR pode usar elementos que ficaram fora dos relatórios sobre ministros do STF, como o contrato do Banco Master com o escritório de Viviane Barci de Moraes. A declaração não indica uma decisão da PGR nem comprova irregularidade.",
+    "status": "press_report",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://www1.folha.uol.com.br/poder/2026/11/chefe-da-pf-diz-que-pgr-pode-usar-provas-fora-de-relatorios-contra-ministros-do-stf-no-caso-master.shtml",
+     "outlet": "Folha de S.Paulo",
+     "date": "2026-11-25",
+     "kind": "declaration"
     }
    ]
   },

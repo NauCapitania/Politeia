@@ -1,6 +1,6 @@
 {
  "dossier": "presidencia-2027",
- "as_of": "2026-11-25",
+ "as_of": "2026-11-26",
  "title": "Presidência do Senado 2027",
  "items": [
   {
@@ -11,7 +11,7 @@
     "date": "2027-02-01",
     "voters": 81,
     "majority": 41,
-    "note": "Disputa ainda não oficializada; candidaturas e contagens abaixo são de imprensa e declarações. A Folha ouviu quatro aliados de Davi Alcolumbre que relataram um plano para invalidar cédulas exibidas antes de serem depositadas; Alcolumbre afirmou que não há definição. Rogério Marinho defende que os senadores mostrem suas cédulas."
+    "note": "Disputa ainda não oficializada; a eleição está prevista para 1º de fevereiro de 2027. Segundo Bela Megale (O Globo), o grupo de Davi Alcolumbre conta com 43 votos e inclui nessa conta três nomes do PL (Michelle Bolsonaro, Eduardo Gomes e Wellington Fagundes); Rogério Marinho diz a colegas ter 44 apoios. A CNN Brasil relata que Marinho mantém em sigilo os nomes de seus apoiadores e que aliados estimam pelo menos 44 votos. São contagens atribuídas às campanhas, não votos individuais confirmados. A Folha ouviu quatro aliados de Davi Alcolumbre que relataram um plano para invalidar cédulas exibidas antes de serem depositadas; Alcolumbre afirmou que não há definição. Rogério Marinho defende que os senadores mostrem suas cédulas."
    },
    "sources": [
     {
@@ -30,6 +30,18 @@
      "url": "https://www1.folha.uol.com.br/poder/2026/11/alcolumbre-ameaca-anular-voto-do-senador-que-quebrar-sigilo-de-cedula-na-eleicao-do-senado.shtml",
      "outlet": "Folha de S.Paulo (Raphael Di Cunto)",
      "date": "2026-11-24",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://oglobo.globo.com/blogs/bela-megale/post/2026/11/os-3-votos-do-pl-que-o-grupo-de-alcolumbre-acredita-ter-contra-marinho-no-senado.ghtml",
+     "outlet": "O Globo (Bela Megale)",
+     "date": "2026-11-26",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/rogerio-marinho-guarda-sigilo-sobre-apoios-para-evitar-traicoes/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-25",
      "kind": "press_report"
     }
    ]
