@@ -14,6 +14,7 @@ from datetime import date
 from pathlib import Path
 
 from sqlalchemy import delete, insert, select, text
+from sqlalchemy.dialects.postgresql import distinct_on
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
@@ -240,7 +241,7 @@ class _Loader:
             select(M.RelationshipEvidence.relationship_id, M.RelationshipEvidence.raw_record_id)
             .join(M.RawRecord, M.RawRecord.id == M.RelationshipEvidence.raw_record_id)
             .where(M.RelationshipEvidence.relationship_kind == "mandate")
-            .distinct(M.RelationshipEvidence.relationship_id)
+            .ext(distinct_on(M.RelationshipEvidence.relationship_id))
             .order_by(M.RelationshipEvidence.relationship_id, M.RawRecord.last_seen_at.desc(),
                       M.RelationshipEvidence.observed_at.desc())).all())
         self.minister_party: dict[str, str] = {}
