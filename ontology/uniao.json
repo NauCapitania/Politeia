@@ -568,7 +568,7 @@
   {
    "id": "cmp_pr_indica_ministro_stf",
    "holder_office": "off_pres_republica",
-   "verb": "Indicar e nomear",
+   "verb": "Indicar",
    "target_office": "off_ministro_stf",
    "target_label": "Ministro do STF",
    "exclusive": true,
@@ -591,9 +591,21 @@
    "provision": "inciso III, a"
   },
   {
+   "id": "cmp_pr_nomeia_ministro_stf",
+   "holder_office": "off_pres_republica",
+   "verb": "Nomear",
+   "target_office": "off_ministro_stf",
+   "target_label": "Ministro do STF, após aprovação do Senado",
+   "exclusive": true,
+   "flow": "nomeacao_ministro_stf",
+   "flow_order": 3,
+   "legal_basis": "cf_art84",
+   "provision": "inciso XIV"
+  },
+  {
    "id": "cmp_pr_indica_pgr",
    "holder_office": "off_pres_republica",
-   "verb": "Indicar e nomear",
+   "verb": "Indicar",
    "target_office": "off_pgr",
    "target_label": "Procurador-Geral da República",
    "exclusive": true,
@@ -614,6 +626,18 @@
    "flow_order": 2,
    "legal_basis": "cf_art52",
    "provision": "inciso III, e"
+  },
+  {
+   "id": "cmp_pr_nomeia_pgr",
+   "holder_office": "off_pres_republica",
+   "verb": "Nomear",
+   "target_office": "off_pgr",
+   "target_label": "Procurador-Geral da República, após aprovação do Senado",
+   "exclusive": true,
+   "flow": "nomeacao_pgr",
+   "flow_order": 3,
+   "legal_basis": "cf_art128",
+   "provision": "§ 1º"
   },
   {
    "id": "cmp_senado_aprova_bc",
