@@ -7,11 +7,12 @@ function pageLabel(url: string) {
   return `${host}${pathname}${search}${hash}`
 }
 
-export function SrcList({ sources, showPage = false }: { sources?: Src[]; showPage?: boolean }) {
-  if (!sources?.length) return null
+export function SrcList({ sources, showPage = false, hidePress = false }: { sources?: Src[]; showPage?: boolean; hidePress?: boolean }) {
+  const visible = hidePress ? sources?.filter((source) => source.kind !== 'press_report') : sources
+  if (!visible?.length) return null
   return (
     <span className="src-list">
-      {sources.map((s, i) => (
+      {visible.map((s, i) => (
         <a key={i} className={showPage ? 'src-chip src-chip-page' : 'src-chip'} href={s.url} target="_blank" rel="noreferrer" title={s.url}>
           <span className={`kind kind-${s.kind}`}>{KIND[s.kind] ?? s.kind}</span>
           {s.outlet}{showPage ? ` · ${pageLabel(s.url)}` : ''}{s.date ? ` · ${s.date.split('-').reverse().join('/')}` : ''}

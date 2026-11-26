@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
@@ -14,6 +14,7 @@ const inst = {
 }
 const seat = (i: number) => ({ person_id: `per_${i}`, code: String(i), name: `Senador ${i}`, uf: 'SP', party: i % 2 ? 'PL' : 'PT', participation: i === 3 ? 'suplente' : 'titular' })
 const src = [{ url: 'https://www25.senado.leg.br/x', outlet: 'Senado', date: '2025-02-01', kind: 'official' }]
+const press = { url: 'https://example.com/reportagem', outlet: 'O Globo', date: '2026-11-24', kind: 'press_report' }
 const posterior = { 'Davi Alcolumbre': 0.9, 'Astronauta Marcos Pontes': 0.05, 'Eduardo Girão': 0.05 }
 const DATA: Record<string, unknown> = {
   '/v1/institutions': [inst],
@@ -27,7 +28,7 @@ const DATA: Record<string, unknown> = {
   '/v1/senadores/per_1': {
     id: 'per_1', code: '1', name: 'Senador 1', full_name: 'Senador Um', photo_url: null, links: { perfil_oficial: 'https://www25.senado.leg.br/1' },
     social_note: 'nota', mandates: [{ id: 'm', uf: 'SP', participation: 'holder', start: '2023-02-01', end: '2031-01-31' }], exercises: [],
-    parties: [{ party: 'PL', from: '2022-01-01', to: null, basis: 'affiliation_history' }], vote_summary: { Sim: 3 }, votes: [], speeches: [], news: [], claims: [],
+    parties: [{ party: 'PL', from: '2022-01-01', to: null, basis: 'affiliation_history' }], vote_summary: { Sim: 3 }, votes: [], speeches: [], claims: [],
   },
   '/v1/presidencia/2025': {
     available: true,
@@ -154,17 +155,22 @@ describe('Espaço de trabalho', () => {
 describe('Plataforma modular', () => {
   it('separa a instituição Supremo da análise Master e preserva a linha do tempo', async () => {
     mockFetch({ '/v1/dossies/stf-caso-master': { items: {
-      minister: [{ id: 'min-1', name: 'Ministro de teste', seat: 1, sources: src }],
-      procedure_actor: [], impeachment_step: [], timeline_event: [{ id: 'ev-1', date: '2026-11-24', track: 'caso', text: 'Evento de teste com fonte', status: 'fact_reported', sources: src }],
+      minister: [{ id: 'min-1', name: 'Ministro de teste', seat: 1, sources: [...src, press, press] }],
+      procedure_actor: [], impeachment_step: [], timeline_event: [{ id: 'ev-1', date: '2026-11-24', track: 'caso', text: 'Evento de teste com fonte', status: 'fact_reported', sources: [...src, press] }],
     } } })
     renderApp()
     await userEvent.click(screen.getByRole('button', { name: 'Supremo Tribunal Federal' }))
     expect(await screen.findByRole('heading', { name: 'Supremo Tribunal Federal' })).toBeInTheDocument()
     expect(await screen.findByRole('heading', { name: 'Ministro de teste' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Senado · 01\/02\/2025/ })).toHaveAttribute('href', src[0].url)
+    expect(screen.queryByRole('link', { name: /O Globo/ })).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Linha do tempo' })).not.toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Abrir análise do caso Master →' }))
     expect(await screen.findByRole('heading', { name: 'Caso Master' })).toBeInTheDocument()
     expect(screen.getByText('Evento de teste com fonte', { exact: false })).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button', { name: 'Examinar Ministro de teste' }))
+    expect(screen.getByRole('heading', { name: 'Ministro de teste' })).toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: /O Globo/ })).toHaveLength(1)
     expect(useStore.getState()).toMatchObject({ view: 'analises', analysisId: 'caso-master' })
     await userEvent.click(screen.getByRole('button', { name: 'Todas as análises' }))
     expect(await screen.findByRole('heading', { name: 'Análises' })).toBeInTheDocument()
@@ -310,11 +316,16 @@ describe('Plataforma modular', () => {
   })
 
   it('preserva o perfil completo do senador aberto nas notícias', async () => {
+    mockFetch({ '/v1/noticias': [{ ...press, id: 'nws_1', title: 'Notícia de teste', published_at: null, mentions: [] }] })
     useStore.setState({ view: 'noticias' })
     renderApp()
     await waitFor(() => expect(useStore.getState().institutionId).toBe(inst.id))
     act(() => useStore.getState().select('per_1'))
     expect(await screen.findByText('Senador Um')).toBeInTheDocument()
+    const profile = within(screen.getByRole('complementary', { name: 'Perfil do senador' }))
+    expect(profile.getByRole('tab', { name: 'Mandato' })).toBeInTheDocument()
+    expect(profile.queryByRole('tab', { name: /Notícias/ })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Notícia de teste' })).toHaveAttribute('href', press.url)
   })
 
   it('navega pelos poderes e explica etapas sem apresentar o roteiro como tramitação real', async () => {

@@ -85,7 +85,7 @@ export function Presidencia2025() {
                 </div>
               ))}
               <h4>Por quê</h4>
-              <ul>{sel.justification.map((j: any, i: number) => <li key={i}><span className={`kind kind-${j.kind}`}>{j.kind === 'analysis' ? 'Hipótese' : j.kind === 'official' ? 'Oficial' : j.kind === 'declaration' ? 'Declaração' : 'Imprensa'}</span> {j.text} <SrcList sources={j.sources} /></li>)}</ul>
+              <ul>{sel.justification.map((j: any, i: number) => <li key={i}><span className={`kind kind-${j.kind}`}>{j.kind === 'analysis' ? 'Hipótese' : j.kind === 'official' ? 'Oficial' : j.kind === 'declaration' ? 'Declaração' : 'Imprensa'}</span> {j.text} <SrcList sources={j.sources} hidePress /></li>)}</ul>
             </>
           )}
           <h4>Método</h4>
