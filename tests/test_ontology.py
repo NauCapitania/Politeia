@@ -130,7 +130,9 @@ def test_master_and_2027_are_proceedings_on_the_map(factory):
 
 def test_api_exposes_the_map(api):
     d = api.get("/v1/ontologia").json()
-    assert {p["id"] for p in d["powers"] if p["constitutional"]} == {"pow_legislativo", "pow_executivo", "pow_judiciario"}
+    assert {p["id"] for p in d["powers"] if p["constitutional"]} == {
+        "pow_legislativo", "pow_executivo", "pow_judiciario",
+    }
     assert next(p for p in d["powers"] if p["id"] == "grp_funcoes_justica")["constitutional"] is False
     assert not any(p["id"] == "pow_controle" for p in d["powers"])
     by_id = {b["id"]: b for b in d["bodies"]}
