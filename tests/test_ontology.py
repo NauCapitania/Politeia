@@ -130,8 +130,20 @@ def test_master_and_2027_are_proceedings_on_the_map(factory):
 
 def test_api_exposes_the_map(api):
     d = api.get("/v1/ontologia").json()
-    assert {p["id"] for p in d["powers"]} == {"pow_legislativo", "pow_executivo", "pow_judiciario", "pow_controle"}
-    assert next(p for p in d["powers"] if p["id"] == "pow_controle")["constitutional"] is False
+    assert {p["id"] for p in d["powers"] if p["constitutional"]} == {"pow_legislativo", "pow_executivo", "pow_judiciario"}
+    assert next(p for p in d["powers"] if p["id"] == "grp_funcoes_justica")["constitutional"] is False
+    assert not any(p["id"] == "pow_controle" for p in d["powers"])
+    by_id = {b["id"]: b for b in d["bodies"]}
+    assert by_id["bod_tcu"]["power_id"] == "pow_legislativo"
+    assert by_id["bod_tcu"]["parent_id"] is None
+    assert all(by_id[b]["power_id"] == "pow_executivo" for b in ("bod_pf", "bod_cgu", "bod_agu"))
+    assert all(by_id[b]["power_id"] == "grp_funcoes_justica" for b in ("bod_pgr", "bod_dpu"))
+    judiciary = {b["id"] for b in d["bodies"] if b["power_id"] == "pow_judiciario"}
+    assert {"bod_stf", "bod_stj", "bod_tse", "bod_tst", "bod_stm", "bod_cnj"} <= judiciary
+    assert all(b["legal_basis_id"] for b in d["bodies"] if b["id"] in judiciary)
+    # No invented holders or administrative subordination of other courts to the STF.
+    assert all(b["parent_id"] is None for b in d["bodies"] if b["id"] in judiciary)
+    assert next(b for b in d["bodies"] if b["id"] == "bod_stj")["holders"] == 0
     stf = next(o for o in d["offices"] if o["id"] == "off_ministro_stf")
     assert stf["holders"] == 10 and stf["vacancies"] == 1
     assert next(b for b in d["bodies"] if b["id"] == "bod_stf")["holders"] == 10

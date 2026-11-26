@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import App from './App'
 import { useStore } from './store'
 import { hemicycleLayout } from './views/Hemicycle'
+import { ontology } from './test/ontology'
 
 const inst = {
   id: 'ins_br_senado', slug: 'brazil-senate', official_name: 'Senado Federal', short_name: 'Senado', institution_type: 'chamber',
@@ -17,6 +18,7 @@ const src = [{ url: 'https://www25.senado.leg.br/x', outlet: 'Senado', date: '20
 const press = { url: 'https://example.com/reportagem', outlet: 'O Globo', date: '2026-11-24', kind: 'press_report' }
 const posterior = { 'Davi Alcolumbre': 0.9, 'Astronauta Marcos Pontes': 0.05, 'Eduardo Girão': 0.05 }
 const DATA: Record<string, unknown> = {
+  '/v1/ontologia': ontology,
   '/v1/institutions': [inst],
   '/v1/executivo': {
     institution_id: 'ins_br_executivo', presidency: null, bodies: [], unmatched: [], sources: [],
@@ -104,23 +106,22 @@ describe('Espaço de trabalho', () => {
     expect(folder).toHaveAttribute('aria-expanded', 'true')
   })
 
-  it('não transforma filiação desconhecida em um partido adicional', async () => {
+  it('abre a ontologia sem depender da composição do Senado', async () => {
     useStore.setState({ view: 'inicio' })
     mockFetch({ '/v1/senado/composicao': { date: '2026-11-24', observed: 3, seats: [seat(0), seat(1), { ...seat(2), party: null }] } })
     renderApp()
-    await waitFor(() => expect(screen.getByRole('button', { name: /Distribuição de poder/ })).toHaveTextContent('2 partidos'))
-    expect(screen.getByRole('img', { name: /Filiação não informada: 1 cadeiras/ })).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: 'Explorar Senado Federal' })).toBeInTheDocument()
+    expect(screen.queryByText('Filiação não informada')).not.toBeInTheDocument()
   })
 
   it('abre a central com dados da base e navega pelo mapa de poder', async () => {
     useStore.setState({ view: 'inicio' })
     renderApp()
-    expect(await screen.findByRole('heading', { name: 'A política em perspectiva.' })).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Ontologia da política brasileira' })).toBeInTheDocument()
     expect(screen.queryByLabelText('Painel de evidências')).not.toBeInTheDocument()
-    await waitFor(() => expect(screen.getByRole('button', { name: /Distribuição de poder/ })).toHaveTextContent('2 partidos'))
-    expect(screen.getByRole('img', { name: /PT: 41 cadeiras; PL: 40 cadeiras/ })).toBeInTheDocument()
+    await userEvent.click(await screen.findByRole('button', { name: 'Explorar Senado Federal' }))
     screen.getByRole('main').scrollTop = 124
-    await userEvent.click(screen.getByRole('button', { name: /Explorar composição/ }))
+    await userEvent.click(screen.getByRole('button', { name: /Abrir espaço da instituição/ }))
     expect(screen.getByRole('main').scrollTop).toBe(0)
     await waitFor(() => expect(screen.getAllByTestId('seat')).toHaveLength(81))
   })
@@ -129,7 +130,7 @@ describe('Espaço de trabalho', () => {
     useStore.setState({ view: 'inicio' })
     mockFetch({ '/v1/senado/composicao': { date: '2026-11-24', observed: 1, seats: [{ ...seat(1), full_name: 'Senador Um' }] } })
     renderApp()
-    await screen.findByRole('heading', { name: 'A política em perspectiva.' })
+    await screen.findByRole('heading', { name: 'Ontologia da política brasileira' })
     await userEvent.keyboard('{Control>}k{/Control}')
     const input = await screen.findByRole('combobox')
     await userEvent.type(input, 'Senador Um')
@@ -248,7 +249,7 @@ describe('Plataforma modular', () => {
   it('abre o catálogo ao voltar da central depois de visitar uma análise', async () => {
     useStore.setState({ view: 'inicio', analysisId: 'caso-master' })
     renderApp()
-    await userEvent.click(await screen.findByRole('button', { name: 'Todas as análises' }))
+    await userEvent.click(await screen.findByRole('button', { name: /Todas as análises/ }))
     expect(await screen.findByRole('heading', { name: 'Análises' })).toBeInTheDocument()
     expect(useStore.getState().analysisId).toBeNull()
   })
@@ -351,6 +352,7 @@ describe('Snapshot estático', () => {
     vi.stubEnv('VITE_DATA_MODE', 'static')
     const date = '2026-11-23'
     const snapshot: Record<string, unknown> = {
+      '/data/ontologia.json': ontology,
       '/data/meta.json': { generated_at: '2026-11-24T01:30:00Z', composition_dates: ['2023-02-01', date] },
       '/data/institutions.json': [inst],
       '/data/noticias.json': [],
@@ -392,7 +394,7 @@ describe('Snapshot estático', () => {
       expect(screen.queryByText('PEC 1/2026')).not.toBeInTheDocument()
 
       await user.click(screen.getByRole('button', { name: 'Politeia, início' }))
-      expect(await screen.findByText('Base consultada · 23/11/2026')).toBeInTheDocument()
+      expect(await screen.findByRole('button', { name: 'Explorar Senado Federal' })).toBeInTheDocument()
       await user.click(screen.getByRole('button', { name: 'Abrir terminal local' }))
       await user.type(screen.getByRole('textbox', { name: 'Comando do terminal' }), 'resumo{Enter}')
       expect(await screen.findByText(`Composição consultada: ${date}`)).toBeInTheDocument()

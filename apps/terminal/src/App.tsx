@@ -24,7 +24,7 @@ import { PowerTabs } from './components/PowerTabs'
 import { viewLabel } from './platform'
 
 const VIEWS: Record<View, ComponentType<{ inst?: Institution }>> = {
-  inicio: ({ inst }) => inst ? <Overview inst={inst} /> : null,
+  inicio: Overview,
   senado: ({ inst }) => inst ? <SenadoHub inst={inst} /> : null,
   sources: ({ inst }) => inst ? <Sources inst={inst} /> : null,
   analises: Analises, congresso: Congresso, camara: CamaraModule,
@@ -55,7 +55,7 @@ export default function App() {
   }, [data, institutionId, setInstitution])
 
   const inst = data?.find((i) => i.id === institutionId)
-  const requiresInstitution = view === 'inicio' || view === 'senado' || view === 'sources'
+  const requiresInstitution = view === 'senado' || view === 'sources'
   const ready = !requiresInstitution || inst
   const View = VIEWS[view]
 
