@@ -119,6 +119,11 @@ def test_master_and_2027_are_proceedings_on_the_map(factory):
     assert cited and all(p.epistemic_status == "press_report" for p in cited)
     assert race.competence_id == "cmp_senadores_elegem_presidente"
     assert estimates and {e.label for e in estimates} == {"inferência"}
+    with factory() as s:
+        month_only = s.scalars(select(M.Step).where(M.Step.date_label == "2026-01")).all()
+        actors = s.scalars(select(M.Participant).where(M.Participant.role == "ator_processual")).all()
+    assert month_only and all(st.happened_on is None for st in month_only)
+    assert next(a for a in actors if a.label == "Presidente do STF").epistemic_status == "press_report"
     assert {(n.target_kind, n.target_id) for n in links} == {("analysis", "ana_caso_master"),
                                                              ("proceeding", "prc_master_relatorios_pf")}
 
@@ -129,9 +134,15 @@ def test_api_exposes_the_map(api):
     assert next(p for p in d["powers"] if p["id"] == "pow_controle")["constitutional"] is False
     stf = next(o for o in d["offices"] if o["id"] == "off_ministro_stf")
     assert stf["holders"] == 10 and stf["vacancies"] == 1
+    assert next(b for b in d["bodies"] if b["id"] == "bod_stf")["holders"] == 10
+    flow = sorted((c["flow_order"], c["verb"]) for c in d["competences"] if c["flow"] == "nomeacao_ministro_stf")
+    assert [verb for _, verb in flow][-1] == "Nomear"
     assert all(h["office_id"] != "off_membro_comissao" for h in d["holdings"])
     master = next(p for p in d["proceedings"] if p["id"] == "prc_master_relatorios_pf")
     assert master["deadlines"][0]["due_on"] == "2026-12-08" and master["news"][0]["url"].endswith("pgr-relatorios")
+    assert all(st["sources"] for st in master["steps"] if st["status"] == "done")
+    race = next(a for a in d["analyses"] if a["id"] == "ana_presidencia_2027")
+    assert all(e["sources"] for e in race["estimates"])
     links = api.get("/v1/ontologia/ligacoes/ins_br_senado").json()
     assert links["kind"] == "vote_agreement" and isinstance(links["links"], list)
     assert api.get("/v1/ontologia/ligacoes/ins_nao_existe").status_code == 404

@@ -68,7 +68,8 @@ def ontology_overview(s: Session) -> dict:
         if o.seats is not None:
             row["vacancies"] = max(o.seats - held_office[o.id], 0)
         offices.append(row)
-    members = Counter(h.body_id for h in holdings if h.body_id)
+    members = Counter(body for body, _ in {(h.body_id, h.person_id) for h in holdings if h.body_id}
+                      if body)
     bodies = [_row(b) | {"description": _short(b.description), "holders": members[b.id]}
               for b in s.scalars(select(M.Body).order_by(M.Body.id))]
     affiliated = Counter(org for org in party.values())
@@ -76,11 +77,13 @@ def ontology_overview(s: Session) -> dict:
                      for o in s.scalars(select(M.Organization).order_by(M.Organization.id))]
     proceedings = []
     participants = defaultdict(list)
+    participant_sources = _sources(s, "process.participants")
     for p in s.scalars(select(M.Participant).order_by(M.Participant.id)):
-        participants[p.proceeding_id].append(_row(p, "proceeding_id"))
+        participants[p.proceeding_id].append(_row(p, "proceeding_id") | {"sources": participant_sources[p.id]})
     steps = defaultdict(list)
+    step_sources = _sources(s, "process.steps")
     for st in s.scalars(select(M.Step).order_by(M.Step.proceeding_id, M.Step.ordinal)):
-        steps[st.proceeding_id].append(_row(st, "proceeding_id"))
+        steps[st.proceeding_id].append(_row(st, "proceeding_id") | {"sources": step_sources[st.id]})
     deadlines = defaultdict(list)
     for d in s.scalars(select(M.Deadline).order_by(M.Deadline.due_on)):
         deadlines[d.proceeding_id].append(_row(d, "proceeding_id"))
@@ -94,8 +97,9 @@ def ontology_overview(s: Session) -> dict:
     for e in s.scalars(select(M.AnalysisEntity).order_by(M.AnalysisEntity.entity_kind, M.AnalysisEntity.entity_id)):
         entities[e.analysis_id].append(_row(e, "analysis_id"))
     estimates = defaultdict(list)
+    estimate_sources = _sources(s, "analysis.estimates")
     for e in s.scalars(select(M.Estimate).order_by(M.Estimate.id)):
-        estimates[e.analysis_id].append(_row(e, "analysis_id"))
+        estimates[e.analysis_id].append(_row(e, "analysis_id") | {"sources": estimate_sources[e.id]})
     analysis_news = _news(s, "analysis")
     analyses = [_row(a) | {"entities": entities[a.id], "estimates": estimates[a.id], "news": analysis_news[a.id]}
                 for a in s.scalars(select(M.Analysis).order_by(M.Analysis.id))]

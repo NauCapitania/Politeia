@@ -20,6 +20,7 @@ from sqlalchemy.orm import Session
 
 from connectors.base.protocol import normalize_name, parse_date
 from engine.db import models as M
+from engine.executivo import match_body
 from engine.media import political_news
 
 ONTOLOGY_FILE = Path(__file__).resolve().parent.parent.parent / "ontology" / "uniao.json"
@@ -147,6 +148,7 @@ class _Loader:
         siorg = {e.siorg_code: e for e in self.s.scalars(select(M.ExecutiveBody).where(
             M.ExecutiveBody.institution_id == "ins_br_executivo", M.ExecutiveBody.is_current))}
         by_acronym = {e.acronym: e for e in siorg.values() if e.acronym}
+        self.siorg_orgaos = [e for e in siorg.values() if e.unit_type == "orgao"]
         self.body_by_siorg: dict[str, str] = {}
         curated = []
         for b in d["bodies"]:
@@ -183,6 +185,8 @@ class _Loader:
             self.fact("state.bodies", f"bod_{eb.id}", raw_record_id=eb.raw_record_id, outlet="SIORG")
         for c in self.s.scalars(select(M.Committee).where(M.Committee.institution_id.in_(CHAMBER_BODY))
                                 .order_by(M.Committee.id)):
+            if (c.attributes or {}).get("active") is False:
+                continue
             seats = (c.attributes or {}).get("seats") or {}
             titulares = str(seats.get("titulares") or "")
             self.add(M.Body, id=f"bod_{c.id}", name=c.name, acronym=c.abbreviation, body_type="comissao",
@@ -193,8 +197,6 @@ class _Loader:
                      url=(c.attributes or {}).get("url"))
             self.fact("state.bodies", f"bod_{c.id}", raw_record_id=c.raw_record_id, url=(c.attributes or {}).get("url"))
         self.body_ids = {r["id"] for r in self.rows[M.Body]}
-        self.body_by_name = {normalize_name(r["name"]): r["id"] for r in self.rows[M.Body]
-                             if r["power_id"] in ("pow_executivo", "pow_controle")}
 
         for o in d["offices"]:
             self.add(M.Office, id=o["id"], body_id=o.get("body"), name=o["name"], seats=o.get("seats"),
@@ -235,8 +237,10 @@ class _Loader:
     def holdings(self) -> None:
         held: dict[str, list[str]] = defaultdict(list)
         mandate_evidence = dict(self.s.execute(
-            select(M.EntityEvidence.entity_id, func.min(M.EntityEvidence.raw_record_id.cast(M.Text)))
-            .where(M.EntityEvidence.entity_kind == "mandate").group_by(M.EntityEvidence.entity_id)).all())
+            select(M.RelationshipEvidence.relationship_id,
+                   func.min(M.RelationshipEvidence.raw_record_id.cast(M.Text)))
+            .where(M.RelationshipEvidence.relationship_kind == "mandate")
+            .group_by(M.RelationshipEvidence.relationship_id)).all())
         self.minister_party: dict[str, str] = {}
         profile = dict(self.s.execute(select(M.Person.id, M.Person.profile_url)).all())
         mandates = self.s.scalars(select(M.Mandate).where(M.Mandate.institution_id.in_(FEDERAL),
@@ -245,8 +249,9 @@ class _Loader:
             office, provision = MANDATE_OFFICE[m.role_type]
             body = CHAMBER_BODY.get(m.institution_id)
             if m.role_type == "minister_of_state":
-                title = re.sub(r"\s*\(Brasil\)$", "", (m.attributes or {}).get("ministry_title") or "")
-                body = self.body_by_name.get(normalize_name(title), "bod_presidencia")
+                title = (m.attributes or {}).get("ministry_title") or m.represented_unit or ""
+                eb = match_body(title, m.represented_unit or "", self.siorg_orgaos)
+                body = self.body_by_siorg[eb.siorg_code] if eb else "bod_presidencia"
                 if (m.attributes or {}).get("party"):
                     self.minister_party[m.person_id] = m.attributes["party"]
             hid = f"hold_{m.id}"
@@ -268,6 +273,8 @@ class _Loader:
             .where(M.CommitteeMembership.is_current, M.Committee.institution_id.in_(CHAMBER_BODY))
             .order_by(M.CommitteeMembership.id))
         for cm, _ in memberships:
+            if f"bod_{cm.committee_id}" not in self.body_ids:
+                continue
             office = COMMITTEE_OFFICE.get((cm.role or "").upper(), "off_membro_comissao")
             hid = f"hold_{cm.id}"
             self.add(M.OfficeHolding, id=hid, person_id=cm.person_id, office_id=office,
@@ -376,19 +383,21 @@ class _Loader:
             for item in master["procedure_actor"]:
                 a = item.payload
                 body = next((b for key, b in ACTOR_BODIES if key in normalize_name(a["actor"])), None)
+                official = all(src.get("kind") == "official" for src in item.sources)
                 self.add(M.Participant, id=f"par_{pid}_{item.id}", proceeding_id=pid, person_id=None, body_id=body,
                          organization_id=None, label=a["actor"], role="ator_processual", detail=a.get("powers"),
-                         epistemic_status="official")
+                         epistemic_status="official" if official else "press_report")
+                self.cite("process.participants", f"par_{pid}_{item.id}", item.sources)
             events = sorted(master["timeline_event"], key=lambda i: (i.payload.get("date") or "", i.id))
             for n, item in enumerate(events):
                 self.add(M.Step, id=f"stp_{item.id}", proceeding_id=pid, ordinal=n, title=item.payload.get("track"),
-                         text=item.payload["text"], happened_on=parse_date(item.payload.get("date")), status="done",
-                         decided_by_body_id=None)
+                         text=item.payload["text"], happened_on=parse_date(item.payload.get("date")),
+                         date_label=item.payload.get("date"), status="done", decided_by_body_id=None)
                 self.cite("process.steps", f"stp_{item.id}", item.sources)
             for k, outcome in enumerate(p.get("possible_outcomes") or []):
                 self.add(M.Step, id=f"stp_{pid}_outcome_{k}", proceeding_id=pid, ordinal=len(events) + k,
                          title=outcome["outcome"], text=outcome.get("then") or outcome["outcome"], happened_on=None,
-                         status="possible", decided_by_body_id="bod_pgr")
+                         date_label=None, status="possible", decided_by_body_id="bod_pgr")
             if p.get("deadline_estimate"):
                 self.add(M.Deadline, id=f"ddl_{pid}", proceeding_id=pid, due_on=parse_date(p["deadline_estimate"]),
                          basis="politeia_estimate", note=p.get("deadline_note"))
@@ -401,7 +410,7 @@ class _Loader:
             for item in sorted(master["impeachment_step"], key=lambda i: i.payload.get("order", 0)):
                 self.add(M.Step, id=f"stp_{item.id}", proceeding_id=pid, ordinal=item.payload.get("order", 0),
                          title=item.payload.get("step"), text=item.payload["text"], happened_on=None,
-                         status="possible", decided_by_body_id="bod_senado")
+                         date_label=None, status="possible", decided_by_body_id="bod_senado")
                 self.cite("process.steps", f"stp_{item.id}", item.sources)
 
         race = self.dossiers["presidencia-2027"]
