@@ -1,6 +1,6 @@
 {
  "dossier": "stf-caso-master",
- "as_of": "2026-11-26",
+ "as_of": "2026-11-28",
  "title": "STF e caso Banco Master",
  "disclaimer": "Menção em relatório ou reportagem não é prova de ilícito. O Politeia distingue fato oficial, cobertura jornalística, alegação e análise.",
  "items": [
@@ -1049,6 +1049,132 @@
      "outlet": "Folha de S.Paulo",
      "date": "2026-11-25",
      "kind": "declaration"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_24",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-27",
+    "text": "Edson Fachin nega pedidos de soltura do ex-presidente do BRB Paulo Henrique Costa e do advogado Daniel Monteiro, mantendo as prisões preventivas por risco à ordem pública e à instrução criminal mesmo após ultrapassado o prazo de 90 dias para revisão cautelar.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://valor.globo.com/financas/noticia/2026/11/27/caso-master-fachin-rejeita-pedidos-de-soltura-de-ex-presidente-do-brb-e-de-advogado-que-atuava-para-vorcaro.ghtml",
+     "outlet": "Valor Econômico",
+     "date": "2026-11-27",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_25",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-27",
+    "text": "Edson Fachin prorroga por 60 dias, a pedido da PF com parecer favorável da PGR, os inquéritos ligados ao caso Master sobre o financiamento do filme Dark Horse (com o senador Flávio Bolsonaro entre os investigados) e sobre suposta interlocução do senador Jaques Wagner em favor do grupo do banco.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://cbn.globo.com/brasil/noticia/2026/11/27/fachin-prorroga-investigacoes-sobre-flavio-bolsonaro-e-jaques-wagner-no-caso-banco-master.ghtml",
+     "outlet": "CBN",
+     "date": "2026-11-27",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_26",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-27",
+    "text": "Edson Fachin autoriza a liberação ao BRB de R$ 316,4 milhões retidos na liquidação do Banco Master referentes a carteiras de crédito sem disputa de titularidade, mantendo bloqueados R$ 218 milhões em disputa com terceiros.",
+    "status": "official_reported",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://g1.globo.com/df/distrito-federal/noticia/2026/11/27/fachin-libera-r-316-milhoes-da-liquidacao-do-banco-master-para-reforcar-caixa-do-brb.ghtml",
+     "outlet": "g1",
+     "date": "2026-11-27",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_27",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-27",
+    "text": "Segundo O Globo, Fachin indicou a interlocutores que pretende definir o rito dos quatro relatórios da PF ainda em 2026 após o parecer da PGR, mas um julgamento em plenário antes do recesso é considerado remoto.",
+    "status": "press_report",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/politica/noticia/2026/11/27/caso-master-fachin-definira-rito-sobre-relatorios-da-pf-apos-pgr-enviar-parecer-mas-julgamento-em-plenario-deve-ficar-para-2027.ghtml",
+     "outlet": "O Globo",
+     "date": "2026-11-27",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_28",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-28",
+    "text": "Segundo a coluna de Malu Gaspar (O Globo), os relatórios refeitos pela PF sobre citações a ministros do STF entregues a Fachin omitem assinaturas da equipe original e trazem apenas números de matrícula; os documentos sobre Alexandre de Moraes e André Mendonça foram redigidos por um mesmo agente com quatro anos de corporação. A reportagem não comprova irregularidade.",
+    "status": "press_report",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/blogs/malu-gaspar/post/2026/11/master-relatorios-sobre-ministros-do-stf-a-fachin-omitem-assinaturas-de-agentes.ghtml",
+     "outlet": "O Globo (Malu Gaspar)",
+     "date": "2026-11-28",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_29",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-28",
+    "text": "Segundo a CNN Brasil, a distribuição por prevenção a Kassio Nunes Marques do mandado de segurança da defesa de Vorcaro contra a atuação de Fachin ampliou o impasse interno no STF sobre quem conduzirá as investigações, que pode avançar para 2027.",
+    "status": "press_report",
+    "track": "stf"
+   },
+   "sources": [
+    {
+     "url": "https://www.cnnbrasil.com.br/politica/caso-master-mantem-disputa-no-stf-sobre-quem-vai-comandar-investigacoes/",
+     "outlet": "CNN Brasil",
+     "date": "2026-11-28",
+     "kind": "press_report"
+    }
+   ]
+  },
+  {
+   "id": "tl_master_30",
+   "kind": "timeline_event",
+   "payload": {
+    "date": "2026-11-28",
+    "text": "Segundo Bela Megale (O Globo), a liquidante do Master (EFB) acusou o governo do DF, em manifestação ao STF, de buscar ressarcimento duplo ao pedir R$ 12,2 bilhões sem descontar R$ 10,6 bilhões já substituídos em ativos; a PGDF negou e afirmou que valores recuperados serão descontados.",
+    "status": "press_report",
+    "track": "caso"
+   },
+   "sources": [
+    {
+     "url": "https://oglobo.globo.com/blogs/bela-megale/post/2026/11/liquidante-do-master-acusa-governo-do-df-de-tentar-ressarcir-brb-duas-vezes-pelo-mesmo-prejuizo.ghtml",
+     "outlet": "O Globo (Bela Megale)",
+     "date": "2026-11-28",
+     "kind": "press_report"
     }
    ]
   },
