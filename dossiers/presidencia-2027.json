@@ -1,6 +1,6 @@
 {
  "dossier": "presidencia-2027",
- "as_of": "2026-11-26",
+ "as_of": "2026-11-28",
  "title": "Presidência do Senado 2027",
  "items": [
   {
@@ -11,7 +11,7 @@
     "date": "2027-02-01",
     "voters": 81,
     "majority": 41,
-    "note": "Disputa ainda não oficializada; a eleição está prevista para 1º de fevereiro de 2027. Segundo Bela Megale (O Globo), o grupo de Davi Alcolumbre conta com 43 votos e inclui nessa conta três nomes do PL (Michelle Bolsonaro, Eduardo Gomes e Wellington Fagundes); Rogério Marinho diz a colegas ter 44 apoios. A CNN Brasil relata que Marinho mantém em sigilo os nomes de seus apoiadores e que aliados estimam pelo menos 44 votos. São contagens atribuídas às campanhas, não votos individuais confirmados. A Folha ouviu quatro aliados de Davi Alcolumbre que relataram um plano para invalidar cédulas exibidas antes de serem depositadas; Alcolumbre afirmou que não há definição. Rogério Marinho defende que os senadores mostrem suas cédulas."
+    "note": "Disputa ainda não oficializada; a eleição está prevista para 1º de fevereiro de 2027. Segundo Bela Megale (O Globo), o grupo de Davi Alcolumbre conta com 43 votos e inclui nessa conta três nomes do PL (Michelle Bolsonaro, Eduardo Gomes e Wellington Fagundes); Rogério Marinho diz a colegas ter 44 apoios. A CNN Brasil relata que Marinho mantém em sigilo os nomes de seus apoiadores e que aliados estimam pelo menos 44 votos. São contagens atribuídas às campanhas, não votos individuais confirmados. A Folha ouviu quatro aliados de Davi Alcolumbre que relataram um plano para invalidar cédulas exibidas antes de serem depositadas; Alcolumbre afirmou que não há definição. Rogério Marinho defende que os senadores mostrem suas cédulas. Em 27/11, o coordenador da campanha de Marinho, Efraim Filho (PL-PB), sugeriu à Folha um revezamento no comando do Senado com Tereza Cristina (2027–2029 e 2029–2031) para unificar a oposição ainda em 2026; no mesmo dia, o PlatôBR/Estado de Minas relatou que ministros do STF sinalizaram ao Senado resistência a eventual impeachment mesmo em caso de vitória de Marinho."
    },
    "sources": [
     {
@@ -42,6 +42,18 @@
      "url": "https://www.cnnbrasil.com.br/politica/rogerio-marinho-guarda-sigilo-sobre-apoios-para-evitar-traicoes/",
      "outlet": "CNN Brasil",
      "date": "2026-11-25",
+     "kind": "press_report"
+    },
+    {
+     "url": "https://www1.folha.uol.com.br/colunas/painel/2026/11/coordenador-da-campanha-de-marinho-sugere-revezamento-com-tereza-na-presidencia-do-senado.shtml",
+     "outlet": "Folha de S.Paulo (Painel)",
+     "date": "2026-11-27",
+     "kind": "declaration"
+    },
+    {
+     "url": "https://www.em.com.br/politica/platobr/2026/11/7545392-nem-se-marinho-vencer-ministros-do-stf-avisam-que-nao-aceitarao-impeachment.html",
+     "outlet": "PlatôBR / Estado de Minas",
+     "date": "2026-11-27",
      "kind": "press_report"
     }
    ]
@@ -105,7 +117,7 @@
     "name": "Tereza Cristina",
     "party": "PP",
     "uf": "MS",
-    "status": "pré-candidata da oposição (imprensa); segundo Marinho, ambos acordaram que apenas o nome mais competitivo deve disputar",
+    "status": "pré-candidata da oposição (imprensa); reafirmou em 27/11 à Gazeta do Povo o pacto de unificação com Marinho em torno do nome mais viável, enquanto Efraim Filho sugeriu revezamento entre ambos",
     "impeachment_stance": "sem_declaracao",
     "impeachment_note": "Nenhuma declaração pública sobre o tema nas fontes consultadas."
    },
@@ -121,6 +133,12 @@
      "outlet": "Folha de S.Paulo (Thaísa Oliveira)",
      "date": "2026-11-24",
      "kind": "press_report"
+    },
+    {
+     "url": "https://www.gazetadopovo.com.br/republica/encontro-de-tereza-cristina-com-alcolumbre-acende-alerta-no-pl-sobre-disputa-no-senado/",
+     "outlet": "Gazeta do Povo",
+     "date": "2026-11-27",
+     "kind": "declaration"
     }
    ]
   },
